@@ -601,6 +601,11 @@ class RCTRArchipelago extends ModuleBase {
 
     PoisonTrap(): void{
         //TODO: Create function that boosts nausea for every guest holding a food item
+        var guests = map.getAllEntities("guest");
+        for (var i=0; i<guests.length; i++) {
+            if(guests[i].HasFoodOrDrink() == True and guests[i].HasDrink() == False){ // not sure on this yet, no PR until this is confirmed
+                guests[i].nausea = 255;
+        }
         return;
     }
 
