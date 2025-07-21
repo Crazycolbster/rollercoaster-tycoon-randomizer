@@ -387,7 +387,7 @@ function archipelagoGui(){
                 y: wh - 24 - 6,
                 width: 85,
                 height: 26,
-                text: 'Tutorial',
+                text: 'AP Tutorial',
                 tooltip: 'I\'ll learn you good!',
                 isDisabled: false,
                 onClick: function() {
