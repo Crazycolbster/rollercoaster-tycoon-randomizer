@@ -1361,6 +1361,19 @@ function archipelagoDebug(){
                             showAd(adPool[adNumber]);
                         }});
                     }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button27',
+                    x: 415,
+                    y: 140,
+                    width: 200,
+                    height: 25,
+                    text: 'Poison Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.PoisonTrap();
+                    }
                 }
            ]
         )
