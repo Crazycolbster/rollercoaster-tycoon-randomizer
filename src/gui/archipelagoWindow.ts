@@ -127,22 +127,7 @@ function archipelagoGui(){
                 height: 20,
                 tooltip: 'What if this logo was animated? Wouldn\'t that be cool?',
                 onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_icon_ID.start).id, 0,0)}
-            }//,
-            // {
-            //     type: 'checkbox',
-            //     name: 'multiple-game-requests-toggle',
-            //     text: 'Send multiple game requests',
-            //     x: ww - 325,
-            //     y: wh - 6 - 27 - 45,
-            //     width: 240,
-            //     height: 10,
-            //     tooltip: 'If enabled, the game will split its request for items/locations into several packets. If you\'re in a multiworld with lots of games, this will fix the issue of your items not appearing...hopefully. Recommended off.',
-            //     isChecked: archipelago_multiple_requests,
-            //     onChange: function(isChecked: boolean) {
-            //         var currentWindow = ui.getWindow("archipelago-connect");
-            //         archipelago_multiple_requests = isChecked;
-            //     }
-            // }
+            }
             ]
         )
     });
@@ -1305,9 +1290,9 @@ function archipelagoDebug(){
                         //     }
                         // }
                         // runNextTick(() => {park.cash += 20000});
-                        // var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
-                        // BathroomTrap.fireworks();
-                        console.log((objectManager.getAllObjects("terrain_surface")));
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.AddScenery();
+                        // console.log((objectManager.getAllObjects("terrain_surface")));
                     }
                 },
                 {

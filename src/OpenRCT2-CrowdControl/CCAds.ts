@@ -351,6 +351,12 @@ const adPool: Ad[] = [
                 }
                 ui.showError("I don't feel so good...", "I think... I'm going to go home...");
             }
+    },
+    {//43
+        title: "Go play Ghost Trick",
+        header: "I'll be honest, Ghost Trick: Phantom Detective is an incredible game.",
+        message: "Go play it right now. I don't care that you're in the middle of Archipelago.",
+        button: "Go buy Ghost Trick and start playing!",
     }
 ]
 
