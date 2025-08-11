@@ -504,7 +504,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
                                 player_color + "{RED} missed 100% of the shots they didn't take.", "{RED}It was " + player_color + "{RED}'s controller, I swear!",
                                 player_color + "{RED} was not the imposter.", player_color + "{RED} rolled a natural 1.",
                                 player_color + "{RED} should not have tried stealing the kings flocks from Ammon!", player_color + "{RED} started a land war in Asia!",
-                                player_color + "{RED} was burninated by Trogdor!"];
+                                player_color + "{RED} was burninated by Trogdor!",player_color + "{RED} couldn't live and didn't learn!"];
                             var death_message = message_choice[Math.floor(Math.random() * message_choice.length)];
                             archipelago_print_message(death_message);
                         }
