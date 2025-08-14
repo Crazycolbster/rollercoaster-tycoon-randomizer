@@ -1351,7 +1351,7 @@ class RCTRArchipelago extends ModuleBase {
                             if(prereqs[5] != 0)//Check for length requirement
                                 cost += ((built[4] >= prereqs[0]) ? ', (> ' + context.formatString("{LENGTH}", prereqs[5]) + ')': ',{RED} (> ' + context.formatString("{LENGTH}", prereqs[5]) + ')' + display_color);
                             if(prereqs[6] != 0)//Check for total customers requirement
-                                cost += ((built[5] >= prereqs[0]) ? ', (> ' + prereqs[6] + ' Total Riders Per Ride)': '{RED}, (> ' + prereqs[6] + ' Total Riders Per Ride)' + display_color);
+                                cost += ((built[5] >= prereqs[6]) ? ', (> ' + prereqs[6] + ' Total Riders)': '{RED}, (> ' + prereqs[6] + ' Total Riders)' + display_color);
                         console.log(JSON.stringify((built)));
                         console.log(JSON.stringify((prereqs)));
                         console.log("asntueh");
@@ -1923,62 +1923,67 @@ class RCTRArchipelago extends ModuleBase {
                     }
                 }
                 if((Prices[LocationID].Lives <= park.guests) || archipelago_skip_enabled){//Check if the player has enough guests to sacrifice
-                    var NumQualifiedRides = self.CheckElligibleRides(LocationID)[0];
+                    var QualifiedInfo = self.CheckElligibleRides(LocationID);
                     let guest_list = map.getAllEntities("guest");
-                    if(!Prereqs.length || NumQualifiedRides >= Prereqs[0] || archipelago_skip_enabled){
-                        if(!archipelago_skip_enabled){
-                            trace("Prereqs have been met with this many qualified rides: " + String(NumQualifiedRides));
-                            if(Prices[LocationID].Lives != 0){//Code to explode guests
-                            var doomed = Math.floor(Prices[LocationID].Lives * 1.5);//Add a buffer to the stated cost to make up for janky guest exploding code
-                                if(doomed < guest_list.length){//Explode either the doomed amount, or every guest in the park, whichever is less
-                                    for(var i = 0; i < doomed; i++){
-                                        guest_list[i].setFlag("explode", true);// Credit to Gymnasiast/everything-must-die for the idea
+                    if(!Prereqs.length || QualifiedInfo[0] >= Prereqs[0] || archipelago_skip_enabled){
+                        if(!QualifiedInfo[5] || QualifiedInfo[5] >= Prereqs[6]){//If our total guest count is higher than what we asked for
+                            if(!archipelago_skip_enabled){
+                                trace("Prereqs have been met with this many qualified rides: " + String(QualifiedInfo[0]));
+                                if(Prices[LocationID].Lives != 0){//Code to explode guests
+                                var doomed = Math.floor(Prices[LocationID].Lives * 1.5);//Add a buffer to the stated cost to make up for janky guest exploding code
+                                    if(doomed < guest_list.length){//Explode either the doomed amount, or every guest in the park, whichever is less
+                                        for(var i = 0; i < doomed; i++){
+                                            guest_list[i].setFlag("explode", true);// Credit to Gymnasiast/everything-must-die for the idea
+                                        }
+                                    }
+                                    else{
+                                        for(var i = 0; i < guest_list.length; i++){
+                                            guest_list[i].setFlag("explode", true);
+                                        }
                                     }
                                 }
-                                else{
-                                    for(var i = 0; i < guest_list.length; i++){
-                                        guest_list[i].setFlag("explode", true);
-                                    }
-                                }
+                                park.cash -= (Prices[LocationID].Price * 10);//Multiply by 10 to obtain the correct amount
                             }
-                            park.cash -= (Prices[LocationID].Price * 10);//Multiply by 10 to obtain the correct amount
+                            else{
+                                archipelago_skip_enabled = false;
+                                archipelago_settings.skips --;
+                                (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).text = 'Skips: ' + String(archipelago_settings.skips);
+                                (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isPressed = false;
+                                (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isDisabled = !archipelago_settings.skips;
+                            }
+
+                            Unlocked.push(Locked[wantedItem]);
+                            Locked.splice(wantedItem,1);
+                            archipelago_locked_locations = Locked;
+                            trace(JSON.stringify(archipelago_locked_locations));
+                            archipelago_unlocked_locations = Unlocked;
+                            trace(archipelago_locked_locations);
+                            ArchipelagoSaveLocations(archipelago_locked_locations, archipelago_unlocked_locations);
+                            var lockedWindow = ui.getWindow("archipelago-locations");
+                            lockedWindow.findWidget<ListViewWidget>("locked-location-list").items = self.CreateLockedList();
+                            spam_timeout = true;
+                            context.setTimeout(() => {spam_timeout = false;}, 2000);
+                            //If we have full visibility, send hints for any items shown
+                            if(archipelago_settings.location_information == "Full"){
+                                let hint_list = [];
+                                trace(hint_list);
+                                const temp_list = archipelago_locked_locations.slice();//Dude, screw how lists are handled in this stupid language
+                                for(let i = 0; i < temp_list.length; i++){
+                                    let location = temp_list[i].LocationID;
+                                    trace(location);
+                                    if(self.IsVisible(location))
+                                    hint_list.push(location + 2000000);
+                                }
+                                trace(hint_list);
+                                context.setTimeout(() => (archipelago_send_message("LocationHints",hint_list)), 2000)
+                            }
                         }
                         else{
-                            archipelago_skip_enabled = false;
-                            archipelago_settings.skips --;
-                            (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).text = 'Skips: ' + String(archipelago_settings.skips);
-                            (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isPressed = false;
-                            (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isDisabled = !archipelago_settings.skips;
-                        }
-
-                        Unlocked.push(Locked[wantedItem]);
-                        Locked.splice(wantedItem,1);
-                        archipelago_locked_locations = Locked;
-                        trace(JSON.stringify(archipelago_locked_locations));
-                        archipelago_unlocked_locations = Unlocked;
-                        trace(archipelago_locked_locations);
-                        ArchipelagoSaveLocations(archipelago_locked_locations, archipelago_unlocked_locations);
-                        var lockedWindow = ui.getWindow("archipelago-locations");
-                        lockedWindow.findWidget<ListViewWidget>("locked-location-list").items = self.CreateLockedList();
-                        spam_timeout = true;
-                        context.setTimeout(() => {spam_timeout = false;}, 2000);
-                        //If we have full visibility, send hints for any items shown
-                        if(archipelago_settings.location_information == "Full"){
-                            let hint_list = [];
-                            trace(hint_list);
-                            const temp_list = archipelago_locked_locations.slice();//Dude, screw how lists are handled in this stupid language
-                            for(let i = 0; i < temp_list.length; i++){
-                                let location = temp_list[i].LocationID;
-                                trace(location);
-                                if(self.IsVisible(location))
-                                hint_list.push(location + 2000000);
-                            }
-                            trace(hint_list);
-                            context.setTimeout(() => (archipelago_send_message("LocationHints",hint_list)), 2000)
+                            ui.showError("Guest prerequisite not met", "You only have " + String(QualifiedInfo[5]) + " total riders across all these rides!");
                         }
                     }
                     else{
-                        ui.showError("Prerequisites not met", "You only have " + String(NumQualifiedRides) + " elligible rides in the park! (Ensure they have posted stats)");
+                        ui.showError("Prerequisites not met", "You only have " + String(QualifiedInfo[0]) + " elligible rides in the park! (Ensure they have posted stats)");
                     }
                 }
                 else{
@@ -2007,7 +2012,7 @@ class RCTRArchipelago extends ModuleBase {
         var QualifiedIntensityCounter = 0;
         var QualifiedNauseaCounter = 0;
         var QualifiedLengthCounter = 0;
-        var QualifiedTotalCustomerCounter = 0;
+        var TotalCustomerCounter = 0;
         console.log(JSON.stringify(Locked));
         console.log(LocationID);
         for(var i = 0; i < map.numRides; i++){
@@ -2054,18 +2059,15 @@ class RCTRArchipelago extends ModuleBase {
                     QualifiedLength = true;
                     QualifiedLengthCounter++;
                 }
-                if (ride_list[i].totalCustomers >= (Prereqs[6])){
-                    QualifiedTotalCustomer = true;
-                    QualifiedTotalCustomerCounter++;
-                }
+                TotalCustomerCounter += ride_list[i].totalCustomers;
+                console.log(TotalCustomerCounter);
             }
 
-            if (QualifiedExcitement && QualifiedIntensity && QualifiedNausea && QualifiedLength && QualifiedTotalCustomer){
+            if (QualifiedExcitement && QualifiedIntensity && QualifiedNausea && QualifiedLength){
                 NumQualifiedRides += 1;
             }
         }
-        console.log(QualifiedTotalCustomerCounter);
-        return [NumQualifiedRides,QualifiedExcitementCounter,QualifiedIntensityCounter,QualifiedNauseaCounter,QualifiedLengthCounter,QualifiedTotalCustomerCounter];
+        return [NumQualifiedRides,QualifiedExcitementCounter,QualifiedIntensityCounter,QualifiedNauseaCounter,QualifiedLengthCounter,TotalCustomerCounter];
     }
 
     CheckIfUnlocked(checked_ride): boolean{//Checks if a given ride is in the researched items list
