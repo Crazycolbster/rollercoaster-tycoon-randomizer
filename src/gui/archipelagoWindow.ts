@@ -1290,9 +1290,7 @@ function archipelagoDebug(){
                         //     }
                         // }
                         // runNextTick(() => {park.cash += 20000});
-                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
-                        BathroomTrap.AddScenery();
-                        // console.log((objectManager.getAllObjects("terrain_surface")));
+                        context.subscribe("interval.day", () => {console.log(park.awards)})// console.log((objectManager.getAllObjects("terrain_surface")));
                     }
                 },
                 {
