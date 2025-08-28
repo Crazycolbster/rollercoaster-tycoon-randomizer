@@ -91,7 +91,7 @@ class RCTRArchipelago extends ModuleBase {
         //Add menu items
         ui.registerMenuItem("Archipelago Checks!", archipelagoLocations); //Register the check menu
         ui.registerMenuItem("Archipelago Tutorial", tutorial_0); //Register the tutorial
-        if (archipelago_settings.deathlink)//Enable deathlink checks if deathlink is enabled
+        // if (archipelago_settings.deathlink)//Enable deathlink checks if deathlink is enabled
         self.SubscribeEvent('vehicle.crash',(e: any) => self.SendDeathLink(e.id));
         context.subscribe('action.execute',e => self.InterpretAction(e.player, e.action, e.args, e.result));
         context.subscribe('interval.tick', (e: any) => self.CheckMonopoly());
@@ -1212,39 +1212,40 @@ class RCTRArchipelago extends ModuleBase {
     }
 
     SendDeathLink(vehicleID?: number, name?: string): any{
-        if(archipelago_settings.deathlink_timeout == false) {
-            archipelago_settings.deathlink_timeout = true;//Set the timeout. Rides won't crash twice in 20 seconds (From deathlink, anyways)
-            context.setTimeout(() => {archipelago_settings.deathlink_timeout = false;}, 20000);//In 20 seconds, reenable the Death Link
-            trace("Sending Deathlink");
-            if(vehicleID){
-                var cars = map.getAllEntities("car");
-                //console.log((cars));
-                for(let i = 0; i < cars.length; i++){
-                    if(cars[i].id == vehicleID){
-                        var rideID = cars[i].ride;
-                        var rideName = "";//map.rides[rideID].name;
-                        var rides = map.rides;
-                        for(let j = 0; j < rides.length; j++){
-                            if (rides[j].id == rideID){
-                                rideName = rides[j].name;
-                                break;//breaks the for loop
+        if(archipelago_settings.deathlink){
+            if(archipelago_settings.deathlink_timeout == false) {
+                archipelago_settings.deathlink_timeout = true;//Set the timeout. Rides won't crash twice in 20 seconds (From deathlink, anyways)
+                context.setTimeout(() => {archipelago_settings.deathlink_timeout = false;}, 20000);//In 20 seconds, reenable the Death Link
+                trace("Sending Deathlink");
+                if(vehicleID){
+                    var cars = map.getAllEntities("car");
+                    //console.log((cars));
+                    for(let i = 0; i < cars.length; i++){
+                        if(cars[i].id == vehicleID){
+                            var rideID = cars[i].ride;
+                            var rideName = "";//map.rides[rideID].name;
+                            var rides = map.rides;
+                            for(let j = 0; j < rides.length; j++){
+                                if (rides[j].id == rideID){
+                                    rideName = rides[j].name;
+                                    break;//breaks the for loop
+                                }
                             }
+                            trace("vehicleID:" + vehicleID);
+                            trace("rideID:" + rideID);
+                            trace("ride name:" + rideName);
+                            archipelago_send_message("Bounce",{ride: rideName, tag: "DeathLink"});
+                            break;
                         }
-                        trace("vehicleID:" + vehicleID);
-                        trace("rideID:" + rideID);
-                        trace("ride name:" + rideName);
-                        archipelago_send_message("Bounce",{ride: rideName, tag: "DeathLink"});
-                        break;
                     }
                 }
+                if(name){
+                    archipelago_send_message("Bounce",{ride: name, tag: "DeathLink"});
+                }
             }
-            if(name){
-                archipelago_send_message("Bounce",{ride: name, tag: "DeathLink"});
+            else {
+                console.log("Death Link Timeout has not expired. Cancelling Death Link signal. Note: Multiple cars crashing will attempt to send multiple signals")
             }
-            
-        }
-        else {
-            console.log("Death Link Timeout has not expired. Cancelling Death Link signal. Note: Multiple cars crashing will attempt to send multiple signals")
         }
     }
 

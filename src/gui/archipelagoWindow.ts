@@ -1290,7 +1290,8 @@ function archipelagoDebug(){
                         //     }
                         // }
                         // runNextTick(() => {park.cash += 20000});
-                        context.subscribe("interval.day", () => {console.log(park.awards)})// console.log((objectManager.getAllObjects("terrain_surface")));
+                        console.log(archipelago_settings.deathlink);
+                        // context.subscribe("interval.day", () => {console.log(park.awards)})// console.log((objectManager.getAllObjects("terrain_surface")));
                     }
                 },
                 {
@@ -2045,8 +2046,9 @@ function interpretMessage(){
                     archipelago_print_message("!!addSkip: Cheats in a skip for the unlock shop. This is on the honor system.");
                     break;
                 case '!!toggledeathlink':
-                    archipelago_settings.death_link = !archipelago_settings.death_link;
-                    if(archipelago_settings.death_link)
+                    archipelago_settings.deathlink = !archipelago_settings.deathlink;
+                    archipelago_settings.deathlink_timeout = false;
+                    if(archipelago_settings.deathlink)
                     archipelago_print_message("Deathlink Enabled you monster");
                     else
                     archipelago_print_message("Deathlink Disabled you coward");
