@@ -1255,10 +1255,10 @@ class RCTRArchipelago extends ModuleBase {
             let archipelagoPlayers = (context.getParkStorage().get("RCTRando.ArchipelagoPlayers") as playerTuple[]);
             for(let i=0; i<(archipelagoPlayers.length); i++){
                 var inPark = false;
-                for(let j=0; j<(guests.length); j++){
-                    if(archipelagoPlayers[i][0] == (guests[j].name)){
-                        inPark = true;
-                        if(archipelagoPlayers[i][1] == true){//If this game has beaten their scenario
+                if(archipelagoPlayers[i][1] == true){//If this game has beaten their scenario, avoid looping through the second loop unless someone has beaten their game
+                    for(let j=0; j<(guests.length); j++){
+                        if(archipelagoPlayers[i][0] == (guests[j].name)){
+                            inPark = true;
                             guests[j].setFlag("joy", true);//Make them do a little dance,
                             guests[j].happiness = 255;//Make them constantly happy,
                             guests[j].energy = 128;//Make them energized,
