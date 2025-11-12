@@ -357,6 +357,35 @@ const adPool: Ad[] = [
         header: "I'll be honest, Ghost Trick: Phantom Detective is an incredible game.",
         message: "Go play it right now. I don't care that you're in the middle of Archipelago.",
         button: "Go buy Ghost Trick and start playing!",
+    },
+    {//44
+        title: "LEGO",
+        header: "Ever want to go completely broke buying toys made for children?",
+        message: "Buy a LEGO set today!",
+        button: "It's only a couple hundred dollars for a single set!",
+    },
+    {//45
+        title: "A Winner is You!",
+        header: "Todays Lucky Number is:",
+        message: String(Math.ceil(Math.random() * 1000000)),
+        button: "Did you win?",
+    },
+    {//46
+        title: "\"Poetry\"",
+        header: "'The time has come,' the Walrus said, 'To talk of many things' Of shoes — and ships — and sealing-wax —",
+        message: "Of cabbages — and kings — And why the sea is boiling hot —",
+        button: "And whether pigs have wings.",
+    },
+    {//47
+        title: "Middle Earth!",
+        header: "Visit Beautiful New Zealand today!",
+        message: "It's only NZ $17 for a tourist e-visa!",
+        button: "Buy Now!",
+        onClick: () => 
+            {
+                park.cash -= 1170;
+                ui.showError("PSYC!", "It's actually NZD $117! (True story)")
+            }
     }
 ]
 

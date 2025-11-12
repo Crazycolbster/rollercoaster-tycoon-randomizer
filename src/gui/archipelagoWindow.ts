@@ -703,6 +703,403 @@ function archipelagoLocations(){
                         }
                     ]
                 )
+            },
+            {//Awards
+                image: {frameBase: 5470,frameCount: 16,frameDuration: 8},
+                widgets: [].concat
+                (
+                    [
+
+                        {
+                            type: 'label',
+                            name: 'Awards',
+                            x: 245,
+                            y: 60,
+                            width: 1000,
+                            height: 25,
+                            text: "Awards You've Earned!",
+                            tooltip: 'Congrats champ, you\'ve earned these!'
+                        },
+                        {
+                            type: 'button',
+                            name: 'Tidiest Award',
+                            width: 25,
+                            height: 25,
+                            x: 45,
+                            y: 90,
+                            border: true,
+                            image: 5470,
+                            isDisabled: archipelago_settings.awards_received.indexOf("mostTidy") === -1,
+                            isVisible: true,
+                            tooltip: "More than 1/64th of the guests must be commenting on how tidy the park is, and less than 6 guests must be thinking the park is untidy."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Tidiest Label',
+                            x: 25,
+                            y: 120,
+                            width: 75,
+                            height: 85,
+                            text: "Most Tidy\nPark in the\nMultiverse",
+                            tooltip: 'More than 1/64th of the guests must be commenting on how tidy the park is, and less than 6 guests must be thinking the park is untidy.'
+                        },
+                        {
+                            type: 'button',
+                            name: 'Best Rollercoasters Award',
+                            width: 25,
+                            height: 25,
+                            x: 135,
+                            y: 90,
+                            border: true,
+                            image: 5471,
+                            isDisabled: archipelago_settings.awards_received.indexOf("bestRollerCoasters") === -1,
+                            isVisible: true,
+                            tooltip: "Park must have at least 6 rollercoasters which are opened."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Best Rollercoasters Label',
+                            x: 115,
+                            y: 120,
+                            width: 80,
+                            height: 85,
+                            text: "Best Roller\nCoasters in\nthe Multiverse",
+                            tooltip: 'Park must have at least 6 rollercoasters which are opened.'
+                        },
+                        {
+                            type: 'button',
+                            name: 'Most Beautiful Award',//It's a beautiful award. The best award there ever was! And I got it. They tried to not give it to me, but I threatened tarrifs if I didn't get it.
+                            width: 25,
+                            height: 25,
+                            x: 225,
+                            y: 90,
+                            border: true,
+                            image: 5473,
+                            isDisabled: archipelago_settings.awards_received.indexOf("mostBeautiful") === -1,
+                            isVisible: true,
+                            tooltip: "More than 1/128th of guests think \"Great scenery!\" and less than 16 guests comment on how untidy park is."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Most Beautiful Label',//They say "Colby, I've never seen such a beautiful label!" It brings a tear to their eye. It's the best label, unlike those dirty lying Democrat labels.
+                            x: 205,
+                            y: 120,
+                            width: 80,
+                            height: 85,
+                            text: "Most Beautiful\nPark in the\nMultiverse",//Most Beautiful Park in the Multiverse
+                            tooltip: 'More than 1/128th of guests think \"Great scenery!\" and less than 16 guests comment on how untidy park is.'
+                        },
+                        {
+                            type: 'button',
+                            name: 'Best Staff Award',
+                            width: 25,
+                            height: 25,
+                            x: 315,
+                            y: 90,
+                            border: true,
+                            image: 5476,
+                            isDisabled: archipelago_settings.awards_received.indexOf("bestStaff") === -1,
+                            isVisible: true,
+                            tooltip: "All staff types, at least 20 staff, one staff per 32 peeps."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Best Staff Label',
+                            x: 295,
+                            y: 120,
+                            width: 80,
+                            height: 85,
+                            text: "Best Staff\nin the\nMultiverse",//Best Staff in the Multiverse
+                            tooltip: 'All staff types, at least 20 staff, one staff per 32 peeps.'
+                        },
+                        {
+                            type: 'button',
+                            name: 'Best Food Award',
+                            width: 25,
+                            height: 25,
+                            x: 405,
+                            y: 90,
+                            border: true,
+                            image: 5477,
+                            isDisabled: archipelago_settings.awards_received.indexOf("bestFood") === -1,
+                            isVisible: true,
+                            tooltip: "At least 7 food shops, 4 unique, one food shop per 128 guests and no more than 12 guests are allowed to think \"I'm hungry\"."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Best Food Label',
+                            x: 385,
+                            y: 120,
+                            width: 80,
+                            height: 85,
+                            text: "Best Food\nin the\nMultiverse",//Best Food in the Multiverse
+                            tooltip: "At least 7 food shops, 4 unique, one food shop per 128 guests and no more than 12 guests are allowed to think \"I'm hungry\"."
+                        },
+                        {
+                            type: 'button',
+                            name: 'Best Toilets Award',
+                            width: 25,
+                            height: 25,
+                            x: 495,
+                            y: 90,
+                            border: true,
+                            image: 5479,
+                            isDisabled: archipelago_settings.awards_received.indexOf("bestToilets") === -1,
+                            isVisible: true,
+                            tooltip: "At least 4 restrooms, 1 restroom per 128 guests and no more than 16 guests who think they need the restroom."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Best Toilets Label',
+                            x: 475,
+                            y: 120,
+                            width: 80,
+                            height: 85,
+                            text: "Best Toilets\nin the\nMultiverse",//Best Toilets in the Multiverse
+                            tooltip: "At least 4 restrooms, 1 restroom per 128 guests and no more than 16 guests who think they need the restroom."
+                        },
+                        {
+                            type: 'button',
+                            name: 'Best Water Rides Award',
+                            width: 25,
+                            height: 25,
+                            x: 585,
+                            y: 90,
+                            border: true,
+                            image: 5481,
+                            isDisabled: archipelago_settings.awards_received.indexOf("bestWaterRides") === -1,
+                            isVisible: true,
+                            tooltip: "Park must have at least 6 water rides which are currently open and have not crashed recently. #DeathLink"
+                        },
+                        {
+                            type: 'label',
+                            name: 'Best Water Rides Label',
+                            x: 565,
+                            y: 120,
+                            width: 80,
+                            height: 85,
+                            text: "Best Water\nRides in the\nMultiverse",//Best Water Rides in the Multiverse
+                            tooltip: "Park must have at least 6 water rides which are currently open and have not crashed recently. #DeathLink"
+                        },
+                        {
+                            type: 'button',
+                            name: 'Best Custom Designed Rides Award',
+                            width: 25,
+                            height: 25,
+                            x: 45,
+                            y: 180,
+                            border: true,
+                            image: 5482,
+                            isDisabled: archipelago_settings.awards_received.indexOf("bestCustomDesignedRides") === -1,
+                            isVisible: true,
+                            tooltip: "Park must have at least 6 rides which are custom designed, and must have an excitement of more than 5.5"
+                        },
+                        {
+                            type: 'label',
+                            name: 'Best Custom Designed Rides Label',
+                            x: 25,
+                            y: 210,
+                            width: 80,
+                            height: 85,
+                            text: "Best Custom\nDesigned\nRides in\nthe Multiverse",//Best Custom Designed Rides in the Multiverse
+                            tooltip: "Park must have at least 6 rides which are custom designed, and must have an excitement of more than 5.5"
+                        },
+                        {
+                            type: 'button',
+                            name: 'Most Dazzling Colors Award',
+                            width: 25,
+                            height: 25,
+                            x: 135,
+                            y: 180,
+                            border: true,
+                            image: 5483,
+                            isDisabled: archipelago_settings.awards_received.indexOf("mostDazzlingRideColours") === -1,
+                            isVisible: true,
+                            tooltip: "At least 5 rides and more than half of the rides are colourful. A ride is considered colourful if the main track color is bright purple, bright green, light orange or bright pink. Hover over the colors in the palette in the game to see the color names. Rides without a track are not counted!"
+                        },
+                        {
+                            type: 'label',
+                            name: 'Most Dazzling Colors Label',
+                            x: 115,
+                            y: 210,
+                            width: 80,
+                            height: 85,
+                            text: "Most Dazzling\nColors in\nthe Multiverse",//Most Dazzling Colors in the Multiverse
+                            tooltip: "At least 5 rides and more than half of the rides are colourful. A ride is considered colourful if the main track color is bright purple, bright green, light orange or bright pink. Hover over the colors in the palette in the game to see the color names. Rides without a track are not counted!"
+                        },
+                        {
+                            type: 'button',
+                            name: 'Best Gentle Rides Award',
+                            width: 25,
+                            height: 25,
+                            x: 225,
+                            y: 180,
+                            border: true,
+                            image: 5485,
+                            isDisabled: archipelago_settings.awards_received.indexOf("bestGentleRides") === -1,
+                            isVisible: true,
+                            tooltip: "Park must have at least 10 gentle rides which are opened."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Best Gentel Rides Label',
+                            x: 205,
+                            y: 210,
+                            width: 80,
+                            height: 35,
+                            text: "Best Gentle\nRides in\nthe Multiverse",//Best Gentle Rides in the Multiverse
+                            tooltip: "Park must have at least 10 gentle rides which are opened."
+                        },
+                        {
+                            type: 'button',
+                            name: 'Safest Park Award',
+                            width: 25,
+                            height: 25,
+                            x: 315,
+                            y: 180,
+                            border: true,
+                            image: 5475,
+                            isDisabled: archipelago_settings.awards_received.indexOf("safest") === -1,
+                            isVisible: true,
+                            tooltip: "If a ride crashes with fatalities, the game will store a value of 8 in a variable(without fatalities it's 2). Every 2 in-game weeks, 1 is subtracted from this value, so after approximately 3.5 months, the value is back to 0. For the safest park award, the game checks all rides to see if this variable is 0 for every ride, and if no more than 2 peeps think \"The vandalism here is really bad\". If DeathLink is getting to you, you can disable it by typing\"!!toggleDeathlink\" in the chat tab."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Safest Park Label',
+                            x: 295,
+                            y: 210,
+                            width: 80,
+                            height: 35,
+                            text: "Hypothetical\nSafest Park\nin the\nMultiverse",//Hypothetical Safest Park in the Multiverse
+                            tooltip: "If a ride crashes with fatalities, the game will store a value of 8 in a variable(without fatalities it's 2). Every 2 in-game weeks, 1 is subtracted from this value, so after approximately 3.5 months, the value is back to 0. For the safest park award, the game checks all rides to see if this variable is 0 for every ride, and if no more than 2 peeps think \"The vandalism here is really bad\". If DeathLink is getting to you, you can disable it by typing\"!!toggleDeathlink\" in the chat tab."
+                        },
+                        {
+                            type: 'button',
+                            name: 'Most Untidy Award',
+                            width: 25,
+                            height: 25,
+                            x: 405,
+                            y: 180,
+                            border: true,
+                            image: 5469,
+                            isDisabled: archipelago_settings.awards_received.indexOf("mostUntidy") === -1,
+                            isVisible: true,
+                            tooltip: "More than 1/16th of the guests must be thinking that the park is untidy. This includes thoughts \"The litter here is really bad\", \"This path is disgusting\" or \"The vandalism here is really bad\"."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Most Untidy Label',
+                            x: 385,
+                            y: 210,
+                            width: 80,
+                            height: 25,
+                            text: "Most Untidy\nPark in\nthe Multiverse",//Most Untidy Park in the Multiverse
+                            tooltip: "More than 1/16th of the guests must be thinking that the park is untidy. This includes thoughts \"The litter here is really bad\", \"This path is disgusting\" or \"The vandalism here is really bad\"."
+                        },
+                        {
+                            type: 'button',
+                            name: 'Worst Value Award',
+                            width: 25,
+                            height: 25,
+                            x: 495,
+                            y: 180,
+                            border: true,
+                            image: 5474,
+                            isDisabled: archipelago_settings.awards_received.indexOf("worstValue") === -1,
+                            isVisible: true,
+                            tooltip: "Entrance fee is more than the current total \"ride value for money.\" Total ride value for money is calculated by taking the value for each ride and subtracting the entrance price of the ride from it. The value for a ride is calculated from its stats, and becomes lower as a ride ages. If you get this award, it means the entrance fee of your park is too high. Cannot be active together with best value park."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Worst Value Label',
+                            x: 475,
+                            y: 210,
+                            width: 80,
+                            height: 25,
+                            text: "Worst Value\nin the\nMultiverse",//Worst Value in the Multiverse
+                            tooltip: "Entrance fee is more than the current total \"ride value for money.\" Total ride value for money is calculated by taking the value for each ride and subtracting the entrance price of the ride from it. The value for a ride is calculated from its stats, and becomes lower as a ride ages. If you get this award, it means the entrance fee of your park is too high. Cannot be active together with best value park."
+                        },
+                        {
+                            type: 'button',
+                            name: 'Worst Food Award',
+                            width: 25,
+                            height: 25,
+                            x: 585,
+                            y: 180,
+                            border: true,
+                            image: 5478,
+                            isDisabled: archipelago_settings.awards_received.indexOf("worstFood") === -1,
+                            isVisible: true,
+                            tooltip: "No more than 2 unique food shops, less than one food shop per 256 guests and more than 15 hungry guests must be be thinking \"I'm hungry\"."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Worst Food Label',
+                            x: 565,
+                            y: 210,
+                            width: 80,
+                            height: 25,
+                            text: "Worst Food\nin the\nMultiverse",//Worst Food in the Multiverse
+                            tooltip: "No more than 2 unique food shops, less than one food shop per 256 guests and more than 15 hungry guests must be be thinking \"I'm hungry\"."
+                        },
+                        {
+                            type: 'button',
+                            name: 'Total Disappointment',
+                            width: 25,
+                            height: 25,
+                            x: 45,
+                            y: 270,
+                            border: true,
+                            image: 5480,
+                            isDisabled: archipelago_settings.awards_received.indexOf("mostDisappointing") === -1,
+                            isVisible: true,
+                            tooltip: "Park rating must be below 650 and at least half of rides must have popularity below 6 (on a scale from 0 to 255, so very low!)."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Total Disappointment Label',
+                            x: 25,
+                            y: 300,
+                            width: 85,
+                            height: 25,
+                            text: "Total\nDisappointment",//Total Disappointment
+                            tooltip: "Park rating must be below 650 and at least half of rides must have popularity below 6 (on a scale from 0 to 255, so very low!)."
+                        },
+                        {
+                            type: 'button',
+                            name: 'Most Confusing Award',
+                            width: 25,
+                            height: 25,
+                            x: 135,
+                            y: 270,
+                            border: true,
+                            image: 5484,
+                            isDisabled: archipelago_settings.awards_received.indexOf("mostConfusingLayout") === -1,
+                            isVisible: true,
+                            tooltip: "At least 10 peeps and more than 1/64th of guests are thinking \"I'm lost\" or \"I can't find <ride name>\"."
+                        },
+                        {
+                            type: 'label',
+                            name: 'Most Confusing Label',
+                            x: 115,
+                            y: 300,
+                            width: 80,
+                            height: 85,
+                            text: "Most\nConfusing\nLayout in\nthe Multiverse",//Most Confusing Layout in the Multiverse
+                            tooltip: "At least 10 peeps and more than 1/64th of guests are thinking \"I'm lost\" or \"I can't find <ride name>\"."
+                        },
+                        {
+                            type: 'custom',
+                            name: 'custom-archipealgo-logo-1',
+                            x: 5,
+                            y: wh - 24,
+                            width: 22,
+                            height: 20,
+                            tooltip: 'Somebody should give me an award for making OpenRCT2 work with Archipelago! I have a vanity quota to fill after all.',
+                            onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_icon_ID.start).id, 0,0)}
+                        }
+                    ]
+                )
             }
         ]
     });
@@ -1037,12 +1434,12 @@ function archipelagoDebug(){
                     height: 25,
                     text: 'Colbys Decision',
                     onClick: function() {
-                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
-                        archipelago_settings.received_games.push("Ocarina of Time", "Adventure", "Donkey Kong Country 3", "Final Fantasy 1", "Hollow Knight",
-                        "The Legend of Zelda", "A Link to the Past", "Links Awakening", "Pokemon Red and Blue", "Rogue Legacy",
-                        "Sonic Adventure 2", "Super Mario World", "Super Mario 64", "Super Metroid", "VVVVVV")
-                        console.log(archipelago_settings.received_games.length);
-                        // console.log(ScenarioName[0]);
+                        // var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        // archipelago_settings.received_games.push("Ocarina of Time", "Adventure", "Donkey Kong Country 3", "Final Fantasy 1", "Hollow Knight",
+                        // "The Legend of Zelda", "A Link to the Past", "Links Awakening", "Pokemon Red and Blue", "Rogue Legacy",
+                        // "Sonic Adventure 2", "Super Mario World", "Super Mario 64", "Super Metroid", "VVVVVV")
+                        // console.log(archipelago_settings.received_games.length);
+                        console.log(JSON.stringify(archipelago_locked_locations));
                         // archipelago_settings.location_information = locationInfo.Full;
                         // archipelago_send_message("GetDataPackage");
                     }
@@ -1272,26 +1669,9 @@ function archipelagoDebug(){
                     height: 25,
                     text: 'Colbys Choice',
                     onClick: function() { 
-                        // ArchipelagoSaveLocations(context.getParkStorage().get('RCTRando.ArchipelagoLockedLocations'),context.getParkStorage().get('RCTRando.ArchipelagoUnlockedLocations'));
-                        // park.setFlag("forbidMarketingCampaigns", true);
-                        // console.log(archipelago_settings.monopoly_x);
-                        // console.log(archipelago_settings.monopoly_y);
-                        // console.log(archipelago_settings.monopoly_complete);
-                        // for(let i = 0; i < 15; i++){
-                        // console.log(objectManager.getAllObjects("peep_animations")[i]);}
-                        // context.executeAction("staffhire", {autoPosition: true, staffType: 3, costumeIndex: 9, staffOrders: 0} satisfies StaffHireArgs);
-                        // for(let i = 0; i < map.numRides; i++){
-                        //     switch(map.rides[i].classification){
-                        //         case "ride":
-                        //             park.bankLoan += 2000;
-                        //             break;
-                        //         default:
-                        //             console.log(map.rides[i].type);
-                        //     }
-                        // }
-                        // runNextTick(() => {park.cash += 20000});
-                        console.log(archipelago_settings.deathlink);
-                        // context.subscribe("interval.day", () => {console.log(park.awards)})// console.log((objectManager.getAllObjects("terrain_surface")));
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        console.log(JSON.stringify(archipelago_award_locations));
+                        
                     }
                 },
                 {
@@ -1303,7 +1683,7 @@ function archipelagoDebug(){
                     height: 25,
                     text: 'Add Skip',
                     onClick: function() {
-                        archipelago_settings.skips ++;
+                        archipelago_settings.skips++;
                     }
                 },
                 {
@@ -1344,6 +1724,18 @@ function archipelagoDebug(){
                             const adNumber = parseInt(value, 10);
                             showAd(adPool[adNumber]);
                         }});
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button29',
+                    x: 415,
+                    y: 140,
+                    width: 200,
+                    height: 25,
+                    text: 'Set Max Speed',
+                    onClick: function() {
+                        archipelago_settings.maximum_speed = 8;
                     }
                 }
            ]

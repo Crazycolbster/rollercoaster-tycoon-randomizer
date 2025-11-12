@@ -76,6 +76,7 @@ class RCTRArchipelago extends ModuleBase {
             archipelago_locked_locations = context.getParkStorage().get('RCTRando.ArchipelagoLockedLocations');
             archipelago_unlocked_locations = context.getParkStorage().get('RCTRando.ArchipelagoUnlockedLocations');
             archipelago_location_prices = context.getParkStorage().get('RCTRando.ArchipelagoLocationPrices');
+            archipelago_award_locations = context.getParkStorage().get('RCTRando.ArchipelagoAwardLocations')
             archipelago_objectives = context.getParkStorage().get('RCTRando.ArchipelagoObjectives');
             archipelago_settings = context.getParkStorage().get('RCTRando.ArchipelagoSettings');
         }
@@ -87,7 +88,8 @@ class RCTRArchipelago extends ModuleBase {
         if (!archipelago_connected_to_game)
         init_archipelago_connection();
         //Set up daily events
-        self.SubscribeEvent("interval.day", ()=>{context.executeAction("SetArchipelagoResearch", {}); self.CheckObjectives(); context.executeAction("SetNames", {});});
+        self.SubscribeEvent("interval.day", ()=>{context.executeAction("SetArchipelagoResearch", {}); self.CheckObjectives(); context.executeAction("SetNames", {});
+            self.checkAwards()});
         //Add menu items
         ui.registerMenuItem("Archipelago Checks!", archipelagoLocations); //Register the check menu
         ui.registerMenuItem("Archipelago Tutorial", tutorial_0); //Register the tutorial
@@ -314,6 +316,8 @@ class RCTRArchipelago extends ModuleBase {
         archipelago_settings.seed = imported_settings.seed;
         archipelago_settings.team = imported_settings.team;
         archipelago_settings.fireworks = imported_settings.fireworks;
+        archipelago_settings.awards = imported_settings.awards;
+        archipelago_settings.exclude_safest_park = imported_settings.exclude_safest_park;
         archipelago_location_prices = imported_settings.location_prices;
         context.getParkStorage().set('RCTRando.ArchipelagoLocationPrices', archipelago_location_prices);
 
@@ -1323,7 +1327,7 @@ class RCTRArchipelago extends ModuleBase {
             var self = this;
             var locked = [];
             var location = archipelago_locked_locations.slice();
-            var prices = archipelago_location_prices.slice();
+            var prices = archipelago_location_prices.slice();//TODO: Have this ignore the last locations corrosponding to awards
             for(var i = 0; i < location.length; i++){//Loop through every locked location
                 if (self.IsVisible(location[i].LocationID)){
                     var [display_color, colorblind_color] = self.GetColors(location[i].LocationID);
@@ -1822,6 +1826,9 @@ class RCTRArchipelago extends ModuleBase {
             case 14:
                 CheckID = 6;
                 break;
+            case 808: case 809: case 810: case 811: case 812: case 813: case 814: case 815: case 816: case 817: 
+            case 818: case 819: case 820: case 821: case 822: case 823://Awards won't ever appear. They are seperate 
+                return false;
             default:
                 CheckID = LockedID - 8;
             break;
@@ -2095,6 +2102,110 @@ class RCTRArchipelago extends ModuleBase {
         return false;
     }
 
+    checkAwards(): void{//Looks at all owned awards and sends location for them if not already received
+        var awards = park.awards;
+        console.log("asonetuhaontu",awards);
+        var award_setting = archipelago_settings.awards;
+        if(award_setting == 2)
+            return;//No awards, no logic needed!
+        function findAward(ID){
+            console.log("Here's the award locations: " + JSON.stringify(archipelago_award_locations));
+            for(let i = 0; i < archipelago_award_locations.length; i++){
+                console.log(archipelago_award_locations[i].LocationID);
+                if (ID == archipelago_award_locations[i].LocationID){
+                    console.log("We should be sending this:");
+                    console.log(archipelago_award_locations[i]);
+                    return archipelago_award_locations[i];
+                }
+            }
+            console.log("Error in checkAwards: Award not found");
+            return archipelago_award_locations[69420];//I also hope this never returns
+        }
+        for(let i = 0; i < awards.length; i++){
+            if (archipelago_settings.awards_received.indexOf(awards[i].type) === -1) {//If the item isn't in the list
+                archipelago_settings.awards_received.push(awards[i].type);//Add it to the list
+                //and send an updated location list
+                console.log("Here's the list!" + archipelago_settings.awards_received);
+                switch(awards[i].type){
+                    case "mostUntidy":
+                        if (award_setting == 0){
+                            archipelago_unlocked_locations.push(findAward(808))
+                        }
+                        else 
+                        return;
+                        break;
+                    case "mostTidy":
+                        archipelago_unlocked_locations.push(findAward(809))
+                        break;
+                    case "bestRollerCoasters":
+                        archipelago_unlocked_locations.push(findAward(810))
+                        break;
+                    case "bestValue":
+                        return;
+                    case "mostBeautiful":
+                        archipelago_unlocked_locations.push(findAward(811))
+                        break;
+                    case "worstValue":
+                        if (award_setting == 0){
+                            archipelago_unlocked_locations.push(findAward(812))
+                        }
+                        else 
+                        return;
+                        break;
+                    case "safest":
+                        if(archipelago_settings.exclude_safest_park)
+                            return;
+                        archipelago_unlocked_locations.push(findAward(813))
+                        break;
+                    case "bestStaff":
+                        archipelago_unlocked_locations.push(findAward(814))
+                        break;
+                    case "bestFood":
+                        archipelago_unlocked_locations.push(findAward(815))
+                        break;
+                    case "worstFood":
+                        if (award_setting == 0){
+                            archipelago_unlocked_locations.push(findAward(816))
+                        }
+                        else 
+                        return;
+                        break;
+                    case "bestToilets":
+                        archipelago_unlocked_locations.push(findAward(817))
+                        break;
+                    case "mostDisappointing":
+                        if (award_setting == 0){
+                            archipelago_unlocked_locations.push(findAward(818))
+                        }
+                        else 
+                        return;
+                        break;
+                    case "bestWaterRides":
+                        archipelago_unlocked_locations.push(findAward(819))
+                        break;
+                    case "bestCustomDesignedRides":
+                        archipelago_unlocked_locations.push(findAward(820))
+                        break;
+                    case "mostDazzlingRideColours":
+                        archipelago_unlocked_locations.push(findAward(821))
+                        break;
+                    case "mostConfusingLayout" :
+                        if (award_setting == 0){
+                            archipelago_unlocked_locations.push(findAward(822))
+                        }
+                        else 
+                        return;
+                        break;
+                    case "bestGentleRides":
+                        archipelago_unlocked_locations.push(findAward(823))
+                        break;
+                }
+                console.log(archipelago_unlocked_locations);
+                ArchipelagoSaveLocations(archipelago_locked_locations, archipelago_unlocked_locations);//Send the item!
+            }
+        }
+    }
+
     SendStatus(): any{
         var self = this;
         if(archipelago_connected_to_server){
@@ -2244,7 +2355,7 @@ function explodeRide(args: any){
 function archipelago_update_locations(checked_locations){
     try{
         if(archipelago_locked_locations.length){
-            trace("Updating locations to latest progress from Server");
+            console.log("Updating locations to latest progress from Server");
             for(let i = 0; i < checked_locations.length; i++){
                 let inquired_location = checked_locations[i] - 2000000 //Locations in game have the 2000000 stripped out
                 for(let j = 0; j < archipelago_locked_locations.length; j++){
@@ -2270,8 +2381,9 @@ function archipelago_update_locations(checked_locations){
         }
         else{
             if(archipelago_settings.started)//If the game is started and we still don't have the unlock shop, ask again
-                context.setTimeout(() => {archipelago_send_message("LocationScouts");}, 250);//If we don't have the list, ask for the list again
-            context.setTimeout(() => {archipelago_update_locations(checked_locations)}, 2000);
+                if(!archipelago_location_request_sent)
+                    context.setTimeout(() => {archipelago_send_message("LocationScouts");}, 2500);//If we don't have the list, ask for the list again
+            context.setTimeout(() => {archipelago_update_locations(checked_locations)}, 4000);
         }
     }
     catch(e){
