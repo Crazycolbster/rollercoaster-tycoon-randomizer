@@ -1258,26 +1258,43 @@ class RCTRArchipelago extends ModuleBase {
         if(context.getParkStorage().get("RCTRando.ArchipelagoPlayers")){
             let guests = map.getAllEntities("guest");
             let archipelagoPlayers = (context.getParkStorage().get("RCTRando.ArchipelagoPlayers") as playerTuple[]);
+            
+            var guestsByName = {};//Apparently looking up objects in a dictionary is way faster
+            for (var i = 0; i < guests.length; i++) {//Make a dictionary of guests
+                guestsByName[guests[i].name] = guests[i];
+            }
+            var playerNames = {};//Make a big dictionary of players (Or probably small actually)
+            for (var i = 0; i < archipelagoPlayers.length; i++) {
+                playerNames[archipelagoPlayers[i][0]] = true; //{name:true}
+            }
+            var unusedGuests = [];//Make a list of unnamed guests
+            for (var i = 0; i < guests.length; i++) {
+                if (!playerNames[guests[i].name]) {
+                    unusedGuests.push(guests[i]);
+                }
+            }
+
             for(let i=0; i<(archipelagoPlayers.length); i++){
-                var inPark = false;
-                for(let j=0; j<(guests.length); j++){
-                    if(archipelagoPlayers[i][0] == (guests[j].name)){
-                        inPark = true;
-                        if(archipelagoPlayers[i][1] == true){//If this game has beaten their scenario
-                            guests[j].setFlag("joy", true);//Make them do a little dance,
-                            guests[j].happiness = 255;//Make them constantly happy,
-                            guests[j].energy = 128;//Make them energized,
-                            guests[j].trousersColour = context.getRandom(0, 55);//And make them very colorful
-                            guests[j].tshirtColour = context.getRandom(0, 55);
-                            guests[j].umbrellaColour = context.getRandom(0, 55);
-                            guests[j].cash = 6942
-                        }
-                        break;
+                var name = archipelagoPlayers[i][0];
+                var gameCompleted = archipelagoPlayers[i][1];
+                var guest = guestsByName[name];
+
+                // console.log("This guest is named after an Archipelago player: " + guest.name);
+                if(guest){//A guest is already named after a player
+                    if(gameCompleted){
+                        guest.setFlag("joy", true);//Make them do a little dance,
+                        guest.happiness = 255;//Make them constantly happy,
+                        guest.energy = 128;//Make them energized,
+                        guest.trousersColour = context.getRandom(0, 55);//And make them very colorful
+                        guest.tshirtColour = context.getRandom(0, 55);
+                        guest.umbrellaColour = context.getRandom(0, 55);
+                        guest.cash = 6942
                     }
                 }
-                if(!inPark){
-                    if(guests.length >= archipelagoPlayers.length){
-                        guests[i].name = archipelagoPlayers[i][0];
+                else{//No guest is named after this player
+                    if(unusedGuests.length > 0){
+                        var replacement = unusedGuests.pop();
+                        replacement.name = name;
                     }
                 }
             }
