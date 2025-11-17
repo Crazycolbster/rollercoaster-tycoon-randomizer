@@ -1,9 +1,9 @@
 # RollerCoaster Tycoon Randomizer
-RollerCoaster Tycoon Randomizer mod for RCT1 and RCT2 inside of [OpenRCT2](https://openrct2.org/).
+RollerCoaster Tycoon Randomizer mod for RCT1 and RCT2.
 
-You'll need the latest version of OpenRCT2 from https://openrct2.org/downloads/releases/latest
+You'll need the latest version of OpenRCT2 from https://openrct2.io/download
 
-Download the `rctrando.js` file from [the releases page](https://github.com/Die4Ever/rollercoaster-tycoon-randomizer/releases) and copy it into the OpenRCT2 plugin folder, which is usually `%USERPROFILE%\Documents\OpenRCT2\plugin\`
+Download the `rctrando.js` file from [Mods4Ever.com](https://mods4ever.com/project/RCTRando) and copy it into the OpenRCT2 plugin folder, which is usually `%USERPROFILE%\Documents\OpenRCT2\plugin\`
 
 Currently randomizes:
 * Scenario goals
@@ -17,7 +17,7 @@ Currently randomizes:
     * How often to rerandomize the stats for ride types. Build the Theme Park of Theseus.
     * You will get notifications at the bottom of the screen when these re-rolls happen.
 
-The Randomization Range option specifies how much values can be changed from their original. Low will have a narrow range so the values are close to their originals, while Extreme can give much wider variety. This is mostly separate from difficulty, but Extreme can give unpredictable results that are sometimes very difficult.
+The Randomization Range option specifies how much values can be changed from their original. Low will have a narrow range so the values are close to their originals, while Extreme can give much wider variety. This is mostly separate from difficulty, but Extreme can give unpredictable results that are sometimes very difficult even lower difficulty settings.
 
 We also have an option for [Crowd Control](https://crowdcontrol.live/) to allow your streaming viewers to troll you or help you!
 
@@ -29,4 +29,4 @@ We also have an option for [Crowd Control](https://crowdcontrol.live/) to allow 
 
 [Here is a video of Marcel Vos explaining the Randomizer plugin.](https://youtu.be/IeLoyNDq_7A?t=411)
 
-Join the [Discord discussion here](https://discord.gg/jjfKT9nYDR), or follow me on [Twitter @Die4EverDM](https://twitter.com/Die4EverDM), or [on Mastodon @Die4ever@mastodon.gamedev.place](https://mastodon.gamedev.place/@Die4ever).
+Join the [Discord discussion here](https://discord.gg/jjfKT9nYDR), or follow me [on Mastodon @Die4ever@mastodon.gamedev.place](https://mastodon.gamedev.place/@Die4ever) or [on BlueSky](https://bsky.app/profile/die4ever.mastodon.gamedev.place.ap.brid.gy).
