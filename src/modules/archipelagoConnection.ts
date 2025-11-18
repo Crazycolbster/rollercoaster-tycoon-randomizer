@@ -60,7 +60,25 @@ function archipelago_select_message(type: string, message?: any){
         for(let i = 0; i < archipelago_location_prices.length; i++){
             wanted_locations.push(2000000 + i);
         }
+        switch(archipelago_settings.awards){
+            case 0://Adds all awards to the location scout list
+                var award_locations = [2000808, 2000809, 2000810, 2000811, 2000812, 2000814, 2000815, 2000816, 2000817, 2000818, 2000819, 2000820, 2000821, 2000822, 2000823]
+                if (!archipelago_settings.exclude_safest_park)
+                    award_locations.push(2000813);
+                wanted_locations = wanted_locations.concat(award_locations);
+                break;
+            case 1://Adds postive awards to the location scout list
+                var award_locations = [2000809, 2000810, 2000811, 2000814, 2000815, 2000817, 2000819, 2000820, 2000821, 2000823]
+                if (!archipelago_settings.exclude_safest_park)
+                    award_locations.push(2000813);
+                wanted_locations = wanted_locations.concat(award_locations);
+                break;
+            case 2://Adds nothing to the list. 
+                break;
+        }
         connection.send({cmd: "LocationScouts", locations: wanted_locations, create_as_hint: 0});
+        archipelago_location_request_sent = true;//Keeps archipelago_update_locations from spamming
+        context.setTimeout(() => {archipelago_location_request_sent = false;}, 20000);//In case the connection fails, reset after 20 seconds
         break;
     case "LocationHints":
         connection.send({cmd: "LocationScouts", locations: message, create_as_hint: 2});
@@ -504,7 +522,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
                                 player_color + "{RED} missed 100% of the shots they didn't take.", "{RED}It was " + player_color + "{RED}'s controller, I swear!",
                                 player_color + "{RED} was not the imposter.", player_color + "{RED} rolled a natural 1.",
                                 player_color + "{RED} should not have tried stealing the kings flocks from Ammon!", player_color + "{RED} started a land war in Asia!",
-                                player_color + "{RED} was burninated by Trogdor!"];
+                                player_color + "{RED} was burninated by Trogdor!",player_color + "{RED} couldn't live and didn't learn!"];
                             var death_message = message_choice[Math.floor(Math.random() * message_choice.length)];
                             archipelago_print_message(death_message);
                         }
@@ -520,7 +538,6 @@ function ac_req(data) {//This is what we do when we receive a data packet
             break;
 
         case "ReceivedItems":
-            trace("This Far?");
             if (archipelago_settings.started){//We don't want to apply all the previously received items before we start the game.
                 Archipelago.ReceiveArchipelagoItem(data.items, data.index);
             }
@@ -534,6 +551,31 @@ function ac_req(data) {//This is what we do when we receive a data packet
                     break;//If we have the locations already, we can assume this was an unintentional repeat request
 
                 if(ready){
+                    switch(archipelago_settings.awards){
+                        case 0://all
+                        var count = archipelago_settings.exclude_safest_park ? 15 : 16;
+                        // splice last N from locations
+                        var awardSource = data.locations.splice(data.locations.length - count, count);
+                            for(let i = 0; i < awardSource.length; i++){
+                                console.log("Here's all the award locations!",JSON.stringify(awardSource));
+                                //[item, location, receiving player, flags], strip the 2000000 from the location for internal use.
+                                archipelago_award_locations.push({LocationID: Number(awardSource[i][1] - 2000000), Item: awardSource[i][0], ReceivingPlayer: players[awardSource[i][2] - 1][0], Flags: awardSource[i][3]})
+                                context.getParkStorage().set("RCTRando.ArchipelagoAwardLocations",archipelago_award_locations);
+                            }
+                            break;//Okay, we're going from here next time. Add logic for pushing the positive awards onto the list and have the award function check teh list and send out the item. Good luck.
+                        case 1://positive
+                        var count = archipelago_settings.exclude_safest_park ? 10 : 11;
+                        // splice last N from locations
+                        var awardSource = data.locations.splice(data.locations.length - count, count);
+                            for(let i = 0; i < awardSource.length; i++){
+                                console.log("Here's all the award locations!",JSON.stringify(awardSource));
+                                //[item, location, receiving player, flags], strip the 2000000 from the location for internal use.
+                                archipelago_award_locations.push({LocationID: Number(awardSource[i][1] - 2000000), Item: awardSource[i][0], ReceivingPlayer: players[awardSource[i][2] - 1][0], Flags: awardSource[i][3]})        
+                                context.getParkStorage().set("RCTRando.ArchipelagoAwardLocations",archipelago_award_locations);
+                            }
+                            break;
+                        case 2://none
+                    }
                     for(let i = 0; i < data.locations.length; i++){
                         archipelago_locked_locations.push({LocationID: i, Item: data.locations[i][0], ReceivingPlayer: players[data.locations[i][2] - 1][0], Flags: data.locations[i][3]})
                     }
