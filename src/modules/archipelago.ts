@@ -605,9 +605,12 @@ class RCTRArchipelago extends ModuleBase {
 
     PoisonTrap(): void{
         var guests = map.getAllEntities("guest");
+        var allFood = ["burger","chips","ice_cream","candyfloss","pizza","popcorn","hot_dog","tentacle","toffee_apple","doughnut","chicken","funnel_cake","beef_noodles","fried_rice_noodles","wonton_soup","meatball_soup","sub_sandwich","cookie","roast_sausage"];
         for (var i=0; i<guests.length; i++) {
-            if(guests[i].HasFoodOrDrink() == true){ //can be improved by some form of GetFoodOrDrinkFlags() or finding the exact food items... But AuGold is lazy and wants to give this job to Colby :D
-                guests[i].nausea = 255;
+            for(var j=0; j<allFood.length; j++){
+                if(guests[i].hasItem(allFood[j]) == true){
+                    guests[i].nausea = 255;
+                }
             }
         }
         return;
