@@ -1728,9 +1728,9 @@ function archipelagoDebug(){
                 },
                 {
                     type: 'button',
-                    name: 'debug-button27',
+                    name: 'debug-button30',
                     x: 415,
-                    y: 140,
+                    y: 170,
                     width: 200,
                     height: 25,
                     text: 'Poison Trap',
