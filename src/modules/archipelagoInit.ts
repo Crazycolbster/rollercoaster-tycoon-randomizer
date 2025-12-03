@@ -1,9 +1,9 @@
 //Archipelago Version Number
-const archipelago_version = "v0.1.19-beta";
+const archipelago_version = "v0.1.20-beta";
 
 //Lists for Archipelago
 interface archipelago_item {
-    LocationID: number,
+    LocationID: number,//try changing this to a string and see where the code fails
     Item: string,
     ReceivingPlayer: string,
     Flags: number
