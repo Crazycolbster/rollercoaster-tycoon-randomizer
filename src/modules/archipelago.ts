@@ -448,7 +448,7 @@ class RCTRArchipelago extends ModuleBase {
             var category = "item";
             compare_list.push(items[i]);
             if(items[i][0] >= 2000000 && items[i][0] <= 2000122){//This number will need to change if we ever add more items/traps/etc.
-                var item = item_id_to_name[items[i][0]];
+                var item = item_id_to_name["OpenRCT2"][items[i][0]];
                 if (item.indexOf("Trap") > -1)
                     category = "trap";
                 if (Number(RideType[item]) > -1)//Any item that fits a ride type is a ride
@@ -1310,7 +1310,8 @@ class RCTRArchipelago extends ModuleBase {
             var prices = archipelago_location_prices;
             for(var i = 0; i < location.length; i++){//Loop through every unlocked location
                 var [display_color, colorblind_color] = self.GetColors(location[i].LocationID);
-                let item = context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[archipelago_unlocked_locations[i].Item]
+                let game = archipelago_unlocked_locations[i].Game
+                let item = context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[game][archipelago_unlocked_locations[i].Item]
                 unlocked.push("Unlocked " + item + " for " + archipelago_unlocked_locations[i].ReceivingPlayer + "!");
                 if (prices[location[i].LocationID].Price == 0){//If the price is 0, paid with blood instead of cash
                     unlocked.push(display_color + "          [" + (location[i].LocationID < 8 ? location[i].LocationID : Math.floor(location[i].LocationID / 8) - 1) + "] " + "Instead of cash, you sacrificed " + (prices[location[i].LocationID].Lives).toString() + " guests to the ELDER GODS!");
@@ -1423,7 +1424,8 @@ class RCTRArchipelago extends ModuleBase {
                             trace("Here's our current item:");
                             trace(archipelago_locked_locations[i]);
                             trace(archipelago_locked_locations[i].Item);
-                            let item = context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[archipelago_locked_locations[i].Item]
+                            let game = archipelago_locked_locations[i].Game
+                            let item = context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[game][archipelago_locked_locations[i].Item]
                             trace(item);
                             locked.push("          Unlocks " + item + " for " + archipelago_locked_locations[i].ReceivingPlayer + "!");
                             break;

@@ -1440,6 +1440,8 @@ function archipelagoDebug(){
                         // "Sonic Adventure 2", "Super Mario World", "Super Mario 64", "Super Metroid", "VVVVVV")
                         // console.log(archipelago_settings.received_games.length);
                         console.log(JSON.stringify(archipelago_locked_locations));
+                        console.log(context.getParkStorage().get("RCTRando.ArchipelagoPlayers"));
+                        console.log(archipelago_settings.player);
                         // archipelago_settings.location_information = locationInfo.Full;
                         // archipelago_send_message("GetDataPackage");
                     }
@@ -1669,8 +1671,10 @@ function archipelagoDebug(){
                     height: 25,
                     text: 'Colbys Choice',
                     onClick: function() { 
-                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
-                        console.log(JSON.stringify(archipelago_award_locations));
+                        // var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        // console.log(JSON.stringify(archipelago_award_locations));
+                        console.log(context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName"))
+                        console.log(context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName"))
                         
                     }
                 },
