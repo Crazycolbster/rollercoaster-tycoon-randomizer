@@ -127,12 +127,16 @@ function ac_req(data) {//This is what we do when we receive a data packet
                 if(!context.getParkStorage().get("RCTRando.ArchipelagoPlayers")){ //We only need to do this once
                     for(let i=0; i<data.players.length; i++) {
                         //Create guest list populated with Player names
-                        archipelagoPlayers.push([data.players[i][2], false]);
+                        let playerAlias = data.players[i][2];
+                        let playerGame = data.slot_info[data.players[i][1]][1];
+                        let playerSlot = data.players[i][1];
+                        let team = data.players[i][0];
+                        archipelagoPlayers.push([playerAlias, false, playerGame, playerSlot, team]);
                         multiworld_games.push(data.slot_info[i + 1][1]);
                     }
                     trace(data.slot_info);
-                    trace("Here's our players:");
-                    trace(archipelagoPlayers);
+                    console.log("Here's our players:");
+                    console.log(archipelagoPlayers);
                     context.getParkStorage().set("RCTRando.ArchipelagoPlayers",archipelagoPlayers);
                     try{
                         context.registerAction('SetNames', (args) => {return {};}, (args) => Archipelago.SetNames());
@@ -378,7 +382,8 @@ function ac_req(data) {//This is what we do when we receive a data packet
                                     color = "PALELAVENDER";//Colors them purple
                                     break;
                                 case "item_id":
-                                    segment = context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[Number(data.data[i].text)];
+                                    var game = archipelagoPlayers[data.data[i].player - 1][2];
+                                    segment = context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[game][Number(data.data[i].text)];
                                     switch(data.data[i].flags){
                                         case 0://Normal
                                         case 2://Useful
@@ -393,7 +398,8 @@ function ac_req(data) {//This is what we do when we receive a data packet
                                     }
                                     break;
                                 case "location_id":
-                                    segment = context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName")[Number(data.data[i].text)];
+                                    var game = archipelagoPlayers[data.data[i].player - 1][2];
+                                    segment = context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName")[game][Number(data.data[i].text)];
                                     color = "GREEN";
                                     break;
                             }
@@ -442,18 +448,18 @@ function ac_req(data) {//This is what we do when we receive a data packet
             var location_id_to_name = {};
             let current_game = Object.keys(data.data.games)[0];
 
-            trace("Here's all the keys:");
-            trace(Object.keys(data.data.games));
+            console.log("Here's all the keys:");
+            console.log(Object.keys(data.data.games));
 
-            trace("Here's our current game:");
-            trace(current_game);
-            trace("Here's every game we've received so far (This shouldn't have the current game):");
-            trace(archipelago_settings.received_games);
+            console.log("Here's our current game:");
+            console.log(current_game);
+            console.log("Here's every game we've received so far (This shouldn't have the current game):");
+            console.log(archipelago_settings.received_games);
 
             if(archipelago_settings.received_games.indexOf(current_game) !== -1)//Throw away data we already have
                 break;
 
-            trace("Received DataPackage, updating translation tables");
+            console.log("Received DataPackage, updating translation tables");
 
             function mergeObjects(target: { [key: string]: any }, source: { [key: string]: any }): void {
                 for (const key in source) {
@@ -476,14 +482,15 @@ function ac_req(data) {//This is what we do when we receive a data packet
 
                 return flippedObject;
               }
-            for (const gameName in data.data.games){//For every game in this game of Archipelago
-                if (data.data.games.hasOwnProperty(gameName)) {
-                    mergeObjects(item_name_to_id, data.data.games[gameName].item_name_to_id);
-                    mergeObjects(location_name_to_id, data.data.games[gameName].location_name_to_id);
-                }
-            }
+            
+            mergeObjects(item_name_to_id, data.data.games[current_game].item_name_to_id);
+            mergeObjects(location_name_to_id, data.data.games[current_game].location_name_to_id);
+            
             item_id_to_name = flipObject(item_name_to_id);
             location_id_to_name = flipObject(location_name_to_id);
+
+            item_id_to_name = {[current_game]: item_id_to_name}
+            location_id_to_name = {[current_game]: location_id_to_name}
 
             mergeObjects(full_item_id_to_name, item_id_to_name);
             mergeObjects(full_location_id_to_name, location_id_to_name);
@@ -494,8 +501,8 @@ function ac_req(data) {//This is what we do when we receive a data packet
             // console.log(full_item_id_to_name);
             // console.log(full_location_id_to_name);
 
-            trace("Just added data for this game:");
-            trace(current_game);
+            console.log("Just added data for this game:");
+            console.log(current_game);
 
             archipelago_settings.received_games.push(current_game);
             saveArchipelagoProgress();
@@ -558,8 +565,11 @@ function ac_req(data) {//This is what we do when we receive a data packet
                         var awardSource = data.locations.splice(data.locations.length - count, count);
                             for(let i = 0; i < awardSource.length; i++){
                                 console.log("Here's all the award locations!",JSON.stringify(awardSource));
-                                //[item, location, receiving player, flags], strip the 2000000 from the location for internal use.
-                                archipelago_award_locations.push({LocationID: Number(awardSource[i][1] - 2000000), Item: awardSource[i][0], ReceivingPlayer: players[awardSource[i][2] - 1][0], Flags: awardSource[i][3]})
+                                let receivingPlayer = players[data.locations[i][2] - 1][0]
+                                let game = players[data.locations[i][2] - 1][2];
+                                let slot = data.locations[i][2];
+                                //Strip the 2000000 from the location for internal use.
+                                archipelago_award_locations.push({LocationID: Number(awardSource[i][1] - 2000000), Item: awardSource[i][0], Game: game, Slot: slot, ReceivingPlayer: receivingPlayer, Flags: awardSource[i][3]})
                                 context.getParkStorage().set("RCTRando.ArchipelagoAwardLocations",archipelago_award_locations);
                             }
                             break;//Okay, we're going from here next time. Add logic for pushing the positive awards onto the list and have the award function check teh list and send out the item. Good luck.
@@ -569,15 +579,21 @@ function ac_req(data) {//This is what we do when we receive a data packet
                         var awardSource = data.locations.splice(data.locations.length - count, count);
                             for(let i = 0; i < awardSource.length; i++){
                                 console.log("Here's all the award locations!",JSON.stringify(awardSource));
-                                //[item, location, receiving player, flags], strip the 2000000 from the location for internal use.
-                                archipelago_award_locations.push({LocationID: Number(awardSource[i][1] - 2000000), Item: awardSource[i][0], ReceivingPlayer: players[awardSource[i][2] - 1][0], Flags: awardSource[i][3]})        
+                                let receivingPlayer = players[data.locations[i][2] - 1][0]
+                                let game = players[data.locations[i][2] - 1][2];
+                                let slot = data.locations[i][2];
+                                //Strip the 2000000 from the location for internal use.
+                                archipelago_award_locations.push({LocationID: Number(awardSource[i][1] - 2000000), Item: awardSource[i][0], Game: game, Slot: slot, ReceivingPlayer: receivingPlayer, Flags: awardSource[i][3]})        
                                 context.getParkStorage().set("RCTRando.ArchipelagoAwardLocations",archipelago_award_locations);
                             }
                             break;
                         case 2://none
                     }
                     for(let i = 0; i < data.locations.length; i++){
-                        archipelago_locked_locations.push({LocationID: i, Item: data.locations[i][0], ReceivingPlayer: players[data.locations[i][2] - 1][0], Flags: data.locations[i][3]})
+                        let receivingPlayer = players[data.locations[i][2] - 1][0]
+                        let game = players[data.locations[i][2] - 1][2];
+                        let slot = data.locations[i][2];
+                        archipelago_locked_locations.push({LocationID: i, Item: data.locations[i][0], Game: game, Slot: slot, ReceivingPlayer: receivingPlayer, Flags: data.locations[i][3]})
                     }
                     ArchipelagoSaveLocations(archipelago_locked_locations,[]);
                 }
@@ -595,11 +611,15 @@ function ac_req(data) {//This is what we do when we receive a data packet
                 trace(context.getParkStorage().get("RCTRando.ArchipelagoPlayers") as playerTuple[]);
                 for(let i = 0; i < data.value.length; i++){
                     let archipelagoPlayers = (context.getParkStorage().get("RCTRando.ArchipelagoPlayers") as playerTuple[]);
+                    let receivingPlayer = archipelagoPlayers[Number(data.value[i].receiving_player) - 1][0];
+                    let findingPlayer = archipelagoPlayers[Number(data.value[i].finding_player) - 1][0];
+                    let itemGame = archipelagoPlayers[Number(data.value[i].receiving_player) - 1][2];
+                    let locationGame = archipelagoPlayers[Number(data.value[i].finding_player) - 1][2];
                     var hint: archipelago_hint = {
-                        ReceivingPlayer: archipelagoPlayers[Number(data.value[i].receiving_player) - 1][0],
-                        FindingPlayer: archipelagoPlayers[Number(data.value[i].finding_player) - 1][0],
-                        Location: context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName")[Number(data.value[i].location)],
-                        Item: context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[Number(data.value[i].item)],
+                        ReceivingPlayer: receivingPlayer,
+                        FindingPlayer: findingPlayer,
+                        Location: context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName")[locationGame][Number(data.value[i].location)],
+                        Item: context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[itemGame][Number(data.value[i].item)],
                         Found: data.value[i].found
                     }
                     //Check if we've received the hint before
