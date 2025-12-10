@@ -1447,9 +1447,9 @@ function archipelagoDebug(){
                         // "The Legend of Zelda", "A Link to the Past", "Links Awakening", "Pokemon Red and Blue", "Rogue Legacy",
                         // "Sonic Adventure 2", "Super Mario World", "Super Mario 64", "Super Metroid", "VVVVVV")
                         // console.log(archipelago_settings.received_games.length);
-                        console.log(JSON.stringify(archipelago_locked_locations));
-                        console.log(context.getParkStorage().get("RCTRando.ArchipelagoPlayers"));
-                        console.log(archipelago_settings.player);
+                        console.log(JSON.stringify(archipelago_unlocked_locations));
+                        // console.log(context.getParkStorage().get("RCTRando.ArchipelagoPlayers"));
+                        // console.log(archipelago_settings.player);
                         // archipelago_settings.location_information = locationInfo.Full;
                         // archipelago_send_message("GetDataPackage");
                     }

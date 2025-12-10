@@ -1313,9 +1313,15 @@ class RCTRArchipelago extends ModuleBase {
                 let game = archipelago_unlocked_locations[i].Game
                 let item = context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[game][archipelago_unlocked_locations[i].Item]
                 unlocked.push("Unlocked " + item + " for " + archipelago_unlocked_locations[i].ReceivingPlayer + "!");
-                if (prices[location[i].LocationID].Price == 0){//If the price is 0, paid with blood instead of cash
-                    unlocked.push(display_color + "          [" + (location[i].LocationID < 8 ? location[i].LocationID : Math.floor(location[i].LocationID / 8) - 1) + "] " + "Instead of cash, you sacrificed " + (prices[location[i].LocationID].Lives).toString() + " guests to the ELDER GODS!");
+                if(!prices[location[i].LocationID]){
+                    let award = context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName");
+                    // console.log("Pizzxa" + JSON.stringify(location[i]));//JSON.stringify(award));
+                    let ID = String(location[i].LocationID + 2000000);
+                    unlocked.push("{WHITE}          [" + award["OpenRCT2"][ID] + "]");
                 }
+                else if (prices[location[i].LocationID].Price === 0){//If the price is 0, paid with blood instead of cash
+                    unlocked.push(display_color + "          [" + (location[i].LocationID < 8 ? location[i].LocationID : Math.floor(location[i].LocationID / 8) - 1) + "] " + "Instead of cash, you sacrificed " + (prices[location[i].LocationID].Lives).toString() + " guests to the ELDER GODS!");
+                }                
                 else{//Set up the string denoting the price
                     var prereqs = prices[location[i].LocationID].RidePrereq;
                     var cost = display_color + "          " + "[" + (location[i].LocationID < 8 ? location[i].LocationID : Math.floor(location[i].LocationID / 8) - 1) + "] "  + context.formatString("{CURRENCY2DP}",  (prices[location[i].LocationID].Price) * 10);//Cash price
