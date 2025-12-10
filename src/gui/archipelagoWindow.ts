@@ -1683,6 +1683,7 @@ function archipelagoDebug(){
                         // console.log(JSON.stringify(archipelago_award_locations));
                         console.log(context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName"))
                         console.log(context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName"))
+                        console.log(context.getParkStorage().get("RCTRando.ArchipelagoAwardLocations"));
                         
                     }
                 },

@@ -2123,7 +2123,7 @@ class RCTRArchipelago extends ModuleBase {
 
     checkAwards(): void{//Looks at all owned awards and sends location for them if not already received
         var awards = park.awards;
-        console.log("asonetuhaontu",awards);
+        trace("asonetuhaontu",awards);
         var award_setting = archipelago_settings.awards;
         if(award_setting == 2)
             return;//No awards, no logic needed!
@@ -2148,25 +2148,25 @@ class RCTRArchipelago extends ModuleBase {
                 switch(awards[i].type){
                     case "mostUntidy":
                         if (award_setting == 0){
-                            archipelago_unlocked_locations.push(findAward(808))
+                            archipelago_unlocked_locations.push(findAward(8008))
                         }
                         else 
                         return;
                         break;
                     case "mostTidy":
-                        archipelago_unlocked_locations.push(findAward(809))
+                        archipelago_unlocked_locations.push(findAward(8009))
                         break;
                     case "bestRollerCoasters":
-                        archipelago_unlocked_locations.push(findAward(810))
+                        archipelago_unlocked_locations.push(findAward(8010))
                         break;
                     case "bestValue":
                         return;
                     case "mostBeautiful":
-                        archipelago_unlocked_locations.push(findAward(811))
+                        archipelago_unlocked_locations.push(findAward(8011))
                         break;
                     case "worstValue":
                         if (award_setting == 0){
-                            archipelago_unlocked_locations.push(findAward(812))
+                            archipelago_unlocked_locations.push(findAward(8012))
                         }
                         else 
                         return;
@@ -2174,49 +2174,49 @@ class RCTRArchipelago extends ModuleBase {
                     case "safest":
                         if(archipelago_settings.exclude_safest_park)
                             return;
-                        archipelago_unlocked_locations.push(findAward(813))
+                        archipelago_unlocked_locations.push(findAward(8013))
                         break;
                     case "bestStaff":
-                        archipelago_unlocked_locations.push(findAward(814))
+                        archipelago_unlocked_locations.push(findAward(8014))
                         break;
                     case "bestFood":
-                        archipelago_unlocked_locations.push(findAward(815))
+                        archipelago_unlocked_locations.push(findAward(8015))
                         break;
                     case "worstFood":
                         if (award_setting == 0){
-                            archipelago_unlocked_locations.push(findAward(816))
+                            archipelago_unlocked_locations.push(findAward(8016))
                         }
                         else 
                         return;
                         break;
                     case "bestToilets":
-                        archipelago_unlocked_locations.push(findAward(817))
+                        archipelago_unlocked_locations.push(findAward(8017))
                         break;
                     case "mostDisappointing":
                         if (award_setting == 0){
-                            archipelago_unlocked_locations.push(findAward(818))
+                            archipelago_unlocked_locations.push(findAward(8018))
                         }
                         else 
                         return;
                         break;
                     case "bestWaterRides":
-                        archipelago_unlocked_locations.push(findAward(819))
+                        archipelago_unlocked_locations.push(findAward(8019))
                         break;
                     case "bestCustomDesignedRides":
-                        archipelago_unlocked_locations.push(findAward(820))
+                        archipelago_unlocked_locations.push(findAward(8020))
                         break;
                     case "mostDazzlingRideColours":
-                        archipelago_unlocked_locations.push(findAward(821))
+                        archipelago_unlocked_locations.push(findAward(8021))
                         break;
                     case "mostConfusingLayout" :
                         if (award_setting == 0){
-                            archipelago_unlocked_locations.push(findAward(822))
+                            archipelago_unlocked_locations.push(findAward(8022))
                         }
                         else 
                         return;
                         break;
                     case "bestGentleRides":
-                        archipelago_unlocked_locations.push(findAward(823))
+                        archipelago_unlocked_locations.push(findAward(8023))
                         break;
                 }
                 console.log(archipelago_unlocked_locations);

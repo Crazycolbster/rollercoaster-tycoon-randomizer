@@ -62,15 +62,15 @@ function archipelago_select_message(type: string, message?: any){
         }
         switch(archipelago_settings.awards){
             case 0://Adds all awards to the location scout list
-                var award_locations = [2000808, 2000809, 2000810, 2000811, 2000812, 2000814, 2000815, 2000816, 2000817, 2000818, 2000819, 2000820, 2000821, 2000822, 2000823]
+                var award_locations = [2008008, 2008009, 2008010, 2008011, 2008012, 2008014, 2008015, 2008016, 2008017, 2008018, 2008019, 2008020, 2008021, 2008022, 2008023]
                 if (!archipelago_settings.exclude_safest_park)
-                    award_locations.push(2000813);
+                    award_locations.push(2008013);
                 wanted_locations = wanted_locations.concat(award_locations);
                 break;
             case 1://Adds postive awards to the location scout list
-                var award_locations = [2000809, 2000810, 2000811, 2000814, 2000815, 2000817, 2000819, 2000820, 2000821, 2000823]
+                var award_locations = [2008009, 2008010, 2008011, 2008014, 2008015, 2008017, 2008019, 2008020, 2008021, 2008023]
                 if (!archipelago_settings.exclude_safest_park)
-                    award_locations.push(2000813);
+                    award_locations.push(2008013);
                 wanted_locations = wanted_locations.concat(award_locations);
                 break;
             case 2://Adds nothing to the list. 
@@ -569,7 +569,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
                         // splice last N from locations
                         var awardSource = data.locations.splice(data.locations.length - count, count);
                             for(let i = 0; i < awardSource.length; i++){
-                                trace("Here's all the award locations!",JSON.stringify(awardSource));
+                                console.log("Here's all the award locations!",JSON.stringify(awardSource));
                                 let receivingPlayer = players[data.locations[i][2] - 1][0]
                                 let game = players[data.locations[i][2] - 1][2];
                                 let slot = data.locations[i][2];
