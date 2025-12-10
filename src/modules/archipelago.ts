@@ -2279,15 +2279,15 @@ class RCTRArchipelago extends ModuleBase {
             context.setTimeout(() => {self.RequestGames();}, 250);
             return;
         }
-        console.log("We have the list of games!")
+        trace("We have the list of games!")
         //If we haven't started yet or if the current game has already been received
         if(!archipelago_current_game_request || received_games.indexOf(archipelago_current_game_request) !== -1){
             for(let i = 0; i < games.length; i++){
                 if(received_games.indexOf(games[i]) === -1){
                     archipelago_current_game_request = games[i];
                     archipelago_repeat_game_request_ready = true;
-                    console.log("We have a new game to request:");
-                    console.log(archipelago_current_game_request);
+                    trace("We have a new game to request:");
+                    trace(archipelago_current_game_request);
                     archipelago_repeat_game_request_counter = 0;
                     break;
                 }
@@ -2302,8 +2302,8 @@ class RCTRArchipelago extends ModuleBase {
             }
             return;//P*cking past Colby needs to put his returns in the right spot
         }
-        console.log("Request Counter:");
-        console.log(archipelago_repeat_game_request_counter);
+        trace("Request Counter:");
+        trace(archipelago_repeat_game_request_counter);
         if (archipelago_repeat_game_request_counter > 80){
             archipelago_repeat_game_request_ready = true;
             archipelago_repeat_game_request_counter = 0;

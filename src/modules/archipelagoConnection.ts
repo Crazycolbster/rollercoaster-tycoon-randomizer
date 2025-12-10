@@ -564,7 +564,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
                         // splice last N from locations
                         var awardSource = data.locations.splice(data.locations.length - count, count);
                             for(let i = 0; i < awardSource.length; i++){
-                                console.log("Here's all the award locations!",JSON.stringify(awardSource));
+                                trace("Here's all the award locations!",JSON.stringify(awardSource));
                                 let receivingPlayer = players[data.locations[i][2] - 1][0]
                                 let game = players[data.locations[i][2] - 1][2];
                                 let slot = data.locations[i][2];
@@ -578,7 +578,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
                         // splice last N from locations
                         var awardSource = data.locations.splice(data.locations.length - count, count);
                             for(let i = 0; i < awardSource.length; i++){
-                                console.log("Here's all the award locations!",JSON.stringify(awardSource));
+                                trace("Here's all the award locations!",JSON.stringify(awardSource));
                                 let receivingPlayer = players[data.locations[i][2] - 1][0]
                                 let game = players[data.locations[i][2] - 1][2];
                                 let slot = data.locations[i][2];
