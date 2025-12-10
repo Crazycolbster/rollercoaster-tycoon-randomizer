@@ -436,6 +436,10 @@ function ac_req(data) {//This is what we do when we receive a data packet
 
                     break;
 
+                case "Countdown":
+                    ui.showError("Let's get ready to rumble!", data.data[0].text);
+                    break;
+
                 default:
                     archipelago_print_message(data.data[0].text);
             }
