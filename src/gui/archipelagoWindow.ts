@@ -1520,7 +1520,7 @@ function archipelagoDebug(){
                     height: 25,
                     text: 'Set Obscene Cash',
                     onClick: function() {
-                        park.cash = 1000000;
+                        park.cash = 100000000;
                     }
                 },
                 {

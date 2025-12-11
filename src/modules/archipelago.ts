@@ -1944,7 +1944,10 @@ class RCTRArchipelago extends ModuleBase {
         let Prereqs = Prices[LocationID].RidePrereq;//Have to get LocationID before we can properly check Prereqs
 
         trace(Prices[LocationID]);
-        if(!context.paused){
+        if(context.paused){
+            ui.showError("Game Paused...", "The shopkeeper is not a being that transends time in this universe...unlike you. Unpause the game and try again!");
+        }
+        else {
             if((Prices[LocationID].Price <= (park.cash / 10) || Prices[LocationID].Price == 0) || archipelago_skip_enabled){//Check if player has enough cash or if the price is 0.
                 if(archipelago_skip_enabled){
                     var archipelago_skip_elligible = self.CheckIfUnlocked(Prices[LocationID].RidePrereq[1]);//Make sure the rides unlocked, even if not built.
@@ -1959,7 +1962,7 @@ class RCTRArchipelago extends ModuleBase {
                     var QualifiedInfo = self.CheckElligibleRides(LocationID);
                     let guest_list = map.getAllEntities("guest");
                     if(!Prereqs.length || QualifiedInfo[0] >= Prereqs[0] || archipelago_skip_enabled){
-                        if(!QualifiedInfo[5] || QualifiedInfo[5] >= Prereqs[6]){//If our total guest count is higher than what we asked for
+                        if((!QualifiedInfo[5] || QualifiedInfo[5] >= Prereqs[6]) || archipelago_skip_enabled){//If our total guest count is higher than what we asked for
                             if(!archipelago_skip_enabled){
                                 trace("Prereqs have been met with this many qualified rides: " + String(QualifiedInfo[0]));
                                 if(Prices[LocationID].Lives != 0){//Code to explode guests
@@ -2026,9 +2029,6 @@ class RCTRArchipelago extends ModuleBase {
             else{
                 ui.showError("Not Enough Cash...", "You do not have enough money to buy this!")
             }
-        }
-        else{
-            ui.showError("Game Paused...", "The shopkeeper is not a being that transends time in this universe...unlike you. Unpause the game and try again!");
         }
         return;
     }
