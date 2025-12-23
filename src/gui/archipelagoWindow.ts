@@ -2447,6 +2447,7 @@ function interpretMessage(){
                     archipelago_print_message("!!help: Prints this menu. I bet you didn't know that.");
                     archipelago_print_message("!!toggleDeathLink: Enables/Disables Deathlink\n");
                     archipelago_print_message("!!setMaxSpeed x: Sets the maximum allowed speed.");
+                    archipelago_print_message("!!setvisibility x: Sets visibility. See your YAML for the options.")
                     archipelago_print_message("!!sync: syncs all the items in case the connector is bad at its job.");
                     archipelago_print_message("!!addSkip: Cheats in a skip for the unlock shop. This is on the honor system.");
                     break;
@@ -2457,6 +2458,27 @@ function interpretMessage(){
                     archipelago_print_message("Deathlink Enabled you monster");
                     else
                     archipelago_print_message("Deathlink Disabled you coward");
+                    break;
+                case "!!setvisibility nothing":
+                case "!!setvisibility none":
+                    archipelago_settings.location_information = "None";
+                    archipelago_print_message("Visibility set to [REDACTED]");
+                    break;
+                case "!!setvisibility progression":
+                    archipelago_settings.location_information = "Progression";
+                    archipelago_print_message("Visibility set to Progression!")
+                    break;
+                case "!!setvisibility recipient":
+                    archipelago_settings.location_information = "Recipient";
+                    archipelago_print_message("Visibilty set to Recipient!")
+                    break;
+                case "!!setvisibility progression recipient": 
+                    archipelago_settings.location_information = "Progression Recipient";
+                    archipelago_print_message("Visibilty set to Progression Recipient!")
+                    break;
+                case "!!setvisibility full":
+                    archipelago_settings.location_information = "Full";
+                    archipelago_print_message("Visibilty set to Full!")
                     break;
                 case '!!setmaxspeed 1'://Changes maximum speed allowed
                     archipelago_settings.maximum_speed = 1;
