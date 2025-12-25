@@ -1681,9 +1681,10 @@ function archipelagoDebug(){
                     onClick: function() { 
                         // var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         // console.log(JSON.stringify(archipelago_award_locations));
-                        console.log(context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName"))
-                        console.log(context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName"))
-                        console.log(context.getParkStorage().get("RCTRando.ArchipelagoAwardLocations"));
+                        let costumes = objectManager.getAllObjects("peep_animations");
+                        for (let i = 0; i < costumes.length; i++){
+                            console.log((costumes[i]));
+                        }
                         
                     }
                 },

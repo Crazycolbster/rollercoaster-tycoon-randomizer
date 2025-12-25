@@ -707,17 +707,17 @@ class RCTRArchipelago extends ModuleBase {
             furry_number = 300;
 
         for(let i = 0; i < costumes.length; i++){
-            switch(costumes[i].name){
-                case "Tiger costume":
+            switch(costumes[i].identifier){
+                case "rct2.peep_animations.entertainer_tiger"://"Tiger costume":
                     tiger = costumes[i].index;
                     break;
-                case "Panda costume":
+                case "rct2.peep_animations.entertainer_panda"://"Panda costume":
                     panda = costumes[i].index;
                     break;
-                case "Gorilla costume":
+                case "rct2.peep_animations.entertainer_gorilla"://"Gorilla costume":
                     gorilla = costumes[i].index;
                     break;
-                case "Elephant costume":
+                case "rct2.peep_animations.entertainer_elephant"://"Elephant costume":
                     elephant = costumes[i].index;
                     break;
             }
