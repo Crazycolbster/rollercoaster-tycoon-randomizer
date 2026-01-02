@@ -164,6 +164,11 @@ const adPool: Ad[] = [
         onClick: () => 
             {try{
                 var DeathLink = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                if (!archipelago_settings.deathlink){
+                    console.log("no deathlink enabled");
+                    archipelago_settings.deathlink = true;
+                    context.setTimeout(() => {archipelago_settings.deathlink = false; archipelago_settings.deathlink_timeout = false;}, 5000);
+                }
                 DeathLink.SendDeathLink(null,"A popup window with the text \"SEND DEATHLINK\"");}
             catch{ui.showError("Archipelago not open", "You should try this while playing Archipelago!")}
             ui.closeAllWindows()}//We don't know the ID, so close everything. Besides, it "Crashed"
