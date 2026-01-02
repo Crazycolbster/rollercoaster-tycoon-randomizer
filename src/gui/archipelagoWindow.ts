@@ -1748,6 +1748,7 @@ function archipelagoDebug(){
                     text: 'Poison Trap',
                     onClick: function() {
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("AuGold found Colby's Food Poisioning Trap!");
                         BathroomTrap.PoisonTrap();
                     }
                 }

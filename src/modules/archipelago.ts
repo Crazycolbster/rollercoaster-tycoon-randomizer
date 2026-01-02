@@ -447,7 +447,7 @@ class RCTRArchipelago extends ModuleBase {
         for(let i = counter; i < items.length; i++){//Each item
             var category = "item";
             compare_list.push(items[i]);
-            if(items[i][0] >= 2000000 && items[i][0] <= 2000122){//This number will need to change if we ever add more items/traps/etc.
+            if(items[i][0] >= 2000000 && items[i][0] <= 2000123){//This number will need to change if we ever add more items/traps/etc.
                 var item = item_id_to_name["OpenRCT2"][items[i][0]];
                 if (item.indexOf("Trap") > -1)
                     category = "trap";
@@ -580,7 +580,7 @@ class RCTRArchipelago extends ModuleBase {
     ActivateTrap(trap: string): void{
         var self = this;
         switch(trap){
-            case "FoodPoison":
+            case "Food Poisioning Trap":
                 self.PoisonTrap();
                 break;
             case "Bathroom Trap":
