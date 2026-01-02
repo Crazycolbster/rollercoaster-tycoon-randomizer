@@ -1740,14 +1740,15 @@ function archipelagoDebug(){
                 },
                 {
                     type: 'button',
-                    name: 'debug-button29',
+                    name: 'debug-button30',
                     x: 415,
-                    y: 140,
+                    y: 170,
                     width: 200,
                     height: 25,
-                    text: 'Set Max Speed',
+                    text: 'Poison Trap',
                     onClick: function() {
-                        archipelago_settings.maximum_speed = 8;
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.PoisonTrap();
                     }
                 }
            ]
