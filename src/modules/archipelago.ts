@@ -370,8 +370,9 @@ class RCTRArchipelago extends ModuleBase {
         const origNumResearched = park.research.inventedItems.length;
         let researchItems = park.research.inventedItems.concat(park.research.uninventedItems);
 
-        // Adds first aid room and cash machine. This will be depreciated when future Colby is good at his job.
-        objectManager.load(["rct2.ride.faid1", "rct2.ride.atm1"]);
+        // Adds first aid room, cash machine, merry-go-round and log flume.
+        // Every park must have at least 1 gentle and water ride for award unlocks.
+        objectManager.load(["rct2.ride.faid1", "rct2.ride.atm1", "rct2.ride.lfb1", "rct2.ride.mgr1"]);
 
         //Add every ride for specific settings in Archipelago.
         //Rides are only unlocked by command from the server and some may never be requested based on settings
