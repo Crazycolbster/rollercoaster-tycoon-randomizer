@@ -343,6 +343,7 @@ const adPool: Ad[] = [
                 var iceIndex = (objectManager.load("rct2.terrain_surface.ice")).index;
                 console.log(iceIndex);
                 var surfaces = objectManager.getAllObjects("terrain_surface");
+                context.executeAction("cheatset", {type: 35, param1: 6, param2: 0}, () => trace("Summoned snowfall"));
                 for(let i = 1; i < (x - 1); i++){//check the x's. Map.size gives a couple coordinates off the map, so we exclude those.
                     for(let j = 1; j < (y - 1); j++){//check the y's
                         var tile = map.getTile(i,j).elements;//get the tile data
