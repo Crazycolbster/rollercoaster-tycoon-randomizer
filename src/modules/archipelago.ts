@@ -2007,7 +2007,7 @@ class RCTRArchipelago extends ModuleBase {
                             var lockedWindow = ui.getWindow("archipelago-locations");
                             lockedWindow.findWidget<ListViewWidget>("locked-location-list").items = self.CreateLockedList();
                             spam_timeout = true;
-                            context.setTimeout(() => {spam_timeout = false;}, 2000);
+                            context.setTimeout(() => {spam_timeout = false;}, 200);
                             //If we have full visibility, send hints for any items shown
                             if(archipelago_settings.location_information == "Full"){
                                 let hint_list = [];
