@@ -41,6 +41,8 @@ function archipelagoGui(){
         }
     }
 
+    context.setTimeout(changeTextColor, 1000);
+
     var window = ui.openWindow({
         classification: 'archipelago-connect',
         title: "Archipelago " + archipelago_version,
@@ -119,6 +121,26 @@ function archipelagoGui(){
                 }
             },
             {
+                type: 'label',
+                name: 'Tutorial-label',
+                x: ww - 160 - 40 - 95,
+                y: wh - 20,
+                width: 85,
+                height: 26,
+                text: '{GREEN}First time? -->',
+                tooltip: 'I\'ll learn you good!',
+            },
+            {
+                type: 'label',
+                name: 'Tutorial-label1',
+                x: ww - 120 - 4 - 0,
+                y: wh - 20,
+                width: 85,
+                height: 26,
+                text: '{GREEN}<-- Click here!!',
+                tooltip: 'I\'ll learn you good!',
+            },
+            {
                 type: 'custom',
                 name: 'custom-archipealgo-logo-1',
                 x: 5,
@@ -132,6 +154,23 @@ function archipelagoGui(){
         )
     });
     return window;
+}
+
+function changeTextColor(){
+    trace("COLEOR!");
+    if(((ui.getWindow("archipelago-connect").findWidget("Tutorial-label") as LabelWidget).text) == '{BABYBLUE}First time? -->'){
+        (ui.getWindow("archipelago-connect").findWidget("Tutorial-label") as LabelWidget).text = '{GREEN}First time? -->';
+    }
+    else{
+        (ui.getWindow("archipelago-connect").findWidget("Tutorial-label") as LabelWidget).text = '{BABYBLUE}First time? -->';
+    }
+    if(((ui.getWindow("archipelago-connect").findWidget("Tutorial-label1") as LabelWidget).text) == '{BABYBLUE}<-- Click here!!'){
+        (ui.getWindow("archipelago-connect").findWidget("Tutorial-label1") as LabelWidget).text = '{GREEN}<-- Click here!!';
+    }
+    else{
+        (ui.getWindow("archipelago-connect").findWidget("Tutorial-label1") as LabelWidget).text = '{BABYBLUE}<-- Click here!!';
+    }
+    context.setTimeout(changeTextColor, 1000);
 }
 
 function archipelagoLocations(){
@@ -2209,7 +2248,7 @@ var tutorial_6 = function() {
         width: ww,
         height: wh,
         widgets: [].concat(
-            NewLabel("The sixth and final tab is EnergyLink Bank ATM Machine. This ATM Machine lets you send money to the multiworld for any game that supports EnergyLink.", {
+            NewLabel("The sixth tab is EnergyLink Bank ATM Machine. This ATM Machine lets you send money to the multiworld for any game that supports EnergyLink.", {
                 name: 'Line-1',
                 y: 0,
                 width: 2,
@@ -2253,7 +2292,7 @@ var tutorial_6 = function() {
                 isDisabled: false,
                 onClick: function() {
                     tutorial_6.close();
-                    tutorial_7();
+                    tutorial_6point5();
                 }
             },
             {
@@ -2270,6 +2309,79 @@ var tutorial_6 = function() {
         )
     })
     return tutorial_6;
+}
+
+var tutorial_6point5 = function() {//I didn't want to change every other function when I had to add this new one.
+    var ww = 350;
+    var wh = 225;
+    let y = 0;
+    var tutorial_6point5 = ui.openWindow({
+        classification: 'tutorial-2',
+        title: "How to play!",
+        width: ww,
+        height: wh,
+        widgets: [].concat(
+            NewLabel("The seventh and final tab is the awards tab! Here, you can see what awards you've unlocked in your run (if enabled in the YAML).", {
+                name: 'Line-1',
+                y: 0,
+                width: 2,
+                tooltip: "I'll be honest. I kept mixing up 'award' and 'reward' in the code."
+            }),
+            NewLabel("Hovering over the award will tell you what it is and how to unlock it in a tooltip.", {
+                name: 'Line-2',
+                y: 1.5,
+                width: 2,
+                tooltip: "It's like the one time the tooltips in here are actually helpful."
+            }),
+            NewLabel("Positive awards will send out a regular Archipelago item. Negative awards will always send out a trap. Beware!", {
+                name: 'Line-3',
+                y: 3,
+                width: 2,
+                tooltip: "Unless of course you're playing with a game devolped by a maniac who puts both the progression and trap tags on the same item. Evil stuff."
+            }),
+            [{
+                type: 'button',
+                name: 'back-button',
+                x: ww - 160 - 88 - 6,
+                y: wh - 6 - 26 - 29,
+                width: 85,
+                height: 26,
+                text: 'Back',
+                tooltip: 'The previous page was pretty good, wasn\'t it?',
+                onClick: function() {
+                    tutorial_6point5.close();
+                    tutorial_6();
+                }
+            },
+            {
+                type: 'button',
+                name: 'next-button',
+                x: ww - 160 - 6,
+                y: wh - 6 - 26 - 29,
+                width: 85,
+                height: 26,
+                text: 'Next Page',
+                tooltip: '"Pro tip: Hover your mouse over any of the window elements in this plugin to get insightful and useful commentary!"',
+                isDisabled: false,
+                onClick: function() {
+                    tutorial_6point5.close();
+                    tutorial_7();
+                }
+            },
+            {
+                type: 'custom',
+                name: 'custom-archipealgo-logo-1',
+                x: 5,
+                y: wh - 24,
+                width: 22,
+                height: 20,
+                tooltip: 'Be sure to play with Deathlink! It\s a fun option that doesn\'t cause any stress at all!',
+                onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_icon_ID.start).id, 0,0)}
+            }
+            ]
+        )
+    })
+    return tutorial_6point5;
 }
 
 var tutorial_7 = function() {
@@ -2311,7 +2423,7 @@ var tutorial_7 = function() {
                 tooltip: 'The previous page was pretty good, wasn\'t it?',
                 onClick: function() {
                     tutorial_7.close();
-                    tutorial_6();
+                    tutorial_6point5();
                 }
             },
             {
