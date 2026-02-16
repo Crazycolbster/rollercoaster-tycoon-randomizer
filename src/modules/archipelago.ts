@@ -89,7 +89,7 @@ class RCTRArchipelago extends ModuleBase {
             init_archipelago_connection();
         //Set up daily events
         self.SubscribeEvent("interval.day", ()=>{context.executeAction("SetArchipelagoResearch", {}); self.CheckObjectives(); context.executeAction("SetNames", {});
-            self.checkAwards()});
+            self.checkAwards(); self.SetEntranceOption();});
         //Add menu items
         ui.registerMenuItem("Archipelago Checks!", archipelagoLocations); //Register the check menu
         ui.registerMenuItem("Archipelago Tutorial", tutorial_0); //Register the tutorial
@@ -344,6 +344,10 @@ class RCTRArchipelago extends ModuleBase {
         context.executeAction("parksetresearchfunding", {priorities: 0, fundingAmount: 0}, noop);//Set Funding to 0 and unselect every focus
         park.research.progress = 0; //If any progress is made (Say by users manually re-enabling research), set it back to 0.
         return {};
+    }
+
+    SetEntranceOption(): any{// Absolutely guarantees that user choice for ride/park entrance fee is allowed
+        park.setFlag("unlockAllPrices", true);//Allows charging for the entrance, rides, or both
     }
 
     InterpretAction(player, action, args, result): void {//Interprets game actions for various processes
