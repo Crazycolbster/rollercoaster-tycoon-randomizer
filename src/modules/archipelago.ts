@@ -1415,8 +1415,23 @@ class RCTRArchipelago extends ModuleBase {
                                 case 2:
                                     locked.push("          Unlocks a cool item for somebody!")
                                     break;
+                                case 3:
+                                    locked.push("          Unlocks a cool progression item for somebody!")
+                                    break;
                                 case 4:
                                     locked.push("          IT'S A TRAP!")
+                                    break;
+                                case 5:
+                                    locked.push("          Unlocks a progression item for-WAIT! IT'S A TRAP!")
+                                    break;
+                                case 6:
+                                    locked.push("          Unlocks a cool item for-WAIT! IT'S A TRAP")
+                                    break;
+                                case 7:
+                                    locked.push("          Unlocks a cool progression item for-WAIT! IT'S A TRAP!")
+                                    break;
+                                default:
+                                    locked.push("          Unlocks a mystery item! (Please let Colby know in the Discord)")
                                     break;
                             }
                             break;
@@ -1434,8 +1449,23 @@ class RCTRArchipelago extends ModuleBase {
                                 case 2:
                                     locked.push("          Unlocks a cool item for " + archipelago_locked_locations[i].ReceivingPlayer + "!")
                                     break;
+                                case 3:
+                                    locked.push("          Unlocks a cool progression item for " + archipelago_locked_locations[i].ReceivingPlayer + "!")
+                                    break;
                                 case 4:
                                     locked.push("          IT'S A TRAP FOR " + archipelago_locked_locations[i].ReceivingPlayer + "!")
+                                    break;
+                                case 5:
+                                    locked.push("          Unlocks a progression item for-WAIT! IT'S A TRAP FOR " + archipelago_locked_locations[i].ReceivingPlayer + "!")
+                                    break;
+                                case 6:
+                                    locked.push("          Unlocks a cool item for-WAIT! IT'S A TRAP FOR " + archipelago_locked_locations[i].ReceivingPlayer + "!")
+                                    break;
+                                case 7:
+                                    locked.push("          Unlocks a cool progression item for-WAIT! IT'S A TRAP FOR " + archipelago_locked_locations[i].ReceivingPlayer + "!")
+                                    break;
+                                default:
+                                    locked.push("          Unlocks a mystery item for " + archipelago_locked_locations[i].ReceivingPlayer + "! (Please let Colby know in the Discord)")
                                     break;
                             }
                             break;
