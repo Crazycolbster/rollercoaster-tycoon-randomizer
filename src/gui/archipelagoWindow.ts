@@ -2175,7 +2175,7 @@ var tutorial_5 = function() {
         width: ww,
         height: wh,
         widgets: [].concat(
-            NewLabel("The fifth tab is the hint tab. It tracks any hits received in the multiworld, most importantly, yours! This will be auto-populated if the visibility setting in the shop is “Visible”.", {
+            NewLabel("The fifth tab is the hint tab. It tracks any hints received in the multiworld, most importantly, yours! This will be auto-populated if the visibility setting in the shop is “Visible”.", {
                 name: 'Line-1',
                 y: 0,
                 width: 2,
