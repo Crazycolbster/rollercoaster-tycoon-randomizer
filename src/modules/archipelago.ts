@@ -49,18 +49,25 @@ class RCTRArchipelago extends ModuleBase {
         }
         runNextTick(setRules);//Mutates the game context, so it has to be run on a tick event
 
-        if (archipelago_settings.purchase_land_checks){
-            var enableLandChecks = function(){
-                park.landPrice = 2000;//$200/per tile
+        var enableLandChecks = function(){
+            if (archipelago_settings.land_price < 2010){
+                park.landPrice = archipelago_settings.land_price;
             }
-            runNextTick(enableLandChecks);
-        }
-        if (archipelago_settings.purchase_rights_checks){
-            var enableRightsChecks = function(){
-                park.constructionRightsPrice = 2000;
+            else{
+                archipelago_settings.land_price = park.landPrice;
             }
-            runNextTick(enableRightsChecks);
         }
+        runNextTick(enableLandChecks);
+        
+        var enableRightsChecks = function(){
+            if (archipelago_settings.rights_price < 2010){
+                park.constructionRightsPrice = archipelago_settings.rights_price;
+            }
+            else{
+                archipelago_settings.rights_price = park.constructionRightsPrice;
+            }
+        }
+        runNextTick(enableRightsChecks);
         saveArchipelagoProgress();
         return;
     }
@@ -266,8 +273,6 @@ class RCTRArchipelago extends ModuleBase {
         else
             settings.rando_ride_types = true;
 
-        archipelago_settings.preferred_intensity = imported_settings.preferred_intensity;
-
         archipelago_objectives.Guests[0] = imported_settings.objectives.Guests[0];
         archipelago_objectives.ParkValue[0] = imported_settings.objectives.ParkValue[0];
         for(let i = 0; i < 5; i++){
@@ -319,6 +324,13 @@ class RCTRArchipelago extends ModuleBase {
         archipelago_settings.awards = imported_settings.awards;
         archipelago_settings.exclude_safest_park = imported_settings.exclude_safest_park;
         archipelago_location_prices = imported_settings.location_prices;
+        archipelago_settings.preferred_intensity = imported_settings.preferred_intensity;
+        if(!archipelago_objectives.Monopoly[0]){
+            archipelago_settings.land_price = imported_settings.land_price * 10;
+            archipelago_settings.rights_price = imported_settings.construction_rights_price * 10;
+        }
+        archipelago_settings.max_land_checks = imported_settings.land_discounts;
+        archipelago_settings.max_rights_checks = imported_settings.construction_rights_discounts;
         context.getParkStorage().set('RCTRando.ArchipelagoLocationPrices', archipelago_location_prices);
 
         context.getParkStorage().set('RCTRando.ArchipelagoObjectives', archipelago_objectives);
@@ -810,7 +822,8 @@ class RCTRArchipelago extends ModuleBase {
                 return;
             }
             archipelago_settings.current_land_checks++;
-            park.landPrice = Math.floor(2000 - (2000 * (archipelago_settings.current_land_checks/archipelago_settings.max_land_checks)));
+            var archipelago_land_price = archipelago_settings.land_price; 
+            park.landPrice = Math.floor(archipelago_land_price - (archipelago_land_price * (archipelago_settings.current_land_checks/archipelago_settings.max_land_checks)));
             archipelago_print_message("Speech increased to " + (archipelago_settings.current_land_checks + archipelago_settings.current_rights_checks) + ". New land price is: " + context.formatString("{CURRENCY2DP}",  park.landPrice));//Cash price)
             saveArchipelagoProgress();
         }
@@ -819,8 +832,9 @@ class RCTRArchipelago extends ModuleBase {
                 console.log("Error in GrantDiscount: current construction rights checks greater than max construction rights checks")
                 return;
             }
+            var archipelago_rights_price = archipelago_settings.rights_price; 
             archipelago_settings.current_rights_checks++;
-            park.constructionRightsPrice = Math.floor(2000 - (2000 * (archipelago_settings.current_rights_checks/archipelago_settings.max_rights_checks)));
+            park.constructionRightsPrice = Math.floor(archipelago_rights_price - (archipelago_rights_price * (archipelago_settings.current_rights_checks/archipelago_settings.max_rights_checks)));
             archipelago_print_message("Speech increased to " + (archipelago_settings.current_land_checks + archipelago_settings.current_rights_checks) + ". New construction rights price is: " + context.formatString("{CURRENCY2DP}",  park.constructionRightsPrice));
             saveArchipelagoProgress();
         }
