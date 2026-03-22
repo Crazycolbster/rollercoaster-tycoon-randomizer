@@ -1481,16 +1481,16 @@ function archipelagoDebug(){
                     height: 25,
                     text: 'Colbys Decision',
                     onClick: function() {
-                        // var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         // archipelago_settings.received_games.push("Ocarina of Time", "Adventure", "Donkey Kong Country 3", "Final Fantasy 1", "Hollow Knight",
                         // "The Legend of Zelda", "A Link to the Past", "Links Awakening", "Pokemon Red and Blue", "Rogue Legacy",
                         // "Sonic Adventure 2", "Super Mario World", "Super Mario 64", "Super Metroid", "VVVVVV")
                         // console.log(archipelago_settings.received_games.length);
-                        console.log(JSON.stringify(archipelago_unlocked_locations));
                         // console.log(context.getParkStorage().get("RCTRando.ArchipelagoPlayers"));
                         // console.log(archipelago_settings.player);
                         // archipelago_settings.location_information = locationInfo.Full;
                         // archipelago_send_message("GetDataPackage");
+                        BathroomTrap.AddScenery("Egyptian Theming")
                     }
                 },
                 {
@@ -1581,12 +1581,10 @@ function archipelagoDebug(){
                     y: 170,
                     width: 200,
                     height: 25,
-                    text: 'List Unresearched Rides',
+                    text: 'Display Unlock Shop',
                     onClick: function() {
-                        let researchItems = park.research.inventedItems.concat(park.research.uninventedItems);
-                        for(let i=0; i<researchItems.length; i++) {
-                            console.log(researchItems[i]);
-                        }
+                        console.log("Unlock shop:\n" + JSON.stringify(archipelago_location_prices));
+                        console.log("Awards:\n" + archipelago_award_locations);
                     }
                 },
                 {
@@ -1699,14 +1697,24 @@ function archipelagoDebug(){
                         var items: any = [];
                         for(let i = 0; i < researchItems.length; i++){
                             if(researchItems[i].category == "scenery")
-                            items.push("scenery");
-                            else
-                            items.push(RideType[(researchItems[i] as RideResearchItem).rideType]);
+                            items.push(objectManager.getObject("scenery_group", (researchItems[i] as SceneryResearchItem).object).name);
+                            else{
+                                if((RideType[(researchItems[i] as RideResearchItem).rideType]) == "Food Stall"){
+                                    items.push(objectManager.getObject("ride", (researchItems[i] as RideResearchItem).object).name)
+                                }
+                                else if((RideType[(researchItems[i] as RideResearchItem).rideType]) == "Drink Stall"){
+                                    items.push(objectManager.getObject("ride", (researchItems[i] as RideResearchItem).object).name)
+                                }
+                                else if((RideType[(researchItems[i] as RideResearchItem).rideType]) == "Shop"){
+                                    items.push(objectManager.getObject("ride", (researchItems[i] as RideResearchItem).object).name)
+                                }
+                                else
+                                items.push(RideType[(researchItems[i] as RideResearchItem).rideType]);
+                            }
                         }
-                        console.log("\n\n\n\n\n");
+                        console.log("\n\n");
                         console.log(scenario.name);
                         console.log(JSON.stringify(items));
-                        console.log("\n\n\n\n\n");
                     }
                 },
                 {
@@ -1718,11 +1726,32 @@ function archipelagoDebug(){
                     height: 25,
                     text: 'Colbys Choice',
                     onClick: function() { 
-                        // var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
-                        // console.log(JSON.stringify(archipelago_award_locations));
-                        console.log(archipelago_settings.deathlink);
-                        
-                        
+                        let researchItems = park.research.inventedItems.concat(park.research.uninventedItems);
+                        var items: any = [];
+                        for(let i = 0; i < researchItems.length; i++){
+                            if(researchItems[i].category == "scenery"){
+                                items.push((researchItems[i] as SceneryResearchItem).category);
+                                // console.log((researchItems[i] as SceneryResearchItem).category);
+                                // console.log((researchItems[i] as SceneryResearchItem).type);
+                                // console.log((researchItems[i] as SceneryResearchItem).object);
+                                console.log(objectManager.getObject("scenery_group", (researchItems[i] as SceneryResearchItem).object).name)
+                                console.log(objectManager.getObject("scenery_group", (researchItems[i] as SceneryResearchItem).object).identifier)
+                            }
+                            else{
+                            if((researchItems[i] as RideResearchItem).rideType == 30){
+                                console.log(objectManager.getObject("ride", (researchItems[i] as RideResearchItem).object).name)
+                                console.log(objectManager.getObject("ride", (researchItems[i] as RideResearchItem).object).identifier)
+                                console.log("\n");
+                            }
+                            // items.push((researchItems[i] as RideResearchItem).rideType);//RideType[(researchItems[i] as RideResearchItem).object]);
+                            }
+                        }
+                        console.log("\n\n\n/*******************************************************************************/");
+                        console.log(scenario.name);
+                        console.log(JSON.stringify(items));
+                        console.log("\n\n");
+                        // console.log(convert_shop_name_to_ID("Burger Bar"))
+                                         
                     }
                 },
                 {

@@ -8,6 +8,7 @@ enum ObjectCategory {
     "shop", //5
     "scenery"
 }
+
 enum ScenarioName {
     "forest frontiers",//0
     "dynamite dunes",
@@ -314,6 +315,110 @@ function convert_scenario_name_to_archipelago(scenarioName: string, fileName: st
         case 'build your own six flags over texas.sc6': return "build your own six flags over texas";
     }
     return "P*ck off thing, I'm getting there"
+}
+
+function convert_shop_name_to_ID(shopName: string): string{
+    switch (shopName){
+        case "Fruity Ices Stall (RCT1)": return "rct1.ride.fruity_ices_stall";
+        case "Art Deco Food Stall": return "rct2tt.ride.1920sand";
+        case "Beef Noodles Stall": return "rct2.ride.bnoodles";
+        case "Candy Apple Market Stall": return "rct2tt.ride.mktstal1";
+        case "Candy Apple Stall": return "rct2.ride.toffs";
+        case "Chicken Nuggets Stall": return "rct2.ride.chknug";
+        case "Cookie Shop": return "rct2.ride.cookst";
+        case "Donut Shop": return "rct2.ride.dough";
+        case "Fried Chicken Stall": return "rct2.ride.chcks";
+        case "Fried Rice Noodles Stall": return "rct2.ride.frnood";
+        case "Fries Stall": return "rct2.ride.chpsh2";
+        case "Fruity Ices Stall (RCT2)": return "rct2.ride.icecr1";
+        case "Funnel Cake Shop": return "rct2.ride.funcake";
+        case "Hot Dog Stall": return "rct2.ride.hotds";
+        case "Ice Cream Cone Stall": return "rct2.ride.icecr2";
+        case "Meatball Soup Stall": return "rct2.ride.mbsoup";
+        case "Neptune's Seafood Stall": return "rct2tt.ride.mythosea";
+        case "Pretzel Stall": return "rct2.ride.pretst";
+        case "Roast Sausage Stall": return "rct2.ride.rsaus";
+        case "Sea Food Stall": return "rct2.ride.sqdst";
+        case "Sub Sandwich Stall": return "rct2.ride.substl";
+        case "Witches Brew Soup": return "rct2tt.ride.medisoup";
+        case "Wonton Soup Stall": return "rct2.ride.wonton";
+        case "Fries Shop": return "rct2.ride.chpsh";
+        case "Cotton Candy Stall": return "rct2.ride.cndyf";
+        case "Burger Bar": return "rct2.ride.burgb";
+        case "Popcorn Stall": return "rct2.ride.popcs";
+        case "Pizza Stall": return "rct2.ride.pizzs";
+        case "Drinks Stall": return "rct2.ride.drnks";
+        case "Coffee Shop": return "rct2.ride.coffs";
+        case "Hot Chocolate Stall": return "rct2.ride.hchoc";
+        case "Iced Tea Stall": return "rct2.ride.icetst";
+        case "Lemonade Market Stall": return "rct2tt.ride.mktstal2";
+        case "Lemonade Stall": return "rct2.ride.lemst";
+        case "Moon Juice": return "rct2tt.ride.moonjuce";
+        case "Soybean Milk Stall": return "rct2.ride.soybean";
+        case "Star Fruit Drink Stall": return "rct2.ride.starfrdr";
+        case "Sujeonggwa Stall": return "rct2.ride.cindr";
+        case "Flower Power T-Shirts": return "rct2tt.ride.1960tsrt";
+        case "Hat Stall": return "rct2.ride.hatst";
+        case "Soft Toy Stall": return "rct2tt.ride.softoyst";
+        case "Sunglasses Stall": return "rct2.ride.sungst";
+        case "T-Shirt Stall": return "rct2.ride.tshrt";
+        case "Balloon Stall": return "rct2.ride.balln";
+        case "Souvenir Stall": return "rct2.ride.souvs";
+    }
+    console.log("Not a shop");
+    // printException("error in convert_shop_name_to_ID", "Shop not found");
+    return "";
+}
+
+function convert_scenery_name_to_ID(sceneryName: string): string{
+    switch (sceneryName){
+        case "Abstract Theming": return "rct2.scenery_group.scgabstr";
+        case "Africa Theming": return "rct2ww.scenery_group.scgafric";
+        case "Antarctic Theming": return "rct2ww.scenery_group.scgartic";
+        case "Asia Theming": return "rct2ww.scenery_group.scgasia";
+        case "Australasian Theming": return "rct2ww.scenery_group.scgaustr";
+        case "Classical/Roman Theming": return "rct2.scenery_group.scgclass";
+        case "Creepy Theming": return "rct2.scenery_group.scghallo";
+        case "Dark Age Theming": return "rct2tt.scenery_group.scgmediv";
+        case "Egyptian Theming": return "rct2.scenery_group.scgegypt";
+        case "Europe Theming": return "rct2ww.scenery_group.scgeurop";
+        case "Fences and Walls": return "rct2.scenery_group.scgfence";
+        case "Future Theming": return "rct2tt.scenery_group.scgfutur";
+        case "Gardens": return "rct2.scenery_group.scggardn";
+        case "Giant Candy Theming": return "rct2.scenery_group.scgcandy";
+        case "Giant Garden Theming": return "rct2.scenery_group.scggiant";
+        case "Jungle Theming": return "rct2.scenery_group.scgjungl";
+        case "Jurassic Theming": return "rct2.scenery_group.scgjuras";
+        case "Martian Theming": return "rct2.scenery_group.scgmart";
+        case "Mechanical Theming": return "rct2.scenery_group.scgindus";
+        case "Medieval Theming": return "rct2.scenery_group.scgmedie";
+        case "Mine Theming": return "rct2.scenery_group.scgmine";
+        case "Mythological Theming": return "rct2tt.scenery_group.scgmytho";
+        case "North America Theming": return "rct2ww.scenery_group.scgnamrc";
+        case "Pagoda Theming": return "rct2.scenery_group.scgorien";
+        case "Panda Theming": return "rct2dlc.scenery_group.scgpanda";
+        case "Pirates Theming": return "rct2.scenery_group.scgpirat";
+        case "Prehistoric Theming": return "rct2tt.scenery_group.scgjurra";
+        case "Roaring Twenties Theming": return "rct2tt.scenery_group.scg1920s";
+        case "Roaring Twenties Wall Sets": return "rct2tt.scenery_group.scg1920w";
+        case "Rock 'n' Roll Theming": return "rct2tt.scenery_group.scg1960s";
+        case "Shrubs and Ornaments": return "rct2.scenery_group.scgshrub";
+        case "Signs and Items for Footpaths": return "rct2.scenery_group.scgpathx";
+        case "Six Flags Theming": return "rct2.scenery_group.scgsixfl";
+        case "Snow and Ice Theming": return "rct2.scenery_group.scgsnow";
+        case "South America Theming": return "rct2ww.scenery_group.scgsamer";
+        case "Space Theming": return "rct2.scenery_group.scgspace";
+        case "Spooky Theming": return "rct2.scenery_group.scgspook";
+        case "Sports Theming": return "rct2.scenery_group.scgsport";
+        case "Trees": return "rct2.scenery_group.scgtrees";
+        case "Urban Theming": return "rct2.scenery_group.scgurban";
+        case "Walls and Roofs": return "rct2.scenery_group.scgwalls";
+        case "Water Feature Theming": return "rct2.scenery_group.scgwater";
+        case "Wild West Theming": return "rct2.scenery_group.scgwwest";
+        case "Wonderland Theming": return "rct2.scenery_group.scgwond";
+    }
+    console.log("Not Scenery");
+    return "";
 }
 // var reverseScenarioName = new Map<string, ScenarioName>();
 // Object.keys(ScenarioName).forEach((scenarioName: ScenarioName) => {

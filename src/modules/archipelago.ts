@@ -187,8 +187,8 @@ class RCTRArchipelago extends ModuleBase {
 
     SetImportedSettings(imported_settings: any): any{
         var self = this;
-        console.log("Setting values retrieved from Archipelago");
-        console.log(imported_settings);
+        trace("Setting values retrieved from Archipelago");
+        trace(imported_settings);
         imported_settings = imported_settings.args;
         switch(imported_settings.difficulty){
             case 0://very_easy
@@ -338,7 +338,7 @@ class RCTRArchipelago extends ModuleBase {
 
         //Get the right scenario name, regardless of the version or language
         var scenario_name: string = convert_scenario_name_to_archipelago(scenario.name.toLowerCase(), scenario.filename.toLowerCase());
-        console.log("Game expects: " + scenario_name + "\nArchipelago provided: " + ScenarioName[imported_settings.scenario]);
+        trace("Game expects: " + scenario_name + "\nArchipelago provided: " + ScenarioName[imported_settings.scenario]);
         if(ScenarioName[imported_settings.scenario] == scenario_name)
         archipelago_correct_scenario = true;
         else{
@@ -464,90 +464,93 @@ class RCTRArchipelago extends ModuleBase {
         for(let i = counter; i < items.length; i++){//Each item
             var category = "item";
             compare_list.push(items[i]);
-            if(items[i][0] >= 2000000 && items[i][0] <= 2000123){//This number will need to change if we ever add more items/traps/etc.
-                var item = item_id_to_name["OpenRCT2"][items[i][0]];
-                if (item.indexOf("Trap") > -1)
-                    category = "trap";
-                if (Number(RideType[item]) > -1)//Any item that fits a ride type is a ride
-                    category = "ride";
-                if (item.indexOf("$") > -1)
-                    category = "cash";
-                if (item.indexOf("Guests") > -1)
-                    category = "guests";
-                if(category == "item"){//Check the actual item if none of the above works out
-                    switch(item){
-                        case "scenery":
-                            category = "scenery";
-                            break;
-                        case "Land Discount":
-                        case "Construction Rights Discount":
-                            category = "discount";
-                            break;
-                        case "Easier Guest Generation":
-                        case "Easier Park Rating":
-                        case "Allow High Construction":
-                        case "Allow Landscape Changes":
-                        case "Allow Marketing Campaigns":
-                        case "Allow Tree Removal":
-                            category = "rule";
-                            break;
-                        case "Beauty Contest":
-                            category = "beauty";
-                            break;
-                        case "Rainstorm":
-                        case "Thunderstorm":
-                        case "Snowstorm":
-                        case "Blizzard":
-                            category = "weather";
-                            break;
-                        case "Progressive Speed":
-                            category = "speed";
-                            break;
-                        case "Skip":
-                            category = "skip";
-                            break;
-                    }
-                }
-                switch(category){
-                    case "ride":
-                        self.AddRide(RideType[item]);
-                        break;
-                    case "stall":
-                        self.AddRide(item);
-                        break;
-                    case "trap":
-                        self.ActivateTrap(item);
-                        break;
-                    case "rule":
-                        self.ReleaseRule(item);
-                        break;
+            var item = item_id_to_name["OpenRCT2"][items[i][0]];
+            trace("Finding category for this item: " + item);
+            if (item.indexOf("Trap") > -1)
+                category = "trap";
+            if (Number(RideType[item]) > -1)//Any item that fits a ride type is a ride
+                category = "ride";
+            if (item.indexOf("$") > -1)
+                category = "cash";
+            if (item.indexOf("Guests") > -1)
+                category = "guests";
+            if (convert_shop_name_to_ID(item) != "")
+                category = "stall";
+            if (convert_scenery_name_to_ID(item) != "")
+                category = "scenery";
+            if(category == "item"){//Check the actual item if none of the above works out
+                switch(item){
                     case "scenery":
-                        self.AddScenery();
+                        category = "scenery";
                         break;
-                    case "discount":
-                        self.GrantDiscount(item);
+                    case "Land Discount":
+                    case "Construction Rights Discount":
+                        category = "discount";
                         break;
-                    case "cash":
-                        self.AddCash(item)
+                    case "Easier Guest Generation":
+                    case "Easier Park Rating":
+                    case "Allow High Construction":
+                    case "Allow Landscape Changes":
+                    case "Allow Marketing Campaigns":
+                    case "Allow Tree Removal":
+                        category = "rule";
                         break;
-                    case "guests":
-                        self.AddGuests(item)
+                    case "Beauty Contest":
+                        category = "beauty";
                         break;
-                    case "beauty":
-                        self.BeautyContest();
+                    case "Rainstorm":
+                    case "Thunderstorm":
+                    case "Snowstorm":
+                    case "Blizzard":
+                        category = "weather";
                         break;
-                    case "weather":
-                        self.setWeather(item)
+                    case "Progressive Speed":
+                        category = "speed";
                         break;
-                    case "speed":
-                        self.updateMaxSpeed();
+                    case "Skip":
+                        category = "skip";
                         break;
-                    case "skip":
-                        self.addSkip();
-                        break;
-                    default:
-                        console.log("Error in ReceiveArchipelagoItem: category not found");
                 }
+            }
+            switch(category){
+                case "ride":
+                    self.AddRide(RideType[item]);
+                    break;
+                case "stall":
+                    self.AddStall(item);
+                    break;
+                case "trap":
+                    self.ActivateTrap(item);
+                    break;
+                case "rule":
+                    self.ReleaseRule(item);
+                    break;
+                case "scenery":
+                    self.AddScenery(item);
+                    break;
+                case "discount":
+                    self.GrantDiscount(item);
+                    break;
+                case "cash":
+                    self.AddCash(item)
+                    break;
+                case "guests":
+                    self.AddGuests(item)
+                    break;
+                case "beauty":
+                    self.BeautyContest();
+                    break;
+                case "weather":
+                    self.setWeather(item)
+                    break;
+                case "speed":
+                    self.updateMaxSpeed();
+                    break;
+                case "skip":
+                    self.addSkip();
+                    break;
+                default:
+                    console.log("Error in ReceiveArchipelagoItem: category not found");
             }
         }
         archipelago_settings.received_items = compare_list;//Save the updated list
@@ -558,7 +561,7 @@ class RCTRArchipelago extends ModuleBase {
     AddRide(ride: any): void{
         //Creates function that finds the ride in Uninvented and moves it to Invented items.
 
-        trace(ride);
+        trace("AddRide adding the following:" + ride);
         let unresearchedItems = park.research.uninventedItems;
         let researchedItems = park.research.inventedItems;
         for(let i=0; i<unresearchedItems.length; i++) {
@@ -577,20 +580,60 @@ class RCTRArchipelago extends ModuleBase {
         return;
     }
 
-    AddScenery(): void{
-        //Creates function that moves the next scenery to Invented items.
+    AddStall(stall: string): void{
+        //Creates function that adds the given stall to Invented items.
         let unresearchedItems = park.research.uninventedItems;
         let researchedItems = park.research.inventedItems;
+        var stallID = convert_shop_name_to_ID(stall);
+        // console.log(stallID);
         for(let i=0; i<unresearchedItems.length; i++) {
-            if (((unresearchedItems[i]).type) == "scenery"){//Check if the object is scenery
-                researchedItems.push(unresearchedItems[i]);//Add the scenery to researched items
-                unresearchedItems.splice(i,1);          //Remove the scenery from unresearched items
-                park.research.inventedItems = researchedItems;
-                park.research.uninventedItems = unresearchedItems;//Save the researched items list
-                return;
+            try{
+                if (unresearchedItems[i].category == "shop"){
+                    if ((objectManager.getObject("ride", (unresearchedItems[i] as RideResearchItem).object).identifier) == stallID){//Find the right stall
+                        researchedItems.push(unresearchedItems[i]);//Add the stall to researched items
+                        unresearchedItems.splice(i,1);          //Remove the stall from unresearched items
+                        park.research.inventedItems = researchedItems;
+                        park.research.uninventedItems = unresearchedItems;//Save the researched items list
+                        return;
+                    }
+                }
+            }
+            catch(e){
+                // console.log("Not the stall!" + e);
             }
         }
-        console.log("Error in AddScenery: No more scenery to unlock")
+        console.log("Error in AddStall: Stall not in uninvented items")
+        archipelago_print_message("Error in AddStall: Stall not in uninvented items. Tell Colby on the Discord and he'll curse past Colby.");
+        return;
+    }
+
+    AddScenery(category: string): void{
+        //Creates function that moves the selected scenery to Invented items.
+        let unresearchedItems = park.research.uninventedItems;
+        let researchedItems = park.research.inventedItems;
+        let sceneryID = convert_scenery_name_to_ID(category)
+        for(let i=0; i<unresearchedItems.length; i++) {
+            try{
+                trace("Looking for the following SceneryID: " + sceneryID);
+                trace(objectManager.getObject("scenery_group", (unresearchedItems[i] as SceneryResearchItem).object).identifier);
+                if(unresearchedItems[i].category == "scenery"){
+                    if ((objectManager.getObject("scenery_group", (unresearchedItems[i] as SceneryResearchItem).object).identifier) == sceneryID){//Check if the object is scenery
+                        trace("Found it! The name is: " + (objectManager.getObject("scenery_group", (unresearchedItems[i] as SceneryResearchItem).object).name))
+                        trace("The item in the locked research list is: " + JSON.stringify(unresearchedItems[i]));
+                        researchedItems.push(unresearchedItems[i]);//Add the scenery to researched items
+                        unresearchedItems.splice(i,1);          //Remove the scenery from unresearched items
+                        park.research.inventedItems = researchedItems;
+                        park.research.uninventedItems = unresearchedItems;//Save the researched items list
+                        return;
+                    }
+                }
+            }
+            catch(e){
+                // console.log("Not the scenery!" + e);
+            }
+        }
+        console.log("Error in AddScenery: Scenery not in unlocked list!")
+        archipelago_print_message("Error in AddScenery: Scenery not in uninvented items. Tell Colby on the Discord and he'll besmirch past Colby.");
         return;
     }
 
@@ -1275,7 +1318,7 @@ class RCTRArchipelago extends ModuleBase {
                 }
             }
             else {
-                console.log("Death Link Timeout has not expired. Cancelling Death Link signal. Note: Multiple cars crashing will attempt to send multiple signals")
+                trace("Death Link Timeout has not expired. Cancelling Death Link signal. Note: Multiple cars crashing will attempt to send multiple signals")
             }
         }
     }
@@ -1408,9 +1451,8 @@ class RCTRArchipelago extends ModuleBase {
                                 cost += ((built[4] >= prereqs[0]) ? ', (> ' + context.formatString("{LENGTH}", prereqs[5]) + ')': ',{RED} (> ' + context.formatString("{LENGTH}", prereqs[5]) + ')' + display_color);
                             if(prereqs[6] != 0)//Check for total customers requirement
                                 cost += ((built[5] >= prereqs[6]) ? ', (> ' + prereqs[6] + ' Total Riders)': '{RED}, (> ' + prereqs[6] + ' Total Riders)' + display_color);
-                        console.log(JSON.stringify((built)));
-                        console.log(JSON.stringify((prereqs)));
-                        console.log("asntueh");
+                        // console.log(JSON.stringify((built)));
+                        // console.log(JSON.stringify((prereqs)));
                         }
                         locked.push(cost);
                     }
@@ -1978,8 +2020,8 @@ class RCTRArchipelago extends ModuleBase {
             return;
         }
         var self = this;
-        console.log("Purchasing item number:");
-        console.log(item);
+        trace("Purchasing item number:");
+        trace(item);
         let Locked = archipelago_locked_locations.slice();
         let Unlocked = archipelago_unlocked_locations.slice();
         let Prices = archipelago_location_prices.slice();
@@ -2103,8 +2145,8 @@ class RCTRArchipelago extends ModuleBase {
         var QualifiedNauseaCounter = 0;
         var QualifiedLengthCounter = 0;
         var TotalCustomerCounter = 0;
-        console.log(JSON.stringify(Locked));
-        console.log(LocationID);
+        // console.log(JSON.stringify(Locked));
+        // console.log(LocationID);
         for(var i = 0; i < map.numRides; i++){
             var QualifiedExcitement = false;
             var QualifiedIntensity = false;
@@ -2150,7 +2192,7 @@ class RCTRArchipelago extends ModuleBase {
                     QualifiedLengthCounter++;
                 }
                 TotalCustomerCounter += ride_list[i].totalCustomers;
-                console.log(TotalCustomerCounter);
+                // console.log(TotalCustomerCounter);
             }
 
             if (QualifiedExcitement && QualifiedIntensity && QualifiedNausea && QualifiedLength){
@@ -2162,7 +2204,7 @@ class RCTRArchipelago extends ModuleBase {
 
     CheckIfUnlocked(checked_ride): boolean{//Checks if a given ride is in the researched items list
         let researchItems = park.research.inventedItems;//Only what's already researched
-        console.log(checked_ride);
+        // console.log(checked_ride);
         if(!checked_ride){//If there's no ride prereq
             return true;//It's automatically elligible
         }
@@ -2176,7 +2218,7 @@ class RCTRArchipelago extends ModuleBase {
         }
         checked_ride = RideType[checked_ride];
         for(let i = 0; i < researchItems.length; i++){
-            console.log((researchItems[i] as RideResearchItem).rideType)
+            // console.log((researchItems[i] as RideResearchItem).rideType)
             if((researchItems[i] as RideResearchItem).rideType == checked_ride){//If the items match...
                 return true;
             }
@@ -2191,12 +2233,12 @@ class RCTRArchipelago extends ModuleBase {
         if(award_setting == 2)
             return;//No awards, no logic needed!
         function findAward(ID){
-            console.log("Here's the award locations: " + JSON.stringify(archipelago_award_locations));
+            trace("Here's the award locations: " + JSON.stringify(archipelago_award_locations));
             for(let i = 0; i < archipelago_award_locations.length; i++){
-                console.log(archipelago_award_locations[i].LocationID);
+                trace(archipelago_award_locations[i].LocationID);
                 if (ID == archipelago_award_locations[i].LocationID){
-                    console.log("We should be sending this:");
-                    console.log(archipelago_award_locations[i]);
+                    trace("We should be sending this:");
+                    trace(archipelago_award_locations[i]);
                     return archipelago_award_locations[i];
                 }
             }
@@ -2207,7 +2249,7 @@ class RCTRArchipelago extends ModuleBase {
             if (archipelago_settings.awards_received.indexOf(awards[i].type) === -1) {//If the item isn't in the list
                 archipelago_settings.awards_received.push(awards[i].type);//Add it to the list
                 //and send an updated location list
-                console.log("Here's the list!" + archipelago_settings.awards_received);
+                trace("Here's the list!" + archipelago_settings.awards_received);
                 switch(awards[i].type){
                     case "mostUntidy":
                         if (award_setting == 0){
@@ -2282,7 +2324,6 @@ class RCTRArchipelago extends ModuleBase {
                         archipelago_unlocked_locations.push(findAward(8023))
                         break;
                 }
-                console.log(archipelago_unlocked_locations);
                 ArchipelagoSaveLocations(archipelago_locked_locations, archipelago_unlocked_locations);//Send the item!
             }
         }
@@ -2358,7 +2399,7 @@ class RCTRArchipelago extends ModuleBase {
         }
 
         if(!archipelago_current_game_request || received_games.indexOf(archipelago_current_game_request) !== -1){//The above code couldn't find any new games, whch hypothetically means we have them all
-            console.log("We have all the games! Either that or future Colby is really annoyed right now");
+            trace("We have all the games! Either that or future Colby is really annoyed right now");
             if(!context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")){
                 context.getParkStorage().set("RCTRando.ArchipelagoItemIDToName",full_item_id_to_name);//P*cking past Colby forgot to check for the case of a single player game
                 context.getParkStorage().set("RCTRando.ArchipelagoLocationIDToName",full_location_id_to_name);
@@ -2437,7 +2478,7 @@ function explodeRide(args: any){
 function archipelago_update_locations(checked_locations){
     try{
         if(archipelago_locked_locations.length){
-            console.log("Updating locations to latest progress from Server");
+            trace("Updating locations to latest progress from Server");
             for(let i = 0; i < checked_locations.length; i++){
                 let inquired_location = checked_locations[i] - 2000000 //Locations in game have the 2000000 stripped out
                 for(let j = 0; j < archipelago_locked_locations.length; j++){
