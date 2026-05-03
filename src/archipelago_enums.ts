@@ -1,12 +1,15 @@
 enum ObjectCategory {
-    "not a ride",
-    "transport", // 0
+    "not a ride",// 0
+    "transport", 
     "gentle",
     "rollercoaster",
     "thrill",
-    "water",
-    "shop", //5
-    "scenery"
+    "water", // 5
+    "shop", 
+    "scenery",
+    "Food Stall",
+    "Drink Stall",
+    "Shop"
 }
 
 enum ScenarioName {
@@ -164,6 +167,106 @@ enum ScenarioName {
     "archipelago madness (vanilla)",
     "archipelago madness (expansions)"//152
 
+}
+
+enum Stalls{
+    "rct1.ride.fruity_ices_stall",
+    "rct2tt.ride.1920sand",
+    "rct2.ride.bnoodles",
+    "rct2tt.ride.mktstal1",
+    "rct2.ride.toffs",
+    "rct2.ride.chknug",
+    "rct2.ride.cookst",
+    "rct2.ride.dough",
+    "rct2.ride.chcks",
+    "rct2.ride.frnood",
+    "rct2.ride.chpsh2",
+    "rct2.ride.icecr1",
+    "rct2.ride.funcake",
+    "rct2.ride.hotds",
+    "rct2.ride.icecr2",
+    "rct2.ride.mbsoup",
+    "rct2tt.ride.mythosea",
+    "rct2.ride.pretst",
+    "rct2.ride.rsaus",
+    "rct2.ride.sqdst",
+    "rct2.ride.substl",
+    "rct2tt.ride.medisoup",
+    "rct2.ride.wonton",
+    "rct2.ride.chpsh",
+    "rct2.ride.cndyf",
+    "rct2.ride.burgb",
+    "rct2.ride.popcs",
+    "rct2.ride.pizzs",
+    "rct2.ride.drnks",
+    "rct2.ride.coffs",
+    "rct2.ride.hchoc",
+    "rct2.ride.icetst",
+    "rct2tt.ride.mktstal2",
+    "rct2.ride.lemst",
+    "rct2tt.ride.moonjuce",
+    "rct2.ride.soybean",
+    "rct2.ride.starfrdr",
+    "rct2.ride.cindr",
+    "rct2tt.ride.1960tsrt",
+    "rct2.ride.hatst",
+    "rct2tt.ride.softoyst",
+    "rct2.ride.sungst",
+    "rct2.ride.tshrt",
+    "rct2.ride.balln",
+    "rct2.ride.souvs"
+}
+
+enum FoodStalls{
+    "rct1.ride.fruity_ices_stall",
+    "rct2tt.ride.1920sand",
+    "rct2.ride.bnoodles",
+    "rct2tt.ride.mktstal1",
+    "rct2.ride.toffs",
+    "rct2.ride.chknug",
+    "rct2.ride.cookst",
+    "rct2.ride.dough",
+    "rct2.ride.chcks",
+    "rct2.ride.frnood",
+    "rct2.ride.chpsh2",
+    "rct2.ride.icecr1",
+    "rct2.ride.funcake",
+    "rct2.ride.hotds",
+    "rct2.ride.icecr2",
+    "rct2.ride.mbsoup",
+    "rct2tt.ride.mythosea",
+    "rct2.ride.pretst",
+    "rct2.ride.rsaus",
+    "rct2.ride.sqdst",
+    "rct2.ride.substl",
+    "rct2tt.ride.medisoup",
+    "rct2.ride.wonton",
+    "rct2.ride.chpsh",
+    "rct2.ride.cndyf",
+    "rct2.ride.burgb",
+    "rct2.ride.popcs",
+    "rct2.ride.pizzs"
+}
+enum DrinkStalls{
+    "rct2.ride.drnks",
+    "rct2.ride.coffs",
+    "rct2.ride.hchoc",
+    "rct2.ride.icetst",
+    "rct2tt.ride.mktstal2",
+    "rct2.ride.lemst",
+    "rct2tt.ride.moonjuce",
+    "rct2.ride.soybean",
+    "rct2.ride.starfrdr",
+    "rct2.ride.cindr"
+}
+enum Shops{
+    "rct2tt.ride.1960tsrt",
+    "rct2.ride.hatst",
+    "rct2tt.ride.softoyst",
+    "rct2.ride.sungst",
+    "rct2.ride.tshrt",
+    "rct2.ride.balln",
+    "rct2.ride.souvs"
 }
 
 function convert_scenario_name_to_archipelago(scenarioName: string, fileName: string): string{

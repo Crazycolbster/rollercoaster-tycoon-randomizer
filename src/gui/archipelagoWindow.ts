@@ -1726,30 +1726,31 @@ function archipelagoDebug(){
                     height: 25,
                     text: 'Colbys Choice',
                     onClick: function() { 
-                        let researchItems = park.research.inventedItems.concat(park.research.uninventedItems);
-                        var items: any = [];
-                        for(let i = 0; i < researchItems.length; i++){
-                            if(researchItems[i].category == "scenery"){
-                                items.push((researchItems[i] as SceneryResearchItem).category);
-                                // console.log((researchItems[i] as SceneryResearchItem).category);
-                                // console.log((researchItems[i] as SceneryResearchItem).type);
-                                // console.log((researchItems[i] as SceneryResearchItem).object);
-                                console.log(objectManager.getObject("scenery_group", (researchItems[i] as SceneryResearchItem).object).name)
-                                console.log(objectManager.getObject("scenery_group", (researchItems[i] as SceneryResearchItem).object).identifier)
-                            }
-                            else{
-                            if((researchItems[i] as RideResearchItem).rideType == 30){
-                                console.log(objectManager.getObject("ride", (researchItems[i] as RideResearchItem).object).name)
-                                console.log(objectManager.getObject("ride", (researchItems[i] as RideResearchItem).object).identifier)
-                                console.log("\n");
-                            }
-                            // items.push((researchItems[i] as RideResearchItem).rideType);//RideType[(researchItems[i] as RideResearchItem).object]);
-                            }
-                        }
-                        console.log("\n\n\n/*******************************************************************************/");
-                        console.log(scenario.name);
-                        console.log(JSON.stringify(items));
-                        console.log("\n\n");
+                        // let researchItems = park.research.inventedItems.concat(park.research.uninventedItems);
+                        // var items: any = [];
+                        // for(let i = 0; i < researchItems.length; i++){
+                        //     if(researchItems[i].category == "scenery"){
+                        //         items.push((researchItems[i] as SceneryResearchItem).category);
+                        //         // console.log((researchItems[i] as SceneryResearchItem).category);
+                        //         // console.log((researchItems[i] as SceneryResearchItem).type);
+                        //         // console.log((researchItems[i] as SceneryResearchItem).object);
+                        //         console.log(objectManager.getObject("scenery_group", (researchItems[i] as SceneryResearchItem).object).name)
+                        //         console.log(objectManager.getObject("scenery_group", (researchItems[i] as SceneryResearchItem).object).identifier)
+                        //     }
+                        //     else{
+                        //     if((researchItems[i] as RideResearchItem).rideType == 30){
+                        //         console.log(objectManager.getObject("ride", (researchItems[i] as RideResearchItem).object).name)
+                        //         console.log(objectManager.getObject("ride", (researchItems[i] as RideResearchItem).object).identifier)
+                        //         console.log("\n");
+                        //     }
+                        //     // items.push((researchItems[i] as RideResearchItem).rideType);//RideType[(researchItems[i] as RideResearchItem).object]);
+                        //     }
+                        // }
+                        // console.log("\n\n\n/*******************************************************************************/");
+                        // console.log(scenario.name);
+                        // console.log(JSON.stringify(items));
+                        // console.log("\n\n");
+                        console.log((map.rides));
                         // console.log(convert_shop_name_to_ID("Burger Bar"))
                                          
                     }
@@ -1818,6 +1819,10 @@ function archipelagoDebug(){
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         archipelago_print_message("AuGold found Colby's Food Poisioning Trap!");
                         BathroomTrap.PoisonTrap();
+                        // let rides = map.rides;
+                        // for(let i = 0; i < rides.length; i++){
+                        //     console.log((rides[i]))
+                        // }
                     }
                 }
            ]

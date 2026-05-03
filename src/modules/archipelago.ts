@@ -1450,7 +1450,7 @@ class RCTRArchipelago extends ModuleBase {
                             if(prereqs[5] != 0)//Check for length requirement
                                 cost += ((built[4] >= prereqs[0]) ? ', (> ' + context.formatString("{LENGTH}", prereqs[5]) + ')': ',{RED} (> ' + context.formatString("{LENGTH}", prereqs[5]) + ')' + display_color);
                             if(prereqs[6] != 0)//Check for total customers requirement
-                                cost += ((built[5] >= prereqs[6]) ? ', (> ' + prereqs[6] + ' Total Riders)': '{RED}, (> ' + prereqs[6] + ' Total Riders)' + display_color);
+                                cost += ((built[5] >= prereqs[6]) ? ', (> ' + prereqs[6] + ' Total Customers)': '{RED}, (> ' + prereqs[6] + ' Total Customers)' + display_color);
                         // console.log(JSON.stringify((built)));
                         // console.log(JSON.stringify((prereqs)));
                         }
@@ -2114,11 +2114,11 @@ class RCTRArchipelago extends ModuleBase {
                             }
                         }
                         else{
-                            ui.showError("Guest prerequisite not met", "You only have " + String(QualifiedInfo[5]) + " total riders across all these rides!");
+                            ui.showError("Guest prerequisite not met", "You only have " + String(QualifiedInfo[5]) + " total customers across all these!");
                         }
                     }
                     else{
-                        ui.showError("Prerequisites not met", "You only have " + String(QualifiedInfo[0]) + " elligible rides in the park! (Ensure they have posted stats)");
+                        ui.showError("Prerequisites not met", "You only have " + String(QualifiedInfo[0]) + " of these that are elligible in the park! (Ensure they have posted stats)");
                     }
                 }
                 else{
@@ -2138,6 +2138,7 @@ class RCTRArchipelago extends ModuleBase {
         var object = Prices[LocationID]
         let Prereqs = Prices[LocationID].RidePrereq;//Have to get LocationID before we can properly check Prereqs
         var ride = RideType[Prices[LocationID].RidePrereq[1]];
+        var stall = convert_shop_name_to_ID(Prices[LocationID].RidePrereq[1]);
         let ride_list = map.rides;
         var NumQualifiedRides = 0;
         var QualifiedExcitementCounter = 0;
@@ -2145,6 +2146,10 @@ class RCTRArchipelago extends ModuleBase {
         var QualifiedNauseaCounter = 0;
         var QualifiedLengthCounter = 0;
         var TotalCustomerCounter = 0;
+        const foodStallSet = new Set<string>(Object.values(FoodStalls) as string[]);//Apparently, this gives us way faster results.
+        const drinkStallSet = new Set<string>(Object.values(DrinkStalls) as string[]);
+        const shopSet = new Set<string>(Object.values(Shops) as string[]);
+        const stallSet = new Set<string>(Object.values(Stalls) as string[]);
         // console.log(JSON.stringify(Locked));
         // console.log(LocationID);
         for(var i = 0; i < map.numRides; i++){
@@ -2159,33 +2164,55 @@ class RCTRArchipelago extends ModuleBase {
                 elligible = true;
                 }
             }
-
-            if (ObjectCategory[object.RidePrereq[1]]){//See if there's a prereq that's a category
+            if(stall != ""){//See if there's a prereq that's a specific stall
+                if (ride_list[i].object.identifier == stall)
+                    elligible = true;
+            }
+            let prereq = object.RidePrereq[1];
+            if (ObjectCategory[prereq]){//See if there's a prereq that's a category
                 let researchItems = park.research.inventedItems.concat(park.research.uninventedItems);//Combine the research lists
-                for(var j = 0; j < researchItems.length; j++){
-                    if((researchItems[j] as RideResearchItem).rideType == ride_list[i].type){//If the items match...
-                        if(researchItems[j].category == Prices[LocationID].RidePrereq[1]){//Check if the categories match
-                            elligible = true;
+                if(prereq == "Food Stall" || prereq == "Drink Stall" || prereq == "Shop"){
+                    switch(prereq){
+                        case "Food Stall":
+                            if (foodStallSet.has(ride_list[i].object.identifier))
+                                elligible = true;
+                            break;
+                        case "Drink Stall":
+                            if (drinkStallSet.has(ride_list[i].object.identifier))
+                                elligible = true;
+                            break;
+                        case "Shop":
+                            if (shopSet.has(ride_list[i].object.identifier))
+                                elligible = true;
+                    }
+                }
+                else{
+                    for(var j = 0; j < researchItems.length; j++){
+                        if((researchItems[j] as RideResearchItem).rideType == ride_list[i].type){//If the items match...
+                            if(researchItems[j].category == Prices[LocationID].RidePrereq[1]){//Check if the categories match
+                                elligible = true;
+                            }
                         }
                     }
                 }
             }
 
             if (elligible){
-                if (ride_list[i].excitement >= (Prereqs[2] * 100)){//Check if excitement is met. To translate ingame excitement to incode excitement, multiply ingame excitement by 100
+                //Check if excitement is met. To translate ingame excitement to incode excitement, multiply ingame excitement by 100
+                if ((ride_list[i].excitement >= (Prereqs[2] * 100)) || (stallSet.has(ride_list[i].object.identifier))){
                     QualifiedExcitement = true;
                     QualifiedExcitementCounter++;
                 }
-                if (ride_list[i].intensity >= (Prereqs[3] * 100)){
+                if ((ride_list[i].intensity >= (Prereqs[3] * 100)) || (stallSet.has(ride_list[i].object.identifier))){
                     QualifiedIntensity = true;
                     QualifiedIntensityCounter++;
                 }
-                if (ride_list[i].nausea >= (Prereqs[4] * 100)){
+                if ((ride_list[i].nausea >= (Prereqs[4] * 100)) || (stallSet.has(ride_list[i].object.identifier))){
                     QualifiedNausea = true;
                     QualifiedNauseaCounter++;
                 }
                 //Somethings going janky with this one. If you modify a coaster, it will retain its length value until tested again.
-                if (ride_list[i].rideLength >= (Prereqs[5])){//I want my freedom units!
+                if (ride_list[i].rideLength >= (Prereqs[5]) || (stallSet.has(ride_list[i].object.identifier))){//I want my freedom units!
                     trace("Ride length: " + String(ride_list[i].rideLength));
                     trace("Wanted: " + Prereqs[5])
                     QualifiedLength = true;
@@ -2199,6 +2226,7 @@ class RCTRArchipelago extends ModuleBase {
                 NumQualifiedRides += 1;
             }
         }
+        console.log(NumQualifiedRides,QualifiedExcitementCounter,QualifiedIntensityCounter,QualifiedNauseaCounter,QualifiedLengthCounter,TotalCustomerCounter)
         return [NumQualifiedRides,QualifiedExcitementCounter,QualifiedIntensityCounter,QualifiedNauseaCounter,QualifiedLengthCounter,TotalCustomerCounter];
     }
 
