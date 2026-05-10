@@ -1750,7 +1750,7 @@ function archipelagoDebug(){
                         // console.log(scenario.name);
                         // console.log(JSON.stringify(items));
                         // console.log("\n\n");
-                        console.log((map.rides));
+                        console.log(JSON.stringify(context.getParkStorage().get('RCTRando.ArchipelagoLockedLocations')));
                         // console.log(convert_shop_name_to_ID("Burger Bar"))
                                          
                     }
@@ -1817,7 +1817,7 @@ function archipelagoDebug(){
                     text: 'Poison Trap',
                     onClick: function() {
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
-                        archipelago_print_message("AuGold found Colby's Food Poisioning Trap!");
+                        archipelago_print_message("AuGold found Colby's Food Poisoning Trap!");
                         BathroomTrap.PoisonTrap();
                         // let rides = map.rides;
                         // for(let i = 0; i < rides.length; i++){

@@ -640,7 +640,7 @@ class RCTRArchipelago extends ModuleBase {
     ActivateTrap(trap: string): void{
         var self = this;
         switch(trap){
-            case "Food Poisioning Trap":
+            case "Food Poisoning Trap":
                 self.PoisonTrap();
                 break;
             case "Bathroom Trap":
