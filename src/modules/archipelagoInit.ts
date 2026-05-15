@@ -104,6 +104,7 @@ var archipelago_location_request_sent = false;//Used to keep Archipelago_Update_
 var archipelago_settings: any = {
     deathlink: false,
     deathlink_timeout: false,
+    traplink: false,
     location_information: "None",
     colorblind_mode: false,
     park_message_chat: true,

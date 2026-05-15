@@ -225,6 +225,10 @@ class RCTRArchipelago extends ModuleBase {
             archipelago_settings.deathlink = true;
         else
             archipelago_settings.deathlink = false;
+        if(imported_settings.trap_link)
+            archipelago_settings.traplink = true;
+        else
+            archipelago_settings.traplink = true; // TODO: Change this to false when an option is added to the YAML for it.
         switch(imported_settings.randomization_range){
             case 0://none
                 settings.rando_range = 1;
@@ -637,7 +641,7 @@ class RCTRArchipelago extends ModuleBase {
         return;
     }
 
-    ActivateTrap(trap: string): void{
+    ActivateTrap(trap: string, fromTrapLink?: boolean): void{
         var self = this;
         switch(trap){
             case "Food Poisoning Trap":
@@ -660,6 +664,11 @@ class RCTRArchipelago extends ModuleBase {
             case "Loan Shark Trap":
                 self.LoanSharkTrap();
                 break;
+        }
+        
+        // If this isn't from a TrapLink and we have TrapLink enabled, then send a TrapLink packet out.
+        if (!fromTrapLink && archipelago_settings.traplink){ 
+            archipelago_send_message("Bounce",{trap: trap, tag: "TrapLink"});
         }
     }
 

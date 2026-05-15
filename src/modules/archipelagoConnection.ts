@@ -40,6 +40,7 @@ function archipelago_send_message(type: string, message?: any) {
 function archipelago_select_message(type: string, message?: any){
     switch(type){
     case "Connect":
+        // TODO: This and ConnectUpdate don't display the TrapLink tag, but that's fine for now.
         trace({cmd: "Connect", password: message.password, game: "OpenRCT2", name: message.name, uuid: message.name + ": OpenRCT2", version: {major: 0, minor: 4, build: 1}, item_handling: 0b111, tags: (archipelago_settings.deathlink) ? ["DeathLink"] : [], slot_data: true});
         break;
     case "ConnectUpdate":
@@ -98,6 +99,9 @@ function archipelago_select_message(type: string, message?: any){
     case "Bounce":
         if(message.tag == "DeathLink"){
             connection.send({cmd: "Bounce", tags: ["DeathLink"], data: {time: Math.round(+new Date()/1000), cause: message.ride + " has crashed!", source: archipelago_settings.player[0]}});
+        }
+        if(message.tag == "TrapLink"){
+            connection.send({cmd: "Bounce", tags: ["TrapLink"], data: {time: Math.round(+new Date()/1000), trap_name: message.trap, source: archipelago_settings.player[0]}});
         }
         break;
     case "Get":
@@ -539,6 +543,37 @@ function ac_req(data) {//This is what we do when we receive a data packet
                             archipelago_print_message(death_message);
                         }
                         break;
+                    }
+
+                    if (data.tags[i] == "TrapLink"){
+                        const trap = data.data.trap_name;
+                        const source = data.data.source;
+
+                        // Ignore this trap if it comes from ourselves or TrapLink is disabled.
+                        if (source == archipelago_settings.player[0] || !archipelago_settings.traplink){
+                            break;
+                        }
+
+                        var TrapLink = GetModule("RCTRArchipelago") as RCTRArchipelago;
+
+                        switch (trap){
+                            // TODO: Haven't tested the Bathroom, Loan Shark or Food Poisoning traps, but they should link fine?
+                            // OpenRCT2's own traps.
+                            case "Bathroom Trap":
+                            case "Furry Convention Trap":
+                            case "Spam Trap":
+                            case "Loan Shark Trap":
+                            case "Food poisoning Trap":
+                            archipelago_print_message(source + " linked a " + trap + "!");
+                            TrapLink.ActivateTrap(trap, true);
+                            break;
+
+                            // Other game's traps.
+                            case "Chaos Control Trap": PauseGame(); break;
+                            case "Tutorial Trap": tutorial_0(); break;
+
+                            default: trace("Unhandled trap type: '" + trap +"'."); break;
+                        }
                     }
                 }
             }
