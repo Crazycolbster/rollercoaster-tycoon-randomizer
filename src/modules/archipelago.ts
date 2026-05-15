@@ -228,7 +228,7 @@ class RCTRArchipelago extends ModuleBase {
         if(imported_settings.trap_link)
             archipelago_settings.traplink = true;
         else
-            archipelago_settings.traplink = true; // TODO: Change this to false when an option is added to the YAML for it.
+            archipelago_settings.traplink = false;
         switch(imported_settings.randomization_range){
             case 0://none
                 settings.rando_range = 1;
