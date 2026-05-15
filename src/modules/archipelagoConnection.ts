@@ -569,7 +569,21 @@ function ac_req(data) {//This is what we do when we receive a data packet
                             break;
 
                             // Other game's traps.
+                            case "Animal Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
+                            case "Animal Bonus Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
                             case "Chaos Control Trap": PauseGame(); break;
+                            case "Exposition Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
+                            case "Freeze Trap": PauseGame(); break; // Has altenate idea on the TODO list.
+                            case "Frozen Trap": PauseGame(); break; // Has altenate idea on the TODO list.
+                            case "Frost Trap": TrapLink.setWeather("Snowstorm"); break;
+                            case "Help Trap": tutorial_0(); break;
+                            case "Hey! Trap": TrapLink.ActivateTrap("Spam Trap", true); break; // Has altenate idea on the TODO list.
+                            case "Literature Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
+                            case "Paralyze Trap": PauseGame(); break;
+                            case "Paralysis Trap": PauseGame(); break;
+                            case "Poison Mushroom": TrapLink.ActivateTrap("Food poisoning Trap", true); break;
+                            case "Poison Trap": TrapLink.ActivateTrap("Food poisoning Trap", true); break;
+                            case "Text Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
                             case "Tutorial Trap": tutorial_0(); break;
 
                             default: trace("Unhandled trap type: '" + trap +"'."); break;
