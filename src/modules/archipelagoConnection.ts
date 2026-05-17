@@ -556,6 +556,9 @@ function ac_req(data) {//This is what we do when we receive a data packet
 
                         var TrapLink = GetModule("RCTRArchipelago") as RCTRArchipelago;
 
+                        // Whether or not a message should be placed in the ticker regarding the TrapLink.
+                        var NotifyLink = true;
+
                         switch (trap){
                             // TODO: Haven't tested the Bathroom, Loan Shark or Food Poisoning traps, but they should link fine?
                             // OpenRCT2's own traps.
@@ -564,13 +567,13 @@ function ac_req(data) {//This is what we do when we receive a data packet
                             case "Spam Trap":
                             case "Loan Shark Trap":
                             case "Food poisoning Trap":
-                            archipelago_print_message(source + " linked a " + trap + "!");
                             TrapLink.ActivateTrap(trap, true);
                             break;
 
                             // Other game's traps.
                             case "Animal Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
                             case "Animal Bonus Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
+                            case "Camera Rotate Trap": ui.mainViewport.rotation = Math.floor(Math.random() * 4); break; // TODO: Maybe make it so it can't pick the already active rotation level.
                             case "Chaos Control Trap": PauseGame(); break;
                             case "Exposition Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
                             case "Freeze Trap": PauseGame(); break; // Has altenate idea on the TODO list.
@@ -585,8 +588,19 @@ function ac_req(data) {//This is what we do when we receive a data packet
                             case "Poison Trap": TrapLink.ActivateTrap("Food poisoning Trap", true); break;
                             case "Text Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
                             case "Tutorial Trap": tutorial_0(); break;
+                            case "Zoom In Trap": ui.mainViewport.zoom = -2; break; // TODO: Change this to just zoom in one pip rather than going to the max zoom level?
+                            case "Zoom Out Trap": ui.mainViewport.zoom = 3; break; // TODO: Change this to just zoom out one pip rather than going to the max zoom level?
+                            case "Zoom Trap": ui.mainViewport.zoom = (Math.floor(Math.random() * 6) - 2); break; // TODO: Maybe make it so it can't pick the already active zoom level.
 
-                            default: trace("Unhandled trap type: '" + trap +"'."); break;
+                            // If this trap is unhandled, then trace log it and flip the NotifyLink flag so we don't send a pointless TrapLink notification.
+                            default:
+                                trace("Unhandled trap type: '" + trap +"'.");
+                                NotifyLink = false;
+                                break;
+                        }
+                        
+                        if (NotifyLink){
+                            archipelago_print_message(source + " linked a " + trap + "!");
                         }
                     }
                 }
