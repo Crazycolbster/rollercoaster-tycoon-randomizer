@@ -560,7 +560,6 @@ function ac_req(data) {//This is what we do when we receive a data packet
                         var NotifyLink = true;
 
                         switch (trap){
-                            // TODO: Haven't tested the Bathroom, Loan Shark or Food Poisoning traps, but they should link fine?
                             // OpenRCT2's own traps.
                             case "Bathroom Trap":
                             case "Furry Convention Trap":
