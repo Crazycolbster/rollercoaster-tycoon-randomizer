@@ -2593,6 +2593,7 @@ function interpretMessage(){
                 case '!!help':
                     archipelago_print_message("!!help: Prints this menu. I bet you didn't know that.");
                     archipelago_print_message("!!toggleDeathLink: Enables/Disables Deathlink\n");
+                    archipelago_print_message("!!toggleTrapLink: Enables/Disables TrapLink\n");
                     archipelago_print_message("!!setMaxSpeed x: Sets the maximum allowed speed.");
                     archipelago_print_message("!!setvisibility x: Sets visibility. See your YAML for the options.")
                     archipelago_print_message("!!sync: syncs all the items in case the connector is bad at its job.");
@@ -2605,6 +2606,13 @@ function interpretMessage(){
                     archipelago_print_message("Deathlink Enabled you monster");
                     else
                     archipelago_print_message("Deathlink Disabled you coward");
+                    break;
+                case '!!toggletraplink':
+                    archipelago_settings.traplink = !archipelago_settings.traplink;
+                    if(archipelago_settings.traplink)
+                    archipelago_print_message("TrapLink Enabled you maschoist");
+                    else
+                    archipelago_print_message("TrapLink Disabled you coward");
                     break;
                 case "!!setvisibility nothing":
                 case "!!setvisibility none":
