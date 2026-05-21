@@ -2454,6 +2454,56 @@ class RCTRArchipelago extends ModuleBase {
         archipelago_repeat_game_request_counter ++;
         context.setTimeout(() => {self.RequestGames();}, 250);
     }
+
+    // TODO: Maybe get all the Aaa Trap messages from Freedom Planet 2 and pick one at random?
+    AaaTrap(): void{
+        if (ui) {
+            ui.openWindow({
+                classification: "popup",
+                title: "Aaa",
+                width: 300,
+                height: 100,
+                colours: [context.getRandom(0, 32), context.getRandom(0, 32)],
+                widgets: [
+                    {
+                        type: "label",
+                        x: 0,
+                        y: 50,
+                        width: 300,
+                        height: 75,
+                        text: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        textAlign: "centred"
+                    }
+                ]
+            });
+        }
+    }
+
+    // Shamelessly stolen from the Food Poisoning Trap and tweaked slightly.
+    // TODO: Test that removing Hats actually works, the Umbrella did, but couldn't get peeps to buy any Hats in my quick testing so that's unconfirmed.
+    BaldTrap(): void{
+        var guests = map.getAllEntities("guest");
+        var allFood: GuestItemType[] = ["hat","umbrella"];
+        for (var i=0; i<guests.length; i++) {
+            for(var j=0; j<allFood.length; j++){
+                if(guests[i].hasItem({type: allFood[j]}) == true){
+                    guests[i].removeItem({type: allFood[j]});
+                }
+            }
+        }
+        return;
+    }
+
+    // TODO: Random break down type?
+    // TODO: Test on rides that can't normally break down.
+    BreakdownTrap(): void{
+        if (map.rides.length == 0)
+            return;
+
+        var ride = map.rides[Math.floor(Math.random() * map.rides.length)];
+
+        ride.setBreakdown("safety_cut_out");
+    }
 }
 
 function isInPark(ride: string): boolean{

@@ -570,8 +570,12 @@ function ac_req(data) {//This is what we do when we receive a data packet
                             break;
 
                             // Other game's traps.
+                            case "Aaa Trap": TrapLink.AaaTrap(); break;
                             case "Animal Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
                             case "Animal Bonus Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
+                            case "Army Trap": context.executeAction("staffhire", {autoPosition: true, staffType: 2, costumeIndex: 0, staffOrders: 0} satisfies StaffHireArgs); break; // TODO: Not sure if we'll keep this one.
+                            case "Attraction Breakdown Trap": TrapLink.BreakdownTrap(); break;
+                            case "Bald Trap": TrapLink.BaldTrap(); break;
                             case "Camera Rotate Trap": ui.mainViewport.rotation = Math.floor(Math.random() * 4); break; // TODO: Maybe make it so it can't pick the already active rotation level.
                             case "Chaos Control Trap": PauseGame(); break;
                             case "Exposition Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
