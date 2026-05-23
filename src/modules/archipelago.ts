@@ -2496,6 +2496,7 @@ class RCTRArchipelago extends ModuleBase {
 
     // TODO: Random break down type?
     // TODO: Test on rides that can't normally break down.
+    // TODO: Check if the chosen ride isn't already broken down?
     BreakdownTrap(): void{
         if (map.rides.length == 0)
             return;
@@ -2503,6 +2504,36 @@ class RCTRArchipelago extends ModuleBase {
         var ride = map.rides[Math.floor(Math.random() * map.rides.length)];
 
         ride.setBreakdown("safety_cut_out");
+    }
+
+    // Shameless stolen from that Spam Trap button.
+    ChaosTrap(): void{
+        var x = map.size.x;//Gets the size of the map
+        var y = map.size.y;
+        var surfaces = objectManager.getAllObjects("terrain_surface");
+        for(let i = 1; i < (x - 1); i++){//check the x's. Map.size gives a couple coordinates off the map, so we exclude those.
+            for(let j = 1; j < (y - 1); j++){//check the y's
+                var tile = map.getTile(i,j).elements;//get the tile data
+                for(let k = 0; k < tile.length; k++){//iterate through everything on the tile
+                    if(tile[k].type == "surface"){//if it's a surface element
+                        var surface = tile[k] as SurfaceElement;
+                        surface.surfaceStyle = Math.floor(Math.random()*surfaces.length);
+                    }
+                }
+            }
+        }
+    }
+
+    // TODO: Check if the chosen ride is actually open?
+    CloseRideTrap(): void{
+        if (map.rides.length == 0)
+            return;
+
+        var ride = map.rides[Math.floor(Math.random() * map.rides.length)];
+
+        // Double close the ride to delete any cars/expel any peeps from it.
+        context.executeAction("ridesetstatus", {ride: ride.id, status: 0});
+        context.executeAction("ridesetstatus", {ride: ride.id, status: 0});
     }
 }
 

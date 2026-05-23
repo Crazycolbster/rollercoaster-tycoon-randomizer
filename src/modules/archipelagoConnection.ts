@@ -577,7 +577,10 @@ function ac_req(data) {//This is what we do when we receive a data packet
                             case "Attraction Breakdown Trap": TrapLink.BreakdownTrap(); break;
                             case "Bald Trap": TrapLink.BaldTrap(); break;
                             case "Camera Rotate Trap": ui.mainViewport.rotation = Math.floor(Math.random() * 4); break; // TODO: Maybe make it so it can't pick the already active rotation level.
+                            case "Chaos Trap": TrapLink.ChaosTrap(); break;
                             case "Chaos Control Trap": PauseGame(); break;
+                            case "Damage Trap": TrapLink.BreakdownTrap(); break;
+                            case "Eject Ability": TrapLink.CloseRideTrap(); break;
                             case "Exposition Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
                             case "Freeze Trap": PauseGame(); break; // Has altenate idea on the TODO list.
                             case "Frozen Trap": PauseGame(); break; // Has altenate idea on the TODO list.
