@@ -663,6 +663,27 @@ class RCTRArchipelago extends ModuleBase {
         }
     }
 
+    AaaTrap(): void{ //Only used on traplink
+        var self = this;
+        let aaa = "";
+        for(let i = 0; i < 100; i++){
+            let segment = self.GetColors(rng(0,64))[0] + "A";
+            aaa += segment;
+        }
+        archipelago_print_message(aaa)
+    }
+
+    PauseTrap(): void{ //Only used on traplink.
+        context.paused = true;
+        ui.showError("Get Paused on Nerd!", "");
+    }
+
+    RotateTrap(): void{ //Only used on traplink
+        var self = this;
+        ui.mainViewport.rotation = (ui.mainViewport.rotation + 1) % 4;
+        ui.showError('Insert "Get Rotated Idiot" meme here.', "")
+    }
+
     PoisonTrap(): void{
         var guests = map.getAllEntities("guest");
         var allFood: GuestItemType[] = ["burger","chips","ice_cream","candyfloss","pizza","popcorn","hot_dog","tentacle","toffee_apple","doughnut","chicken","funnel_cake","beef_noodles","fried_rice_noodles","wonton_soup","meatball_soup","sub_sandwich","cookie","roast_sausage"];

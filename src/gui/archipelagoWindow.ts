@@ -1750,7 +1750,11 @@ function archipelagoDebug(){
                         // console.log(scenario.name);
                         // console.log(JSON.stringify(items));
                         // console.log("\n\n");
-                        console.log(JSON.stringify(context.getParkStorage().get('RCTRando.ArchipelagoLockedLocations')));
+                        
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.RotateTrap();
+                        
+                        // console.log(JSON.stringify(context.getParkStorage().get('RCTRando.ArchipelagoLockedLocations')));
                         // console.log(convert_shop_name_to_ID("Burger Bar"))
                                          
                     }
@@ -1787,10 +1791,7 @@ function archipelagoDebug(){
                     width: 200,
                     height: 25,
                     text: 'Loan Shark Trap',
-                    onClick: function() {
-                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
-                        BathroomTrap.LoanSharkTrap();
-                    }
+                    
                 },
                 {
                     type: 'button',
@@ -1819,6 +1820,24 @@ function archipelagoDebug(){
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         archipelago_print_message("AuGold found Colby's Food Poisoning Trap!");
                         BathroomTrap.PoisonTrap();
+                        // let rides = map.rides;
+                        // for(let i = 0; i < rides.length; i++){
+                        //     console.log((rides[i]))
+                        // }
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button31',
+                    x: 415,
+                    y: 170,
+                    width: 200,
+                    height: 25,
+                    text: 'Pause Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.PauseTrap();
                         // let rides = map.rides;
                         // for(let i = 0; i < rides.length; i++){
                         //     console.log((rides[i]))
