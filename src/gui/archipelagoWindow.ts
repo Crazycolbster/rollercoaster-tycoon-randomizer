@@ -1750,9 +1750,9 @@ function archipelagoDebug(){
                         // console.log(scenario.name);
                         // console.log(JSON.stringify(items));
                         // console.log("\n\n");
-                        
+                        console.log((map.rides[0].breakdown))
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
-                        BathroomTrap.RotateTrap();
+                        BathroomTrap.BreakdownTrap();
                         
                         // console.log(JSON.stringify(context.getParkStorage().get('RCTRando.ArchipelagoLockedLocations')));
                         // console.log(convert_shop_name_to_ID("Burger Bar"))
@@ -1830,7 +1830,7 @@ function archipelagoDebug(){
                     type: 'button',
                     name: 'debug-button31',
                     x: 415,
-                    y: 170,
+                    y: 200,
                     width: 200,
                     height: 25,
                     text: 'Pause Trap',

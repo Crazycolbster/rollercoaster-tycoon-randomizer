@@ -641,7 +641,7 @@ class RCTRArchipelago extends ModuleBase {
         return;
     }
 
-    ActivateTrap(trap: string, fromTrapLink?: boolean): void{
+    ActivateTrap(trap: string, fromTrapLink?: boolean, source?: string): void{
         var self = this;
         switch(trap){
             case "Food Poisoning Trap":
@@ -670,27 +670,6 @@ class RCTRArchipelago extends ModuleBase {
         if (!fromTrapLink && archipelago_settings.traplink){ 
             archipelago_send_message("Bounce",{trap: trap, tag: "TrapLink"});
         }
-    }
-
-    AaaTrap(): void{ //Only used on traplink
-        var self = this;
-        let aaa = "";
-        for(let i = 0; i < 100; i++){
-            let segment = self.GetColors(rng(0,64))[0] + "A";
-            aaa += segment;
-        }
-        archipelago_print_message(aaa)
-    }
-
-    PauseTrap(): void{ //Only used on traplink.
-        context.paused = true;
-        ui.showError("Get Paused on Nerd!", "");
-    }
-
-    RotateTrap(): void{ //Only used on traplink
-        var self = this;
-        ui.mainViewport.rotation = (ui.mainViewport.rotation + 1) % 4;
-        ui.showError('Insert "Get Rotated Idiot" meme here.', "")
     }
 
     PoisonTrap(): void{
@@ -845,6 +824,153 @@ class RCTRArchipelago extends ModuleBase {
         for(let i = 0; i < 10; i++){
             showRandomAd();
         }
+    }
+
+    //These traps are only used on TrapLink
+
+    PauseTrap(): void{ //Only used on traplink.
+        context.paused = true;
+        ui.showError("Get Paused on Nerd!", "");
+    }
+
+    RotateTrap(): void{ //Only used on traplink
+        var self = this;
+        ui.mainViewport.rotation = (ui.mainViewport.rotation + 1) % 4;
+        ui.showError('Insert "Get Rotated Idiot" meme here.', "")
+    }
+
+    // TODO: Maybe get all the Aaa Trap messages from Freedom Planet 2 and pick one at random?
+    AaaTrap(): void{
+        var self = this;
+        for(let i = 0; i < 501; i += 100){
+            let aaa = "";
+            for(let j = 0; j < 192; j++){
+                let segment = self.GetColors(rng(0,64))[0] + "A";
+                aaa += segment;
+                if (j && j % 32 == 0)// Puts the new lines in.
+                    aaa += "\n";
+            }
+            if (ui) {
+                context.setTimeout(() => {ui.openWindow({
+                    classification: "popup",
+                    title: "Aaa",
+                    width: 300,
+                    height: 100,
+                    colours: [context.getRandom(0, 32), context.getRandom(0, 32)],
+                    widgets: [
+                        {
+                            type: "label",
+                            x: 0,
+                            y: 50,
+                            width: 300,
+                            height: 75,
+                            text: aaa,//"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                            textAlign: "centred"
+                        }
+                    ]
+                })}, i);
+            }
+        }
+    }
+
+    // Shamelessly stolen by Knux from the Food Poisoning Trap and tweaked slightly.
+    BaldTrap(): void{ // Eh, close enough. Takes umbrellas and gives skin colored hats.
+        var guests = map.getAllEntities("guest");
+        var wearables: GuestItemType[] = ["hat","umbrella"];
+        for (var i=0; i<guests.length; i++) {
+            for(var j=0; j<wearables.length; j++){
+                if(guests[i].hasItem({type: wearables[j]}) == true){
+                    guests[i].removeItem({type: wearables[j]});
+                }
+                guests[i].giveItem({type: "hat"} as GuestItem);
+                guests[i].hatColour = 25 // SalmonPink is about the closest we're getting to skin color. 
+            }
+        }
+        return;
+    }
+
+    // TODO: Random break down type?
+    // TODO: Test on rides that can't normally break down.
+    // TODO: Check if the chosen ride isn't already broken down?
+    BreakdownTrap(source?: string): any{
+        if (map.rides.length == 0)
+            return;
+        const noBreakdowns = ["Mini Golf", "Lift", "Maze", "Crooked House", "Food Stall", "Drink Stall", "Shop", "Information Kiosk", "Toilets",];
+        if (map.rides.every(rides => noBreakdowns.includes(RideType[rides.type]) || rides.breakdown as string !== "none")){
+            var window = ui.openWindow({
+                classification: 'rain-check',
+                title: "Official Archipelago Rain Check",
+                width: 400,
+                height: 300,
+                colours: [7,7],
+                widgets: [].concat(
+                    [
+                        {
+                            type: 'listview',
+                            name: 'rain-check',
+                            x: 25,
+                            y: 35,
+                            width: 350,
+                            height: 200,
+                            isStriped: true,
+                            items: ["The service requested is currently unavaliable. We apologize ", "for any inconvenience. This RAIN CHECK entitiles you to the", "manual service listed. When available, please break down a ", "ride at your convenience."," ", "Todays date: " + (date.month + 3) + '-' + date.day + '-' + 'Year ' + date.year, "Service: Ride Breakdown", "Quantity: 1",' ', 'Sender: ' + (source ? source:"The Universe")],
+                        },
+                        {
+                            type: 'button',
+                            name: 'Ok',
+                            x: 125,
+                            y: 250,
+                            width: 150,
+                            height: 25,
+                            text: 'Click here to sign and close.',
+                            onClick: function() {
+                                window.close();
+                        }
+                    }]
+                )
+            });
+            return window;
+        }
+        var ride = map.rides[Math.floor(Math.random() * map.rides.length)];
+        while (noBreakdowns.includes(RideType[ride.type]) || ride.breakdown as string !== "none"){
+            ride = map.rides[Math.floor(Math.random() * map.rides.length)];
+        }
+        if (RideType[ride.type] == "Merry Go Round")
+            ride.setBreakdown("control_failure");
+        else if(["Boat Hire", "Go Karts", "Monorail Cycles"].includes(RideType[ride.type]))
+            ride.setBreakdown("vehicle_malfunction")
+        else
+            ride.setBreakdown("safety_cut_out");
+    }
+
+    // Shamelessly stolen by Knux from that Spam Trap button.
+    ChaosTrap(): void{
+        var x = map.size.x;//Gets the size of the map
+        var y = map.size.y;
+        var surfaces = objectManager.getAllObjects("terrain_surface");
+        for(let i = 1; i < (x - 1); i++){//check the x's. Map.size gives a couple coordinates off the map, so we exclude those.
+            for(let j = 1; j < (y - 1); j++){//check the y's
+                var tile = map.getTile(i,j).elements;//get the tile data
+                for(let k = 0; k < tile.length; k++){//iterate through everything on the tile
+                    if(tile[k].type == "surface"){//if it's a surface element
+                        var surface = tile[k] as SurfaceElement;
+                        surface.surfaceStyle = Math.floor(Math.random()*surfaces.length);
+                    }
+                }
+            }
+        }
+    }
+
+    // TODO: Check if the chosen ride is actually open?
+    CloseRideTrap(): void{
+        if (map.rides.length == 0)
+            return;
+
+        var ride = map.rides[Math.floor(Math.random() * map.rides.length)];
+
+        // Double close the ride to delete any cars/expel any peeps from it.
+        context.executeAction("ridesetstatus", {ride: ride.id, status: 0});
+        context.executeAction("ridesetstatus", {ride: ride.id, status: 0});
     }
 
     ReleaseRule(rule: string): void{//Function that ends enforcement of detrimental park modifiers
@@ -2474,87 +2600,6 @@ class RCTRArchipelago extends ModuleBase {
             archipelago_send_message("GetDataPackage", archipelago_current_game_request);
         archipelago_repeat_game_request_counter ++;
         context.setTimeout(() => {self.RequestGames();}, 250);
-    }
-
-    // TODO: Maybe get all the Aaa Trap messages from Freedom Planet 2 and pick one at random?
-    AaaTrap(): void{
-        if (ui) {
-            ui.openWindow({
-                classification: "popup",
-                title: "Aaa",
-                width: 300,
-                height: 100,
-                colours: [context.getRandom(0, 32), context.getRandom(0, 32)],
-                widgets: [
-                    {
-                        type: "label",
-                        x: 0,
-                        y: 50,
-                        width: 300,
-                        height: 75,
-                        text: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                        textAlign: "centred"
-                    }
-                ]
-            });
-        }
-    }
-
-    // Shamelessly stolen from the Food Poisoning Trap and tweaked slightly.
-    // TODO: Test that removing Hats actually works, the Umbrella did, but couldn't get peeps to buy any Hats in my quick testing so that's unconfirmed.
-    BaldTrap(): void{
-        var guests = map.getAllEntities("guest");
-        var allFood: GuestItemType[] = ["hat","umbrella"];
-        for (var i=0; i<guests.length; i++) {
-            for(var j=0; j<allFood.length; j++){
-                if(guests[i].hasItem({type: allFood[j]}) == true){
-                    guests[i].removeItem({type: allFood[j]});
-                }
-            }
-        }
-        return;
-    }
-
-    // TODO: Random break down type?
-    // TODO: Test on rides that can't normally break down.
-    // TODO: Check if the chosen ride isn't already broken down?
-    BreakdownTrap(): void{
-        if (map.rides.length == 0)
-            return;
-
-        var ride = map.rides[Math.floor(Math.random() * map.rides.length)];
-
-        ride.setBreakdown("safety_cut_out");
-    }
-
-    // Shameless stolen from that Spam Trap button.
-    ChaosTrap(): void{
-        var x = map.size.x;//Gets the size of the map
-        var y = map.size.y;
-        var surfaces = objectManager.getAllObjects("terrain_surface");
-        for(let i = 1; i < (x - 1); i++){//check the x's. Map.size gives a couple coordinates off the map, so we exclude those.
-            for(let j = 1; j < (y - 1); j++){//check the y's
-                var tile = map.getTile(i,j).elements;//get the tile data
-                for(let k = 0; k < tile.length; k++){//iterate through everything on the tile
-                    if(tile[k].type == "surface"){//if it's a surface element
-                        var surface = tile[k] as SurfaceElement;
-                        surface.surfaceStyle = Math.floor(Math.random()*surfaces.length);
-                    }
-                }
-            }
-        }
-    }
-
-    // TODO: Check if the chosen ride is actually open?
-    CloseRideTrap(): void{
-        if (map.rides.length == 0)
-            return;
-
-        var ride = map.rides[Math.floor(Math.random() * map.rides.length)];
-
-        // Double close the ride to delete any cars/expel any peeps from it.
-        context.executeAction("ridesetstatus", {ride: ride.id, status: 0});
-        context.executeAction("ridesetstatus", {ride: ride.id, status: 0});
     }
 }
 
