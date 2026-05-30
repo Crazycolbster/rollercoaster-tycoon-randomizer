@@ -225,6 +225,10 @@ class RCTRArchipelago extends ModuleBase {
             archipelago_settings.deathlink = true;
         else
             archipelago_settings.deathlink = false;
+        if(imported_settings.trap_link)
+            archipelago_settings.traplink = true;
+        else
+            archipelago_settings.traplink = false;
         switch(imported_settings.randomization_range){
             case 0://none
                 settings.rando_range = 1;
@@ -637,7 +641,7 @@ class RCTRArchipelago extends ModuleBase {
         return;
     }
 
-    ActivateTrap(trap: string): void{
+    ActivateTrap(trap: string, fromTrapLink?: boolean): void{
         var self = this;
         switch(trap){
             case "Food Poisoning Trap":
@@ -660,6 +664,11 @@ class RCTRArchipelago extends ModuleBase {
             case "Loan Shark Trap":
                 self.LoanSharkTrap();
                 break;
+        }
+        
+        // If this isn't from a TrapLink and we have TrapLink enabled, then send a TrapLink packet out.
+        if (!fromTrapLink && archipelago_settings.traplink){ 
+            archipelago_send_message("Bounce",{trap: trap, tag: "TrapLink"});
         }
     }
 
@@ -2465,6 +2474,87 @@ class RCTRArchipelago extends ModuleBase {
             archipelago_send_message("GetDataPackage", archipelago_current_game_request);
         archipelago_repeat_game_request_counter ++;
         context.setTimeout(() => {self.RequestGames();}, 250);
+    }
+
+    // TODO: Maybe get all the Aaa Trap messages from Freedom Planet 2 and pick one at random?
+    AaaTrap(): void{
+        if (ui) {
+            ui.openWindow({
+                classification: "popup",
+                title: "Aaa",
+                width: 300,
+                height: 100,
+                colours: [context.getRandom(0, 32), context.getRandom(0, 32)],
+                widgets: [
+                    {
+                        type: "label",
+                        x: 0,
+                        y: 50,
+                        width: 300,
+                        height: 75,
+                        text: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        textAlign: "centred"
+                    }
+                ]
+            });
+        }
+    }
+
+    // Shamelessly stolen from the Food Poisoning Trap and tweaked slightly.
+    // TODO: Test that removing Hats actually works, the Umbrella did, but couldn't get peeps to buy any Hats in my quick testing so that's unconfirmed.
+    BaldTrap(): void{
+        var guests = map.getAllEntities("guest");
+        var allFood: GuestItemType[] = ["hat","umbrella"];
+        for (var i=0; i<guests.length; i++) {
+            for(var j=0; j<allFood.length; j++){
+                if(guests[i].hasItem({type: allFood[j]}) == true){
+                    guests[i].removeItem({type: allFood[j]});
+                }
+            }
+        }
+        return;
+    }
+
+    // TODO: Random break down type?
+    // TODO: Test on rides that can't normally break down.
+    // TODO: Check if the chosen ride isn't already broken down?
+    BreakdownTrap(): void{
+        if (map.rides.length == 0)
+            return;
+
+        var ride = map.rides[Math.floor(Math.random() * map.rides.length)];
+
+        ride.setBreakdown("safety_cut_out");
+    }
+
+    // Shameless stolen from that Spam Trap button.
+    ChaosTrap(): void{
+        var x = map.size.x;//Gets the size of the map
+        var y = map.size.y;
+        var surfaces = objectManager.getAllObjects("terrain_surface");
+        for(let i = 1; i < (x - 1); i++){//check the x's. Map.size gives a couple coordinates off the map, so we exclude those.
+            for(let j = 1; j < (y - 1); j++){//check the y's
+                var tile = map.getTile(i,j).elements;//get the tile data
+                for(let k = 0; k < tile.length; k++){//iterate through everything on the tile
+                    if(tile[k].type == "surface"){//if it's a surface element
+                        var surface = tile[k] as SurfaceElement;
+                        surface.surfaceStyle = Math.floor(Math.random()*surfaces.length);
+                    }
+                }
+            }
+        }
+    }
+
+    // TODO: Check if the chosen ride is actually open?
+    CloseRideTrap(): void{
+        if (map.rides.length == 0)
+            return;
+
+        var ride = map.rides[Math.floor(Math.random() * map.rides.length)];
+
+        // Double close the ride to delete any cars/expel any peeps from it.
+        context.executeAction("ridesetstatus", {ride: ride.id, status: 0});
+        context.executeAction("ridesetstatus", {ride: ride.id, status: 0});
     }
 }
 

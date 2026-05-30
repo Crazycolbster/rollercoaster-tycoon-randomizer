@@ -40,6 +40,7 @@ function archipelago_send_message(type: string, message?: any) {
 function archipelago_select_message(type: string, message?: any){
     switch(type){
     case "Connect":
+        // TODO: This and ConnectUpdate don't display the TrapLink tag, but that's fine for now.
         trace({cmd: "Connect", password: message.password, game: "OpenRCT2", name: message.name, uuid: message.name + ": OpenRCT2", version: {major: 0, minor: 4, build: 1}, item_handling: 0b111, tags: (archipelago_settings.deathlink) ? ["DeathLink"] : [], slot_data: true});
         break;
     case "ConnectUpdate":
@@ -98,6 +99,9 @@ function archipelago_select_message(type: string, message?: any){
     case "Bounce":
         if(message.tag == "DeathLink"){
             connection.send({cmd: "Bounce", tags: ["DeathLink"], data: {time: Math.round(+new Date()/1000), cause: message.ride + " has crashed!", source: archipelago_settings.player[0]}});
+        }
+        if(message.tag == "TrapLink"){
+            connection.send({cmd: "Bounce", tags: ["TrapLink"], data: {time: Math.round(+new Date()/1000), trap_name: message.trap, source: archipelago_settings.player[0]}});
         }
         break;
     case "Get":
@@ -539,6 +543,71 @@ function ac_req(data) {//This is what we do when we receive a data packet
                             archipelago_print_message(death_message);
                         }
                         break;
+                    }
+
+                    if (data.tags[i] == "TrapLink"){
+                        const trap = data.data.trap_name;
+                        const source = data.data.source;
+
+                        // Ignore this trap if it comes from ourselves or TrapLink is disabled.
+                        if (source == archipelago_settings.player[0] || !archipelago_settings.traplink){
+                            break;
+                        }
+
+                        var TrapLink = GetModule("RCTRArchipelago") as RCTRArchipelago;
+
+                        // Whether or not a message should be placed in the ticker regarding the TrapLink.
+                        var NotifyLink = true;
+
+                        switch (trap){
+                            // OpenRCT2's own traps.
+                            case "Bathroom Trap":
+                            case "Furry Convention Trap":
+                            case "Spam Trap":
+                            case "Loan Shark Trap":
+                            case "Food poisoning Trap":
+                            TrapLink.ActivateTrap(trap, true);
+                            break;
+
+                            // Other game's traps.
+                            case "Aaa Trap": TrapLink.AaaTrap(); break;
+                            case "Animal Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
+                            case "Animal Bonus Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
+                            case "Army Trap": context.executeAction("staffhire", {autoPosition: true, staffType: 2, costumeIndex: 0, staffOrders: 0} satisfies StaffHireArgs); break; // TODO: Not sure if we'll keep this one.
+                            case "Attraction Breakdown Trap": TrapLink.BreakdownTrap(); break;
+                            case "Bald Trap": TrapLink.BaldTrap(); break;
+                            case "Camera Rotate Trap": ui.mainViewport.rotation = Math.floor(Math.random() * 4); break; // TODO: Maybe make it so it can't pick the already active rotation level.
+                            case "Chaos Trap": TrapLink.ChaosTrap(); break;
+                            case "Chaos Control Trap": PauseGame(); break;
+                            case "Damage Trap": TrapLink.BreakdownTrap(); break;
+                            case "Eject Ability": TrapLink.CloseRideTrap(); break;
+                            case "Exposition Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
+                            case "Freeze Trap": PauseGame(); break; // Has altenate idea on the TODO list.
+                            case "Frozen Trap": PauseGame(); break; // Has altenate idea on the TODO list.
+                            case "Frost Trap": TrapLink.setWeather("Snowstorm"); break;
+                            case "Help Trap": tutorial_0(); break;
+                            case "Hey! Trap": TrapLink.ActivateTrap("Spam Trap", true); break; // Has altenate idea on the TODO list.
+                            case "Literature Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
+                            case "Paralyze Trap": PauseGame(); break;
+                            case "Paralysis Trap": PauseGame(); break;
+                            case "Poison Mushroom": TrapLink.ActivateTrap("Food poisoning Trap", true); break;
+                            case "Poison Trap": TrapLink.ActivateTrap("Food poisoning Trap", true); break;
+                            case "Text Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
+                            case "Tutorial Trap": tutorial_0(); break;
+                            case "Zoom In Trap": ui.mainViewport.zoom = -2; break; // TODO: Change this to just zoom in one pip rather than going to the max zoom level?
+                            case "Zoom Out Trap": ui.mainViewport.zoom = 3; break; // TODO: Change this to just zoom out one pip rather than going to the max zoom level?
+                            case "Zoom Trap": ui.mainViewport.zoom = (Math.floor(Math.random() * 6) - 2); break; // TODO: Maybe make it so it can't pick the already active zoom level.
+
+                            // If this trap is unhandled, then trace log it and flip the NotifyLink flag so we don't send a pointless TrapLink notification.
+                            default:
+                                trace("Unhandled trap type: '" + trap +"'.");
+                                NotifyLink = false;
+                                break;
+                        }
+                        
+                        if (NotifyLink){
+                            archipelago_print_message(source + " linked a " + trap + "!");
+                        }
                     }
                 }
             }
