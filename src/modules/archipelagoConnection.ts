@@ -610,7 +610,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
                         }
                         
                         if (NotifyLink){
-                            archipelago_print_message(source + " linked a " + trap + "!");
+                            archipelago_print_message("{PALELAVENDER}" + source + "{GREEN} linked a {RED}" + trap + "{WHITE}!");
                         }
                     }
                 }

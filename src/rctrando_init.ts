@@ -17,8 +17,9 @@ function trace(message?: any, ...optionalParams: any[]): void {
 if (bDebug){
     ui.registerMenuItem("Archipelago Debug", archipelagoDebug);//Colby's debug menu. no touchy!
     ui.registerShortcut({id:"debug", text:"[AP] Opens the debug window! You should never see this!", bindings:['D'],
-    callback() {archipelagoDebug()}
-    })
+    callback() {archipelagoDebug()}})
+    ui.registerShortcut({id:"debug-traps", text:"[AP] Opens the trap debug window! You should never see this!", bindings:['T'],
+    callback() {archipelagoDebugTraps()}})
 }
 
 var global_settings = {

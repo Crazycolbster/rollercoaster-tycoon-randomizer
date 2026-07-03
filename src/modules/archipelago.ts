@@ -1109,6 +1109,7 @@ class RCTRArchipelago extends ModuleBase {
     RotateTrap(): any{ //Only used on traplink
         var self = this;
         ui.mainViewport.rotation = (ui.mainViewport.rotation + 1) % 4;
+        console.log(archipelago_get_rotated_idiot_bottom_image_ID.start);
         context.setTimeout(()=> {try{ui.getWindow("get-rotated-idiot").close();} catch{console.log("Error: rotated-idiot window already closed")}}, 3000);
         var get_rotated_idiot = ui.openWindow({
             classification: 'get-rotated-idiot',
@@ -1119,7 +1120,7 @@ class RCTRArchipelago extends ModuleBase {
             widgets: [].concat(
                 {
                     type: 'custom',
-                    name: 'get-rotated-idiot',
+                    name: 'get-rotated-idiot-top',
                     x: 10,
                     y: 30,
                     width: 300,
@@ -1129,7 +1130,7 @@ class RCTRArchipelago extends ModuleBase {
                 },
                 {
                     type: 'custom',
-                    name: 'get-rotated-idiot',
+                    name: 'get-rotated-idiot-bottom',
                     x: 10,
                     y: 165,
                     width: 300,

@@ -26,8 +26,8 @@ function inlineSprite(imageId: number): string {//Converts the image to an inlin
 
 const archipelago_icon_ID = ui.imageManager.allocate(1);
 const archipelago_menu_location_image_ID = ui.imageManager.allocate(1);
-const archipelago_get_rotated_idiot_top_image_ID = ui.imageManager.allocate(1);
-const archipelago_get_rotated_idiot_bottom_image_ID = ui.imageManager.allocate(1);
+var archipelago_get_rotated_idiot_top_image_ID = ui.imageManager.allocate(1);
+var archipelago_get_rotated_idiot_bottom_image_ID = ui.imageManager.allocate(1);
 ui.imageManager.setPixelData(archipelago_icon_ID.start, archipelago_icon);
 ui.imageManager.setPixelData(archipelago_menu_location_image_ID.start, menu_location_image);
 ui.imageManager.setPixelData(archipelago_get_rotated_idiot_top_image_ID.start, get_rotated_idiot_top_image);

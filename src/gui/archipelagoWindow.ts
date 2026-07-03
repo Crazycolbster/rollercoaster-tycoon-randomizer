@@ -1534,7 +1534,7 @@ function archipelagoDebug(){
                     y: 320,
                     width: 200,
                     height: 25,
-                    text: 'Furry Trap',
+                    text: 'Free Space',
                     onClick: function() {
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         archipelago_print_message("Curtis found Colbys Furry Convention Trap!");
@@ -1548,7 +1548,7 @@ function archipelagoDebug(){
                     y: 20,
                     width: 200,
                     height: 25,
-                    text: 'Spam Trap',
+                    text: 'Free Space',
                     onClick: function() {
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         archipelago_print_message("Dustin found Colbys Spam Mail Trap!");
@@ -1562,7 +1562,7 @@ function archipelagoDebug(){
                     y: 50,
                     width: 200,
                     height: 25,
-                    text: 'Bathroom Trap',
+                    text: 'Free Space',
                     onClick: function() {
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         archipelago_print_message("Ty found Colby's Bathroom Trap!");
@@ -1803,8 +1803,10 @@ function archipelagoDebug(){
                     y: 80,
                     width: 200,
                     height: 25,
-                    text: 'Loan Shark Trap',
-                    
+                    text: 'Traps!',
+                    onClick: function() {
+                        archipelagoDebugTraps();
+                        }
                 },
                 {
                     type: 'button',
@@ -1828,7 +1830,7 @@ function archipelagoDebug(){
                     y: 140,
                     width: 200,
                     height: 25,
-                    text: 'Poison Trap',
+                    text: 'Free Space',
                     onClick: function() {
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         archipelago_print_message("AuGold found Colby's Food Poisoning Trap!");
@@ -1846,7 +1848,7 @@ function archipelagoDebug(){
                     y: 200,
                     width: 200,
                     height: 25,
-                    text: 'Pause Trap',
+                    text: 'Free Space',
                     onClick: function() {
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
@@ -1855,6 +1857,379 @@ function archipelagoDebug(){
                         // for(let i = 0; i < rides.length; i++){
                         //     console.log((rides[i]))
                         // }
+                    }
+                }
+           ]
+        )
+    });
+    return window;
+}
+
+function archipelagoDebugTraps(){
+    var ww = 600;
+    var wh = 350;
+    let y = 0;
+
+    var window = ui.openWindow({
+        classification: 'debug-traps-window',
+        title: "Trap Window. You should never see this!",
+        width: ww,
+        height: wh,
+        widgets: [].concat(
+            [
+                {
+                    type: 'button',
+                    name: 'debug-button1',
+                    x: 5,
+                    y: 20,
+                    width: 200,
+                    height: 25,
+                    text: 'Furry Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Curtis found Colbys Furry Convention Trap!");
+                        BathroomTrap.FurryConventionTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button2',
+                    x: 5,
+                    y: 50,
+                    width: 200,
+                    height: 25,
+                    text: 'Spam Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Dustin found Colbys Spam Mail Trap!");
+                        BathroomTrap.SpamTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button3',
+                    x: 5,
+                    y: 80,
+                    width: 200,
+                    height: 25,
+                    text: 'Bathroom Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Ty found Colby's Bathroom Trap!");
+                        BathroomTrap.BathroomTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button4',
+                    x: 5,
+                    y: 110,
+                    width: 200,
+                    height: 25,
+                    text: 'Loan Shark Trap',
+                    
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button5',
+                    x: 5,
+                    y: 140,
+                    width: 200,
+                    height: 25,
+                    text: 'Poison Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("AuGold found Colby's Food Poisoning Trap!");
+                        BathroomTrap.FoodPoisoningTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button12',
+                    x: 210,
+                    y: 20,
+                    width: 200,
+                    height: 25,
+                    text: 'Pause Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.PauseTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button13',
+                    x: 210,
+                    y: 50,
+                    width: 200,
+                    height: 25,
+                    text: 'Aaa Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.AaaTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button14',
+                    x: 210,
+                    y: 80,
+                    width: 200,
+                    height: 25,
+                    text: 'Bald Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.BaldTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button15',
+                    x: 210,
+                    y: 110,
+                    width: 200,
+                    height: 25,
+                    text: 'Breakdown Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.BreakdownTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button16',
+                    x: 210,
+                    y: 140,
+                    width: 200,
+                    height: 25,
+                    text: 'Chaos Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.ChaosTrap()
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button17',
+                    x: 210,
+                    y: 170,
+                    width: 200,
+                    height: 25,
+                    text: 'Close Ride Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.CloseRideTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button18',
+                    x: 210,
+                    y: 200,
+                    width: 200,
+                    height: 25,
+                    text: 'Extreme Chaos Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.ExtremeChaosTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button19',
+                    x: 210,
+                    y: 200,
+                    width: 200,
+                    height: 25,
+                    text: 'Fast Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.FastTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button19',
+                    x: 210,
+                    y: 230,
+                    width: 200,
+                    height: 25,
+                    text: 'Frost Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.FrostTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button20',
+                    x: 210,
+                    y: 260,
+                    width: 200,
+                    height: 25,
+                    text: 'Hey Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.HeyTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button21',
+                    x: 210,
+                    y: 290,
+                    width: 200,
+                    height: 25,
+                    text: 'Pause Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        archipelago_print_message("Traplink: Knux Received Chaos Control Trap!");
+                        BathroomTrap.PauseTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button22',
+                    x: 210,
+                    y: 320,
+                    width: 200,
+                    height: 25,
+                    text: 'Rotate Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.RotateTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button23',
+                    x: 415,
+                    y: 20,
+                    width: 200,
+                    height: 25,
+                    text: 'Scroll Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.ScrollTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button24',
+                    x: 415,
+                    y: 50,
+                    width: 200,
+                    height: 25,
+                    text: 'Security Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.SecurityTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button25',
+                    x: 415,
+                    y: 80,
+                    width: 200,
+                    height: 25,
+                    text: 'Spawn Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.SpawnTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button26',
+                    x: 415,
+                    y: 110,
+                    width: 200,
+                    height: 25,
+                    text: 'Tutorial Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.TutorialTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button27',
+                    x: 415,
+                    y: 140,
+                    width: 200,
+                    height: 25,
+                    text: 'Zoom In Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.ZoomInTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button28',
+                    x: 415,
+                    y: 170,
+                    width: 200,
+                    height: 25,
+                    text: 'Zoom Out Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.ZoomOutTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button29',
+                    x: 415,
+                    y: 200,
+                    width: 200,
+                    height: 25,
+                    text: 'Zoom Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.ZoomTrap();
+                    }
+                },
+                {
+                    type: 'button',
+                    name: 'debug-button31',
+                    x: 415,
+                    y: 290,
+                    width: 200,
+                    height: 25,
+                    text: 'Try Furry Quiz',
+                    onClick: function() {
+                        ui.showTextInput({title:"Yeaaaaaah, WHADDA WANT?",description:"Fine, give me a quiz number.", callback(value: string){
+                            const quizNumber = parseInt(value, 10);
+                            archipelagoExcorcizeFurries(quizNumber);
+                        }});
+                    }
+                },
+                
+                {
+                    type: 'button',
+                    name: 'debug-button32',
+                    x: 415,
+                    y: 320,
+                    width: 200,
+                    height: 25,
+                    text: 'Specific Ad',
+                    onClick: function() {
+                        ui.showTextInput({title:"Yeaaaaaah, WHADDA WANT?",description:"Fine, give me an ad number.", callback(value: string){
+                            const adNumber = parseInt(value, 10);
+                            showAd(adPool[adNumber]);
+                        }});
                     }
                 }
            ]
