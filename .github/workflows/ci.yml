@@ -13,7 +13,7 @@ jobs:
     - name: Aquire openrct2.d.ts
       run: |
         mkdir lib
-        curl -Lo lib/openrct2.d.ts https://github.com/OpenRCT2/OpenRCT2/raw/develop/distribution/openrct2.d.ts
+        curl -Lo lib/openrct2.d.ts https://github.com/OpenRCT2/OpenRCT2/raw/develop/distribution/scripting/openrct2.d.ts
     - name: Install
       run: npm install
     - name: Build
