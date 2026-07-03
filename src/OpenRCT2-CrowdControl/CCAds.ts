@@ -265,7 +265,25 @@ const adPool: Ad[] = [
         button: "This is why ride costs $300 instead of $50,000.",
         onClick: () => 
             {
-                ui.showError("We convert the guests essence directly into rides.", "Keep an eye out for Hoid!");
+                try{
+                    ui.showError("We convert the guests essence directly into rides.", "Keep an eye out for Hoid!");
+                    let hoidNames = ["Hoid", "Wit", "Cephandrius", "Midius"]
+                    let archipelagoPlayers = (context.getParkStorage().get("RCTRando.ArchipelagoPlayers") as playerTuple[]);
+                    var found = false;
+                    console.log(JSON.stringify(archipelagoPlayers));
+                    for(let i=0; i<archipelagoPlayers.length; i++){
+                        if (hoidNames.includes(archipelagoPlayers[i][0])){
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found){
+                        let randomName = hoidNames[rng(0, (hoidNames.length - 1))]
+                        archipelagoPlayers.push([randomName,true ,"The Cosmere", 17000000,17000000])
+                        context.getParkStorage().set("RCTRando.ArchipelagoPlayers",archipelagoPlayers);
+                    }
+                }
+                catch{ui.showError("Archipelago not open", "You should try this while playing Archipelago!")}
             }
     },
     {//37
