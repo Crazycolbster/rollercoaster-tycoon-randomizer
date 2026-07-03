@@ -99,7 +99,7 @@ class RCTRArchipelago extends ModuleBase {
             self.checkAwards(); self.SetEntranceOption();});
         //Add menu items
         ui.registerMenuItem("Archipelago Checks!", archipelagoLocations); //Register the check menu
-        ui.registerMenuItem("Archipelago Tutorial", tutorial_0); //Register the tutorial
+        ui.registerMenuItem("Archipelago Tutorial", () => {tutorial_0(); archipelago_settings.traplink && archipelago_send_message("Bounce",{trap: "Tutorial Trap", tag: "TrapLink"});}); //Register the tutorial
         // if (archipelago_settings.deathlink)//Enable deathlink checks if deathlink is enabled
         self.SubscribeEvent('vehicle.crash',(e: any) => self.SendDeathLink(e.id));
         context.subscribe('action.execute',e => self.InterpretAction(e.player, e.action, e.args, e.result));
@@ -221,7 +221,7 @@ class RCTRArchipelago extends ModuleBase {
                 settings.scenarioLength = scenarioLengths.Marathon;
                 break;
         }
-        if(imported_settings.death_link)
+        if(imported_settings.death_link)//Sends a 1 or 0, we need to convert to True or False
             archipelago_settings.deathlink = true;
         else
             archipelago_settings.deathlink = false;
@@ -641,14 +641,17 @@ class RCTRArchipelago extends ModuleBase {
         return;
     }
 
+    //Trap Fuctions!
+
     ActivateTrap(trap: string, fromTrapLink?: boolean, source?: string): void{
         var self = this;
         switch(trap){
-            case "Food Poisoning Trap":
-                self.PoisonTrap();
-                break;
+            //Standard Traps
             case "Bathroom Trap":
                 self.BathroomTrap();
+                break;
+            case "Food Poisoning Trap":
+                self.FoodPoisoningTrap();
                 break;
             case "Furry Convention Trap":
                 try{
@@ -657,12 +660,67 @@ class RCTRArchipelago extends ModuleBase {
                 catch{
                     console.log("Error in Activate Trap: Furry Conventions aren't fixed yet");
                 }
+                break;    
+            case "Loan Shark Trap":
+                self.LoanSharkTrap();
                 break;
             case "Spam Trap":
                 self.SpamTrap();
                 break;
-            case "Loan Shark Trap":
-                self.LoanSharkTrap();
+            //Traplink Traps
+            case "Aaa Trap":
+                self.AaaTrap();
+                break;
+            case "Bald Trap":
+                self.BaldTrap();
+                break;
+            case "Breakdown Trap":
+                self.BreakdownTrap(source);
+                break;
+            case "Chaos Trap":
+                self.ChaosTrap();
+                break;
+            case "Close Ride Trap":
+                self.CloseRideTrap(source);
+                break;
+            case "Extreme Chaos Trap":
+                self.ExtremeChaosTrap();
+                break;
+            case "Fast Trap":
+                self.FastTrap();
+                break;
+            case "Frost Trap":
+                self.FrostTrap();
+                break;
+            case "Hey Trap":
+                self.HeyTrap();
+                break;
+            case "Pause Trap":
+                self.PauseTrap();
+                break;
+            case "Rotate Trap":
+                self.RotateTrap();
+                break;
+            case "Scroll Trap":
+                self.ScrollTrap();
+                break;
+            case "Security Trap":
+                self.SecurityTrap();
+                break;
+            case "Spawn Trap":
+                self.SpawnTrap();
+                break;
+            case "Tutorial Trap":
+                self.TutorialTrap();
+                break;
+            case "Zoom In Trap":
+                self.ZoomInTrap();
+                break;
+            case "Zoom Out Trap":
+                self.ZoomOutTrap();
+                break;
+            case "Zoom Trap":
+                self.ZoomTrap();
                 break;
         }
         
@@ -672,7 +730,14 @@ class RCTRArchipelago extends ModuleBase {
         }
     }
 
-    PoisonTrap(): void{
+    BathroomTrap(): void{
+        var guests = map.getAllEntities("guest");
+        for (var i=0; i<guests.length; i++) {
+            guests[i].toilet = 255;
+        }
+    }
+
+    FoodPoisoningTrap(): void{
         var guests = map.getAllEntities("guest");
         var allFood: GuestItemType[] = ["burger","chips","ice_cream","candyfloss","pizza","popcorn","hot_dog","tentacle","toffee_apple","doughnut","chicken","funnel_cake","beef_noodles","fried_rice_noodles","wonton_soup","meatball_soup","sub_sandwich","cookie","roast_sausage"];
         for (var i=0; i<guests.length; i++) {
@@ -685,10 +750,52 @@ class RCTRArchipelago extends ModuleBase {
         return;
     }
 
-    BathroomTrap(): void{
-        var guests = map.getAllEntities("guest");
-        for (var i=0; i<guests.length; i++) {
-            guests[i].toilet = 255;
+    FurryConventionTrap(): void{
+        let panda = undefined;
+        let elephant = undefined;
+        let tiger = undefined;
+        let gorilla = undefined;
+        let costumes = objectManager.getAllObjects("peep_animations");
+        var furry_number = Math.ceil(park.guests * .2);
+        if (furry_number < 25)
+            furry_number = 25;
+        if (furry_number > 300)
+            furry_number = 300;
+
+        for(let i = 0; i < costumes.length; i++){
+            switch(costumes[i].identifier){
+                case "rct2.peep_animations.entertainer_tiger"://"Tiger costume":
+                    tiger = costumes[i].index;
+                    break;
+                case "rct2.peep_animations.entertainer_panda"://"Panda costume":
+                    panda = costumes[i].index;
+                    break;
+                case "rct2.peep_animations.entertainer_gorilla"://"Gorilla costume":
+                    gorilla = costumes[i].index;
+                    break;
+                case "rct2.peep_animations.entertainer_elephant"://"Elephant costume":
+                    elephant = costumes[i].index;
+                    break;
+            }
+        }
+
+        for(let i = 0; i < furry_number; i++){
+            var furry_type = rng(0,3);//context.getRandom(0, 4)//rng(0, 3)//Math.floor(Math.random() * 4);
+            switch(furry_type){
+                case 0:
+                    furry_type = panda; //Panda
+                    break;
+                case 1:
+                    furry_type = elephant; //Elephant
+                    break;
+                case 2:
+                    furry_type = tiger; //Tiger
+                    break;
+                case 3:
+                    furry_type = gorilla; //Gorilla
+                    break;
+            }
+            context.executeAction("staffhire", {autoPosition: true, staffType: 3, costumeIndex: furry_type, staffOrders: 0} satisfies StaffHireArgs);
         }
     }
 
@@ -771,73 +878,15 @@ class RCTRArchipelago extends ModuleBase {
         return window;
     }
 
-    FurryConventionTrap(): void{
-        let panda = undefined;
-        let elephant = undefined;
-        let tiger = undefined;
-        let gorilla = undefined;
-        let costumes = objectManager.getAllObjects("peep_animations");
-        var furry_number = Math.ceil(park.guests * .2);
-        if (furry_number < 25)
-            furry_number = 25;
-        if (furry_number > 300)
-            furry_number = 300;
-
-        for(let i = 0; i < costumes.length; i++){
-            switch(costumes[i].identifier){
-                case "rct2.peep_animations.entertainer_tiger"://"Tiger costume":
-                    tiger = costumes[i].index;
-                    break;
-                case "rct2.peep_animations.entertainer_panda"://"Panda costume":
-                    panda = costumes[i].index;
-                    break;
-                case "rct2.peep_animations.entertainer_gorilla"://"Gorilla costume":
-                    gorilla = costumes[i].index;
-                    break;
-                case "rct2.peep_animations.entertainer_elephant"://"Elephant costume":
-                    elephant = costumes[i].index;
-                    break;
-            }
-        }
-
-        for(let i = 0; i < furry_number; i++){
-            var furry_type = rng(0,3);//context.getRandom(0, 4)//rng(0, 3)//Math.floor(Math.random() * 4);
-            switch(furry_type){
-                case 0:
-                    furry_type = panda; //Panda
-                    break;
-                case 1:
-                    furry_type = elephant; //Elephant
-                    break;
-                case 2:
-                    furry_type = tiger; //Tiger
-                    break;
-                case 3:
-                    furry_type = gorilla; //Gorilla
-                    break;
-            }
-            context.executeAction("staffhire", {autoPosition: true, staffType: 3, costumeIndex: furry_type, staffOrders: 0} satisfies StaffHireArgs);
-        }
-    }
-
     SpamTrap(): void{
         for(let i = 0; i < 10; i++){
             showRandomAd();
         }
     }
 
+
     //These traps are only used on TrapLink
 
-    PauseTrap(): void{ //Only used on traplink.
-        context.paused = true;
-        ui.showError("Get Paused on Nerd!", "");
-    }
-
-    RotateTrap(): void{ //Only used on traplink
-        var self = this;
-        ui.mainViewport.rotation = (ui.mainViewport.rotation + 1) % 4;
-        ui.showError('Insert "Get Rotated Idiot" meme here.', "")
-    }
 
     // TODO: Maybe get all the Aaa Trap messages from Freedom Planet 2 and pick one at random?
     AaaTrap(): void{
@@ -889,9 +938,6 @@ class RCTRArchipelago extends ModuleBase {
         return;
     }
 
-    // TODO: Random break down type?
-    // TODO: Test on rides that can't normally break down.
-    // TODO: Check if the chosen ride isn't already broken down?
     BreakdownTrap(source?: string): any{
         if (map.rides.length == 0)
             return;
@@ -913,7 +959,7 @@ class RCTRArchipelago extends ModuleBase {
                             width: 350,
                             height: 200,
                             isStriped: true,
-                            items: ["The service requested is currently unavaliable. We apologize ", "for any inconvenience. This RAIN CHECK entitiles you to the", "manual service listed. When available, please break down a ", "ride at your convenience."," ", "Todays date: " + (date.month + 3) + '-' + date.day + '-' + 'Year ' + date.year, "Service: Ride Breakdown", "Quantity: 1",' ', 'Sender: ' + (source ? source:"The Universe")],
+                            items: ["The service requested is currently unavaliable. We apologize ", "for any inconvenience. This RAIN CHECK entitiles you to the", "manual service listed. When available, please break down a ", "ride at your convenience."," ", "Todays date: " + (date.month + 3) + '-' + date.day + '-' + 'Year ' + date.year, "Service: Ride Breakdown", "Quantity: 1",' ', 'Sender: ' + (source ? source:"The Multiverse")],
                         },
                         {
                             type: 'button',
@@ -962,16 +1008,194 @@ class RCTRArchipelago extends ModuleBase {
     }
 
     // TODO: Check if the chosen ride is actually open?
-    CloseRideTrap(): void{
-        if (map.rides.length == 0)
-            return;
-
-        var ride = map.rides[Math.floor(Math.random() * map.rides.length)];
-
+    CloseRideTrap(source?: string): any{
+        let rides = map.rides
+        if (rides.length == 0 || rides.every(ride => ride.status === "closed")){
+            var window = ui.openWindow({
+                classification: 'rain-check',
+                title: "Official Archipelago Rain Check",
+                width: 400,
+                height: 300,
+                colours: [7,7],
+                widgets: [].concat(
+                    [
+                        {
+                            type: 'listview',
+                            name: 'rain-check',
+                            x: 25,
+                            y: 35,
+                            width: 350,
+                            height: 200,
+                            isStriped: true,
+                            items: ["The service requested is currently unavaliable. We apologize ", "for any inconvenience. This RAIN CHECK entitiles you to the", "manual service listed. When available, please close a ", "ride at your convenience."," ", "Todays date: " + (date.month + 3) + '-' + date.day + '-' + 'Year ' + date.year, "Service: Ride Breakdown", "Quantity: 1",' ', 'Sender: ' + (source ? source:"The Multiverse")],
+                        },
+                        {
+                            type: 'button',
+                            name: 'Ok',
+                            x: 125,
+                            y: 250,
+                            width: 150,
+                            height: 25,
+                            text: 'Click here to sign and close.',
+                            onClick: function() {
+                                window.close();
+                        }
+                    }]
+                )
+            });
+            return window;
+        }
+        var ride = rides[Math.floor(Math.random() * map.rides.length)];
+        while(ride.status != "open")
+            ride = rides[Math.floor(Math.random() * map.rides.length)];
         // Double close the ride to delete any cars/expel any peeps from it.
         context.executeAction("ridesetstatus", {ride: ride.id, status: 0});
         context.executeAction("ridesetstatus", {ride: ride.id, status: 0});
     }
+
+    ExtremeChaosTrap(): void{
+        var self = this;
+        for(let i=0; i<10000; i+=1000)
+            context.setTimeout(() => {self.ChaosTrap();}, i);
+    }
+
+    FastTrap(): void{//Sets speed to max
+        context.executeAction("gamesetspeed",{speed: 5} as GameSetSpeedArgs);
+    }
+
+    FrostTrap():void{
+        var x = map.size.x;//Gets the size of the map
+                var y = map.size.y;
+                var iceIndex = (objectManager.load("rct2.terrain_surface.ice")).index;
+                console.log(iceIndex);
+                var surfaces = objectManager.getAllObjects("terrain_surface");
+                context.executeAction("cheatset", {type: 35, param1: 6, param2: 0}, () => trace("Summoned snowfall"));
+                for(let i = 1; i < (x - 1); i++){//check the x's. Map.size gives a couple coordinates off the map, so we exclude those.
+                    for(let j = 1; j < (y - 1); j++){//check the y's
+                        var tile = map.getTile(i,j).elements;//get the tile data
+                        for(let k = 0; k < tile.length; k++){//iterate through everything on the tile
+                            if(tile[k].type == "surface"){//if it's a surface element
+                                var surface = tile[k] as SurfaceElement;
+                                surface.surfaceStyle = iceIndex;
+                            }
+                        }
+                    }
+                }
+        return;
+    }
+
+    HeyTrap():any{
+        const hey:Ad = {
+            title:"Hey!",
+            header: "Hey!",
+            message: "Hey!",
+            button: ("Hey!"),
+            onClick: () => 
+            {
+                ui.showError("Hey!", "")
+            }
+        }
+        for(let i=0;i<10;i++){
+            showAd(hey)
+        }
+        return;
+    }
+
+    PauseTrap(): void{ //Only used on traplink.
+        context.paused = true;
+        ui.showError("Get Paused on Nerd!", "");
+    }
+
+    RotateTrap(): any{ //Only used on traplink
+        var self = this;
+        ui.mainViewport.rotation = (ui.mainViewport.rotation + 1) % 4;
+        context.setTimeout(()=> {try{ui.getWindow("get-rotated-idiot").close();} catch{console.log("Error: rotated-idiot window already closed")}}, 3000);
+        var get_rotated_idiot = ui.openWindow({
+            classification: 'get-rotated-idiot',
+            title: "Get Rotated",
+            width: 330,
+            height: 330,
+            colours: [0,0],
+            widgets: [].concat(
+                {
+                    type: 'custom',
+                    name: 'get-rotated-idiot',
+                    x: 10,
+                    y: 30,
+                    width: 300,
+                    height: 300,
+                    tooltip: 'Just kidding, I love you, very platonically.',
+                    onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_get_rotated_idiot_top_image_ID.start).id, 0,0)}
+                },
+                {
+                    type: 'custom',
+                    name: 'get-rotated-idiot',
+                    x: 10,
+                    y: 165,
+                    width: 300,
+                    height: 300,
+                    tooltip: 'Just kidding, I love you, very platonically.',
+                    onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_get_rotated_idiot_bottom_image_ID.start).id, 0,0)}
+                },
+                {
+                    type: 'custom',
+                    name: 'custom-archipealgo-logo-1',
+                    x: 5,
+                    y: 300,
+                    width: 22,
+                    height: 20,
+                    tooltip: 'I\'ve wasted so much time committing to stupid bits like this.',
+                    onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_icon_ID.start).id, 0,0)}
+                }
+            )
+        })
+        return get_rotated_idiot;
+    }
+
+    SecurityTrap(): void{ // Spawns 30 Security Guards
+        for(let i=0; i<25; i++){
+            context.executeAction("staffhire", {autoPosition: true, staffType: 2, costumeIndex: 0, staffOrders: 0} satisfies StaffHireArgs);
+        }
+    }
+
+    SpawnTrap(): void{ // Spawns 10 guests. Not really a trap, but hey, it's the best I could think of for the link.
+        let self = this;
+        self.AddGuests("30");//Needs to be a string for the AddGuests function
+    }
+
+    ScrollTrap(): void{ //Scrolls to the far right of the park insistently for 5 seconds
+        for(let i=0; i<5200; i += 200){
+            context.setTimeout(() => {ui.mainViewport.scrollTo({x:0,y:0})}, i)
+        }
+    }
+
+    TutorialTrap(): void{
+        tutorial_0();
+    }
+
+    VoucherTrap(): void{// Gives every guest in the park a voucher to a random ride (Including stalls and bathrooms, which is hilarious)
+        let guests = map.getAllEntities("guest")
+        for(let i=0; i < guests.length; i++){
+            guests[i].giveItem({ type: "voucher", voucherType: "ride_free", rideId: map.rides[Math.floor(Math.random() * map.rides.length)].id } as RideVoucher);}
+    }
+
+    ZoomInTrap(): void{ // Zooms all the way in
+        ui.mainViewport.zoom = -2;
+    }
+
+    ZoomOutTrap(): void{ // Zooms all the way out
+        ui.mainViewport.zoom = 3;
+    }
+
+    ZoomTrap(): void{ //Zooms to a different random Zoom level.
+        let zoom_level = rng(-2, 3)
+        while (ui.mainViewport.zoom == zoom_level)
+            zoom_level = rng(-2, 3)
+        ui.mainViewport.zoom = zoom_level;
+    }
+
+
+    // No more traps 
 
     ReleaseRule(rule: string): void{//Function that ends enforcement of detrimental park modifiers
         var releaseRule = function(){

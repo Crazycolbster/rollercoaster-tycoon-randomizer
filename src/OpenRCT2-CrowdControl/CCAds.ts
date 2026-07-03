@@ -392,6 +392,18 @@ const adPool: Ad[] = [
                 park.cash -= 1170;
                 ui.showError("PSYC!", "It's actually NZD $117! (True story)")
             }
+    },
+    {//48
+        title: "RCT U!",
+        header: "Learn to play OpenRCT2 Archipelago Today!",
+        message: "You may even earn $20!",
+        button: "Click Here!",
+        onClick: () => 
+            {
+                tutorial_0()
+                if(archipelago_settings.traplink)
+                    archipelago_send_message("Bounce",{trap: "Tutorial Trap", tag: "TrapLink"});
+            }
     }
 ]
 

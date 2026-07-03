@@ -570,37 +570,41 @@ function ac_req(data) {//This is what we do when we receive a data packet
                             break;
 
                             // Other game's traps.
-                            case "Aaa Trap": TrapLink.AaaTrap(); break;
+                            case "Aaa Trap": TrapLink.ActivateTrap("Aaa Trap", true, source); break;
                             case "Animal Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
                             case "Animal Bonus Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
-                            case "Army Trap": context.executeAction("staffhire", {autoPosition: true, staffType: 2, costumeIndex: 0, staffOrders: 0} satisfies StaffHireArgs); break; // TODO: Not sure if we'll keep this one.
-                            case "Attraction Breakdown Trap": TrapLink.BreakdownTrap(); break;
-                            case "Bald Trap": TrapLink.BaldTrap(); break;
-                            case "Camera Rotate Trap": ui.mainViewport.rotation = Math.floor(Math.random() * 4); break; // TODO: Maybe make it so it can't pick the already active rotation level.
-                            case "Chaos Trap": TrapLink.ChaosTrap(); break;
-                            case "Chaos Control Trap": PauseGame(); break;
-                            case "Damage Trap": TrapLink.BreakdownTrap(); break;
-                            case "Eject Ability": TrapLink.CloseRideTrap(); break;
+                            case "Attraction Breakdown Trap": TrapLink.ActivateTrap("Breakdown Trap", true, source); break;
+                            case "Bald Trap": TrapLink.ActivateTrap("Bald Trap", true); break;
+                            case "Camera Rotate Trap": TrapLink.ActivateTrap("Rotate Trap"); break;
+                            case "Chaos Trap": TrapLink.ActivateTrap("Chaos Trap"); break;
+                            case "Chaos Control Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break;
+                            case "Controller Drift Trap": TrapLink.ActivateTrap("Scroll Trap", true, source); break;
+                            case "Damage Trap": TrapLink.ActivateTrap("Breakdown Trap", true, source); break;
+                            case "Eject Ability": TrapLink.ActivateTrap("Close Ride Trap", true, source); break;
                             case "Exposition Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
-                            case "Freeze Trap": PauseGame(); break; // Has altenate idea on the TODO list.
-                            case "Frozen Trap": PauseGame(); break; // Has altenate idea on the TODO list.
-                            case "Frost Trap": TrapLink.setWeather("Snowstorm"); break;
-                            case "Help Trap": tutorial_0(); break;
-                            case "Hey! Trap": TrapLink.ActivateTrap("Spam Trap", true); break; // Has altenate idea on the TODO list.
+                            case "Extreme Chaos Trap": TrapLink.ActivateTrap("Extreme Chaos Trap", true); break;
+                            case "Fast Trap": TrapLink.ActivateTrap("Fast Trap", true, source); break;
+                            case "Freeze Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break; 
+                            case "Frozen Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break;
+                            case "Frost Trap": TrapLink.ActivateTrap("Frost Trap", true, source); break;
+                            case "Help Trap": TrapLink.ActivateTrap("Tutorial Trap", true, source); break;
+                            case "Hey! Trap": TrapLink.ActivateTrap("Hey Trap", true); break;
                             case "Literature Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
-                            case "Paralyze Trap": PauseGame(); break;
-                            case "Paralysis Trap": PauseGame(); break;
-                            case "Poison Mushroom": TrapLink.ActivateTrap("Food poisoning Trap", true); break;
-                            case "Poison Trap": TrapLink.ActivateTrap("Food poisoning Trap", true); break;
+                            case "Paralyze Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break;
+                            case "Paralysis Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break;
+                            case "Person Trap": TrapLink.ActivateTrap("Spawn Trap", true, source); break;
+                            case "Poison Mushroom": TrapLink.ActivateTrap("Food Poisoning Trap", true); break;
+                            case "Poison Trap": TrapLink.ActivateTrap("Food Poisoning Trap", true); break;
+                            case "Police Trap": TrapLink.ActivateTrap("Security Trap", true, source); break;
                             case "Text Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
-                            case "Tutorial Trap": tutorial_0(); break;
-                            case "Zoom In Trap": ui.mainViewport.zoom = -2; break; // TODO: Change this to just zoom in one pip rather than going to the max zoom level?
-                            case "Zoom Out Trap": ui.mainViewport.zoom = 3; break; // TODO: Change this to just zoom out one pip rather than going to the max zoom level?
-                            case "Zoom Trap": ui.mainViewport.zoom = (Math.floor(Math.random() * 6) - 2); break; // TODO: Maybe make it so it can't pick the already active zoom level.
+                            case "Tutorial Trap": TrapLink.ActivateTrap("Tutorial Trap", true, source); break;
+                            case "Zoom In Trap": TrapLink.ActivateTrap("Zoom In Trap", true, source); break; 
+                            case "Zoom Out Trap": TrapLink.ActivateTrap("Zoom Out Trap", true, source); break;
+                            case "Zoom Trap": TrapLink.ActivateTrap("Zoom Trap", true, source); break; 
 
                             // If this trap is unhandled, then trace log it and flip the NotifyLink flag so we don't send a pointless TrapLink notification.
                             default:
-                                trace("Unhandled trap type: '" + trap +"'.");
+                                console.log("Unhandled trap type: '" + trap +"'.");
                                 NotifyLink = false;
                                 break;
                         }

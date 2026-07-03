@@ -1482,15 +1482,49 @@ function archipelagoDebug(){
                     text: 'Colbys Decision',
                     onClick: function() {
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
-                        // archipelago_settings.received_games.push("Ocarina of Time", "Adventure", "Donkey Kong Country 3", "Final Fantasy 1", "Hollow Knight",
-                        // "The Legend of Zelda", "A Link to the Past", "Links Awakening", "Pokemon Red and Blue", "Rogue Legacy",
-                        // "Sonic Adventure 2", "Super Mario World", "Super Mario 64", "Super Metroid", "VVVVVV")
-                        // console.log(archipelago_settings.received_games.length);
-                        // console.log(context.getParkStorage().get("RCTRando.ArchipelagoPlayers"));
-                        // console.log(archipelago_settings.player);
-                        // archipelago_settings.location_information = locationInfo.Full;
-                        // archipelago_send_message("GetDataPackage");
-                        BathroomTrap.AddScenery("Egyptian Theming")
+                        // (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_menu_location_image_ID.start).id, 0,0)}
+                        BathroomTrap.RotateTrap()
+                        console.log(JSON.stringify(archipelago_settings));
+                    //     var get_rotated_idiot = ui.openWindow({
+                    //         classification: 'get-rotated-idiot',
+                    //         title: "Get Rotated",
+                    //         width: 330,
+                    //         height: 330,
+                    //         colours: [0,0],
+                    //         widgets: [].concat(
+                    //             {
+                    //                 type: 'custom',
+                    //                 name: 'get-rotated-idiot',
+                    //                 x: 10,
+                    //                 y: 30,
+                    //                 width: 300,
+                    //                 height: 300,
+                    //                 tooltip: 'Just kidding, I love you, very platonically.',
+                    //                 onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_get_rotated_idiot_top_image_ID.start).id, 0,0)}
+                    //             },
+                    //             {
+                    //                 type: 'custom',
+                    //                 name: 'get-rotated-idiot',
+                    //                 x: 10,
+                    //                 y: 165,
+                    //                 width: 300,
+                    //                 height: 300,
+                    //                 tooltip: 'Just kidding, I love you, very platonically.',
+                    //                 onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_get_rotated_idiot_bottom_image_ID.start).id, 0,0)}
+                    //             },
+                    //             {
+                    //                 type: 'custom',
+                    //                 name: 'custom-archipealgo-logo-1',
+                    //                 x: 5,
+                    //                 y: 300,
+                    //                 width: 22,
+                    //                 height: 20,
+                    //                 tooltip: 'I\'ve wasted so much time committing to stupid bits like this.',
+                    //                 onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_icon_ID.start).id, 0,0)}
+                    //             }
+                    //         )
+                    //     })
+                    //     return get_rotated_idiot;
                     }
                 },
                 {
@@ -1726,33 +1760,9 @@ function archipelagoDebug(){
                     height: 25,
                     text: 'Colbys Choice',
                     onClick: function() { 
-                        // let researchItems = park.research.inventedItems.concat(park.research.uninventedItems);
-                        // var items: any = [];
-                        // for(let i = 0; i < researchItems.length; i++){
-                        //     if(researchItems[i].category == "scenery"){
-                        //         items.push((researchItems[i] as SceneryResearchItem).category);
-                        //         // console.log((researchItems[i] as SceneryResearchItem).category);
-                        //         // console.log((researchItems[i] as SceneryResearchItem).type);
-                        //         // console.log((researchItems[i] as SceneryResearchItem).object);
-                        //         console.log(objectManager.getObject("scenery_group", (researchItems[i] as SceneryResearchItem).object).name)
-                        //         console.log(objectManager.getObject("scenery_group", (researchItems[i] as SceneryResearchItem).object).identifier)
-                        //     }
-                        //     else{
-                        //     if((researchItems[i] as RideResearchItem).rideType == 30){
-                        //         console.log(objectManager.getObject("ride", (researchItems[i] as RideResearchItem).object).name)
-                        //         console.log(objectManager.getObject("ride", (researchItems[i] as RideResearchItem).object).identifier)
-                        //         console.log("\n");
-                        //     }
-                        //     // items.push((researchItems[i] as RideResearchItem).rideType);//RideType[(researchItems[i] as RideResearchItem).object]);
-                        //     }
-                        // }
-                        // console.log("\n\n\n/*******************************************************************************/");
-                        // console.log(scenario.name);
-                        // console.log(JSON.stringify(items));
-                        // console.log("\n\n");
-                        console.log((map.rides[0].breakdown))
+                        console.log(map.rides);
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
-                        BathroomTrap.BreakdownTrap();
+                        BathroomTrap.ExtremeChaosTrap();
                         
                         // console.log(JSON.stringify(context.getParkStorage().get('RCTRando.ArchipelagoLockedLocations')));
                         // console.log(convert_shop_name_to_ID("Burger Bar"))
@@ -1780,7 +1790,10 @@ function archipelagoDebug(){
                     height: 25,
                     text: 'Try Furry Quiz',
                     onClick: function() {
-                        archipelagoExcorcizeFurries(challenges.length - 1);
+                        ui.showTextInput({title:"Yeaaaaaah, WHADDA WANT?",description:"Fine, give me a quiz number.", callback(value: string){
+                            const quizNumber = parseInt(value, 10);
+                            archipelagoExcorcizeFurries(quizNumber);
+                        }});
                     }
                 },
                 {
@@ -1819,7 +1832,7 @@ function archipelagoDebug(){
                     onClick: function() {
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         archipelago_print_message("AuGold found Colby's Food Poisoning Trap!");
-                        BathroomTrap.PoisonTrap();
+                        BathroomTrap.FoodPoisoningTrap();
                         // let rides = map.rides;
                         // for(let i = 0; i < rides.length; i++){
                         //     console.log((rides[i]))
@@ -2631,7 +2644,7 @@ function interpretMessage(){
                     if(archipelago_settings.traplink)
                     archipelago_print_message("TrapLink Enabled you maschoist");
                     else
-                    archipelago_print_message("TrapLink Disabled you coward");
+                    archipelago_print_message("TrapLink Disabled you lameo");
                     break;
                 case "!!setvisibility nothing":
                 case "!!setvisibility none":
