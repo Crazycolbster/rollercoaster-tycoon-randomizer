@@ -1,5 +1,5 @@
 # RollerCoaster Tycoon Randomizer
-RollerCoaster Tycoon Randomizer mod for RCT1 and RCT2.
+RollerCoaster Tycoon Randomizer mod for RCT1 and RCT2, with Archipelago support!
 
 You'll need the latest version of OpenRCT2 from https://openrct2.io/download
 
@@ -20,6 +20,8 @@ Currently randomizes:
 The Randomization Range option specifies how much values can be changed from their original. Low will have a narrow range so the values are close to their originals, while Extreme can give much wider variety. This is mostly separate from difficulty, but Extreme can give unpredictable results that are sometimes very difficult even lower difficulty settings.
 
 We also have an option for [Crowd Control](https://crowdcontrol.live/) to allow your streaming viewers to troll you or help you!
+
+For Archipelago Specific help, check [here!](https://github.com/Crazycolbster/Archipelago/blob/General_Killmore/worlds/openrct2/docs/setup_en.md)
 
 <img src="https://user-images.githubusercontent.com/30947252/236901941-511dd2f0-53fa-41bc-8830-f5bf8d87adbe.png" alt="Settings Menu" width="500"/>
 
