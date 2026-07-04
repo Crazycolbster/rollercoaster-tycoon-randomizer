@@ -2203,6 +2203,19 @@ function archipelagoDebugTraps(){
                 },
                 {
                     type: 'button',
+                    name: 'debug-button30',
+                    x: 415,
+                    y: 200,
+                    width: 200,
+                    height: 25,
+                    text: 'Voucher Trap',
+                    onClick: function() {
+                        var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                        BathroomTrap.VoucherTrap();
+                    }
+                },
+                {
+                    type: 'button',
                     name: 'debug-button31',
                     x: 415,
                     y: 290,
