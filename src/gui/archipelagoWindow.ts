@@ -1484,7 +1484,7 @@ function archipelagoDebug(){
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         // (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_menu_location_image_ID.start).id, 0,0)}
                         BathroomTrap.RotateTrap()
-                        console.log(JSON.stringify(archipelago_settings));
+                        console.log(((map.rides)));
                     //     var get_rotated_idiot = ui.openWindow({
                     //         classification: 'get-rotated-idiot',
                     //         title: "Get Rotated",

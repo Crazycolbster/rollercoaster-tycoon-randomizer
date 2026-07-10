@@ -1109,7 +1109,7 @@ class RCTRArchipelago extends ModuleBase {
     RotateTrap(): any{ //Only used on traplink
         var self = this;
         ui.mainViewport.rotation = (ui.mainViewport.rotation + 1) % 4;
-        console.log(archipelago_get_rotated_idiot_bottom_image_ID.start);
+        // console.log(archipelago_get_rotated_idiot_bottom_image_ID.start);
         context.setTimeout(()=> {try{ui.getWindow("get-rotated-idiot").close();} catch{console.log("Error: rotated-idiot window already closed")}}, 3000);
         var get_rotated_idiot = ui.openWindow({
             classification: 'get-rotated-idiot',
@@ -2830,19 +2830,51 @@ class RCTRArchipelago extends ModuleBase {
 
 function isInPark(ride: string): boolean{
     let ride_list = map.rides;
-    for(let i = 0; i < ride_list.length; i++){
-        if(ride_list[i].type == RideType[ride])
-            return true;
+    var stallID = convert_shop_name_to_ID(ride);
+    if (stallID != ""){// Check if this is a stall.
+        for(let i=0; i<ride_list.length; i++) {
+            try{
+                if (ride_list[i].object.identifier == stallID){    
+                    return true;
+                }
+            }
+            catch(e){
+                // console.log("Not the stall!" + e);
+            }
+        }
+    }   
+    else{// This is a ride
+        for(let i = 0; i < ride_list.length; i++){
+            if(ride_list[i].type == RideType[ride])
+                return true;
+        }
     }
     return false;
 }
 
 function isUnlocked(ride: string): boolean{
+    var stallID = convert_shop_name_to_ID(ride);
     let ride_list = park.research.inventedItems;
-    for(let i = 0; i < ride_list.length; i++){
-        let compared_ride = ride_list[i] as RideResearchItem;//Have to cast the given item as a RideResearchItem to not make VSCode yell at me.
-        if(compared_ride.rideType == RideType[ride])
-            return true;
+    if (stallID != ""){// Check if this is a stall.
+        for(let i=0; i<ride_list.length; i++) {
+            try{
+                if (ride_list[i].category == "shop"){
+                    if ((objectManager.getObject("ride", (ride_list[i] as RideResearchItem).object).identifier) == stallID){//Find the right stall
+                        return true;
+                    }
+                }
+            }
+            catch(e){
+                // console.log("Not the stall!" + e);
+            }
+        }
+    }   
+    else{// This is a ride
+        for(let i = 0; i < ride_list.length; i++){
+            let compared_ride = ride_list[i] as RideResearchItem;//Have to cast the given item as a RideResearchItem to not make VSCode yell at me.
+            if(compared_ride.rideType == RideType[ride])
+                return true;
+        }
     }
     return false;
 }
