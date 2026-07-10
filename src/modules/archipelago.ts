@@ -2185,12 +2185,30 @@ class RCTRArchipelago extends ModuleBase {
                 for(let i = 0; i < archipelago_objectives.UniqueRides[0].length; i++){
                     var found = false;
                     var checkedRide = archipelago_objectives.UniqueRides[0][i];
-                    for(let j = 0; j < map.numRides; j++){
-                        if (Number(RideType[checkedRide]) == map.rides[j].type){
-                            if (map.rides[j].excitement > 1 || map.rides[j].intensity > 1){
-                                trace(map.rides[j].excitement);
-                                found = true;
-                                break;
+                    var stallID = convert_shop_name_to_ID(archipelago_objectives.UniqueRides[0][i]);
+                    if(stallID != ""){
+                        for(let j=0; j<map.numRides; j++) {
+                            try{
+                                if (map.rides[j].object.identifier == stallID){    
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            catch(e){
+                                // console.log("Not the stall!" + e);
+                            }
+                        }
+                    }
+                    else{
+                        for(let j = 0; j < map.numRides; j++){
+                            let ride = map.rides[j];
+                            if (Number(RideType[checkedRide]) == ride.type){
+                                // Make sure the ride is open and isn't a Toilet, First Aid Room, Cash Machine, or Info Kiosk
+                                if (ride.excitement > 1 || ride.intensity > 1 || [35, 36, 45, 48].includes(ride.type)){
+                                    trace(ride.excitement);
+                                    found = true;
+                                    break;
+                                }
                             }
                         }
                     }
