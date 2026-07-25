@@ -214,7 +214,13 @@ enum Stalls{
     "rct2.ride.sungst",
     "rct2.ride.tshrt",
     "rct2.ride.balln",
-    "rct2.ride.souvs"
+    "rct2.ride.souvs",
+    "rct2.ride.tlt1",
+    "rct2.ride.faid1",
+    "rct2.ride.infok",
+    "rct2.ride.tlt2",
+    "rct1.ride.toilets",
+    "rct2.ride.atm1"
 }
 
 enum FoodStalls{
