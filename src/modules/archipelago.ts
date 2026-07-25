@@ -2414,19 +2414,28 @@ class RCTRArchipelago extends ModuleBase {
     }
 
     PurchaseItem(item: number): any{
-        if(spam_timeout){
-            ui.showError("Spam Purchase Error", "Spam may be the fastest way to a vikings heart, but it's also the fastest way to break the connection to the client, and that would be frustrating for everybody. Try again in a second.");
-            return;
-        }
         var self = this;
         trace("Purchasing item number:");
         trace(item);
         let Locked = archipelago_locked_locations.slice();
-        let Unlocked = archipelago_unlocked_locations.slice();
         let Prices = archipelago_location_prices.slice();
         let LocationID = 0;
         let wantedItem = 0;
         let counter = 0;
+
+        // Step 1: Check if the spam timeout is active. Error out if so.
+        if(spam_timeout){
+            ui.showError("Spam Purchase Error", "Spam may be the fastest way to a vikings heart, but it's also the fastest way to break the connection to the client, and that would be frustrating for everybody. Try again in a second.");
+            return;
+        }
+
+        // Step 2: Check if the game is paused.
+        if(context.paused){
+            ui.showError("Game Paused...", "The shopkeeper is not a being that transends time in this universe...unlike you. Unpause the game and try again!");
+            return;
+        }
+
+        // Step 3: Obtain the correct LocationID
         for(let i = 0; i < Locked.length; i++){
             if(self.IsVisible(Locked[i].LocationID)){
                 if(item == counter){
@@ -2441,99 +2450,97 @@ class RCTRArchipelago extends ModuleBase {
         }
         let Prereqs = Prices[LocationID].RidePrereq;//Have to get LocationID before we can properly check Prereqs
 
-        trace(Prices[LocationID]);
-        if(context.paused){
-            ui.showError("Game Paused...", "The shopkeeper is not a being that transends time in this universe...unlike you. Unpause the game and try again!");
+        // Step 4: Handle if using a skip
+        if(archipelago_skip_enabled){
+            var archipelago_skip_elligible = self.CheckIfUnlocked(Prices[LocationID].RidePrereq[1]);//Make sure the rides unlocked, even if not built.
+            if(!archipelago_skip_elligible){
+                ui.showError("You must have this ride or category unlocked to use a skip.", "We'd break progression otherwise! You don't want that on your consience.");
+                (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isPressed = false;
+                archipelago_skip_enabled = false;
+                return;
+            }
+            archipelago_skip_enabled = false;
+            archipelago_settings.skips --;
+            (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).text = 'Skips: ' + String(archipelago_settings.skips);
+            (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isPressed = false;
+            (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isDisabled = !archipelago_settings.skips;
+            self.UnlockItem(wantedItem);
+            return;
         }
-        else {
-            if((Prices[LocationID].Price <= (park.cash / 10) || Prices[LocationID].Price == 0) || archipelago_skip_enabled){//Check if player has enough cash or if the price is 0.
-                if(archipelago_skip_enabled){
-                    var archipelago_skip_elligible = self.CheckIfUnlocked(Prices[LocationID].RidePrereq[1]);//Make sure the rides unlocked, even if not built.
-                    if(!archipelago_skip_elligible){
-                        ui.showError("You must have this ride or category unlocked to use a skip.", "We'd break progression otherwise! You don't want that on your consience.");
-                        (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isPressed = false;
-                        archipelago_skip_enabled = false;
-                        return;
-                    }
-                }
-                if((Prices[LocationID].Lives <= park.guests) || archipelago_skip_enabled){//Check if the player has enough guests to sacrifice
-                    var QualifiedInfo = self.CheckElligibleRides(LocationID);
-                    let guest_list = map.getAllEntities("guest");
-                    if(!Prereqs.length || QualifiedInfo[0] >= Prereqs[0] || archipelago_skip_enabled){
-                        if((!QualifiedInfo[5] || QualifiedInfo[5] >= Prereqs[6]) || archipelago_skip_enabled){//If our total guest count is higher than what we asked for
-                            if(!archipelago_skip_enabled){
-                                trace("Prereqs have been met with this many qualified rides: " + String(QualifiedInfo[0]));
-                                if(Prices[LocationID].Lives != 0){//Code to explode guests
-                                var doomed = Math.floor(Prices[LocationID].Lives * 1.5);//Add a buffer to the stated cost to make up for janky guest exploding code
-                                    if(doomed < guest_list.length){//Explode either the doomed amount, or every guest in the park, whichever is less
-                                        for(var i = 0; i < doomed; i++){
-                                            guest_list[i].setFlag("explode", true);// Credit to Gymnasiast/everything-must-die for the idea
-                                        }
-                                    }
-                                    else{
-                                        for(var i = 0; i < guest_list.length; i++){
-                                            guest_list[i].setFlag("explode", true);
-                                        }
-                                    }
-                                }
-                                park.cash -= (Prices[LocationID].Price * 10);//Multiply by 10 to obtain the correct amount
-                            }
-                            else{
-                                archipelago_skip_enabled = false;
-                                archipelago_settings.skips --;
-                                (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).text = 'Skips: ' + String(archipelago_settings.skips);
-                                (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isPressed = false;
-                                (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isDisabled = !archipelago_settings.skips;
-                            }
 
-                            Unlocked.push(Locked[wantedItem]);
-                            Locked.splice(wantedItem,1);
-                            archipelago_locked_locations = Locked;
-                            trace(JSON.stringify(archipelago_locked_locations));
-                            archipelago_unlocked_locations = Unlocked;
-                            trace(archipelago_locked_locations);
-                            ArchipelagoSaveLocations(archipelago_locked_locations, archipelago_unlocked_locations);
-                            var lockedWindow = ui.getWindow("archipelago-locations");
-                            lockedWindow.findWidget<ListViewWidget>("locked-location-list").items = self.CreateLockedList();
-                            spam_timeout = true;
-                            context.setTimeout(() => {spam_timeout = false;}, 200);
-                            //If we have full visibility, send hints for any items shown
-                            if(archipelago_settings.location_information == "Full"){
-                                let hint_list = [];
-                                trace(hint_list);
-                                const temp_list = archipelago_locked_locations.slice();//Dude, screw how lists are handled in this stupid language
-                                for(let i = 0; i < temp_list.length; i++){
-                                    let location = temp_list[i].LocationID;
-                                    trace(location);
-                                    if(self.IsVisible(location))
-                                    hint_list.push(location + 2000000);
-                                }
-                                trace(hint_list);
-                                context.setTimeout(() => (archipelago_send_message("LocationHints",hint_list)), 2000)
-                            }
-                        }
-                        else{
-                            ui.showError("Guest prerequisite not met", "You only have " + String(QualifiedInfo[5]) + " total customers across all these!");
-                        }
-                    }
-                    else{
-                        ui.showError("Prerequisites not met", "You only have " + String(QualifiedInfo[0]) + " of these that are elligible in the park! (Ensure they have posted stats)");
-                    }
-                }
-                else{
-                    ui.showError("Not Enough Guests...", "The Gods are unpleased with your puny sacrifice. Obtain more guests and try again.")
-                }
+        // Step 5: Handle if just a guest sacrifice since there are no further prereqs.
+        if(Prices[LocationID].Lives > 0){
+            if(Prices[LocationID].Lives > park.guests){//Check if the player has enough guests to sacrifice
+                ui.showError("Not Enough Guests...", "The Gods are unpleased with your puny sacrifice. Obtain more guests and try again.")
+                return;
             }
-            else{
-                ui.showError("Not Enough Cash...", "You do not have enough money to buy this!")
+            let guest_list = map.getAllEntities("guest");
+            //Code to explode guests
+            var doomed = Math.floor(Prices[LocationID].Lives * 1.1);//Add a buffer to the stated cost to make up for janky guest exploding code
+            if(doomed > guest_list.length){//Explode either the doomed amount, or every guest in the park, whichever is less
+                doomed = guest_list.length;
             }
+            for(var i = 0; i < doomed; i++){
+                guest_list[i].setFlag("explode", true);// Credit to Gymnasiast/everything-must-die for the idea
+            }
+            self.UnlockItem(wantedItem);
+            return;
         }
+
+        //Step 6: Unlock using Cash.
+        if(Prices[LocationID].Price > (park.cash / 10)){//Check if player has enough cash
+            ui.showError("Not Enough Cash...", "You do not have enough money to buy this!")
+            return;
+        }
+        var QualifiedInfo = self.CheckElligibleRides(LocationID);
+        if(Prereqs.length && QualifiedInfo[0] < Prereqs[0]){
+            ui.showError("Prerequisites not met", "You only have " + String(QualifiedInfo[0]) + " of these that are elligible in the park! (Ensure they have posted stats)");
+            return;
+        }
+        if(QualifiedInfo[5] && QualifiedInfo[5] < Prereqs[6]){//If our total guest count is higher than what we asked for
+            ui.showError("Guest prerequisite not met", "You only have " + String(QualifiedInfo[5]) + " total customers across all these!");
+            return;
+        }
+        trace("Prereqs have been met with this many qualified rides: " + String(QualifiedInfo[0]));
+        park.cash -= (Prices[LocationID].Price * 10);//Multiply by 10 to obtain the correct amount
+        self.UnlockItem(wantedItem);
         return;
+    }
+
+    UnlockItem(wantedItem): void{
+        var self = this;
+        let Locked = archipelago_locked_locations.slice();
+        let Unlocked = archipelago_unlocked_locations.slice();
+
+        Unlocked.push(Locked[wantedItem]);
+        Locked.splice(wantedItem,1);
+        archipelago_locked_locations = Locked;
+        trace(JSON.stringify(archipelago_locked_locations));
+        archipelago_unlocked_locations = Unlocked;
+        trace(archipelago_locked_locations);
+        ArchipelagoSaveLocations(archipelago_locked_locations, archipelago_unlocked_locations);
+        var lockedWindow = ui.getWindow("archipelago-locations");
+        lockedWindow.findWidget<ListViewWidget>("locked-location-list").items = self.CreateLockedList();
+        spam_timeout = true;
+        context.setTimeout(() => {spam_timeout = false;}, 200);
+        //If we have full visibility, send hints for any items shown
+        if(archipelago_settings.location_information == "Full"){
+            let hint_list = [];
+            trace(hint_list);
+            const temp_list = archipelago_locked_locations.slice();//Dude, screw how lists are handled in this stupid language
+            for(let i = 0; i < temp_list.length; i++){
+                let location = temp_list[i].LocationID;
+                trace(location);
+                if(self.IsVisible(location))
+                hint_list.push(location + 2000000);
+            }
+            trace(hint_list);
+            context.setTimeout(() => (archipelago_send_message("LocationHints",hint_list)), 2000)
+        }
     }
 
     CheckElligibleRides(LocationID): any{
         let Prices = archipelago_location_prices.slice();
-        let Locked = archipelago_locked_locations.slice();
         var object = Prices[LocationID]
         let Prereqs = Prices[LocationID].RidePrereq;//Have to get LocationID before we can properly check Prereqs
         var ride = RideType[Prices[LocationID].RidePrereq[1]];
@@ -2631,21 +2638,56 @@ class RCTRArchipelago extends ModuleBase {
 
     CheckIfUnlocked(checked_ride): boolean{//Checks if a given ride is in the researched items list
         let researchItems = park.research.inventedItems;//Only what's already researched
-        // console.log(checked_ride);
+        const foodStallSet = new Set<string>(Object.values(FoodStalls) as string[]);//Apparently, this gives us way faster results.
+        const drinkStallSet = new Set<string>(Object.values(DrinkStalls) as string[]);
+        const shopSet = new Set<string>(Object.values(Shops) as string[]);
+        const stallSet = new Set<string>(Object.values(Stalls) as string[]);
+        console.log(checked_ride);
         if(!checked_ride){//If there's no ride prereq
             return true;//It's automatically elligible
         }
 
+        if(checked_ride == "Food Stall" || checked_ride == "Drink Stall" || checked_ride == "Shop"){
+            for(var i = 0; i < researchItems.length; i++){
+                switch(checked_ride){
+                    case "Food Stall":
+                        if (foodStallSet.has(objectManager.getObject("ride", researchItems[i].object).identifier))
+                            return true;
+                        break;
+                    case "Drink Stall":
+                        if (drinkStallSet.has(objectManager.getObject("ride", researchItems[i].object).identifier))
+                            return true;
+                        break;
+                    case "Shop":
+                        if (shopSet.has(objectManager.getObject("ride", researchItems[i].object).identifier))
+                            return true;
+                    }
+            }
+            return false;
+        }
+
+        let possibleShop = convert_shop_name_to_ID(checked_ride)
+        if (possibleShop){
+            for(var i = 0; i < researchItems.length; i++){
+                if (objectManager.getObject("ride", researchItems[i].object).identifier == possibleShop)
+                    return true;
+            }
+            return false;
+        }
         if (ObjectCategory[checked_ride]){//See if there's a prereq that's a category
             for(var i = 0; i < researchItems.length; i++){
-                if((researchItems[i] as RideResearchItem).category == checked_ride){//If the items match...
+                trace("Type: " + (researchItems[i] as RideResearchItem).type)
+                trace("Object: " + (researchItems[i] as RideResearchItem).object)
+                trace("RideType: " + (researchItems[i] as RideResearchItem).rideType)
+                trace("Category: " + (researchItems[i] as RideResearchItem).category)
+                if((researchItems[i] as RideResearchItem).category == checked_ride){//If the items match...\
                     return true;
                 }
             }
+            return false;// No rides in the category are unlocked
         }
         checked_ride = RideType[checked_ride];
         for(let i = 0; i < researchItems.length; i++){
-            // console.log((researchItems[i] as RideResearchItem).rideType)
             if((researchItems[i] as RideResearchItem).rideType == checked_ride){//If the items match...
                 return true;
             }
