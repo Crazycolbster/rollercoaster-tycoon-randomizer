@@ -180,7 +180,7 @@ function archipelagoLocations(){
     const furryProblem: boolean = (map.getAllEntities("staff").filter((staff: Staff) => staff.staffType === "entertainer").length < 19 ? true : false);
 
     var Archipelago = GetModule("RCTRArchipelago") as RCTRArchipelago;
-    const lockedList = Archipelago.CreateLockedList();
+    var lockedList = Archipelago.CreateLockedList();
     var messageLog = context.getParkStorage().get("RCTRando.MessageLog") as Array<any>;
 
     var game_choice = ["Ocarina of Time", "Adventure", "Donkey Kong Country 3", "Final Fantasy 1", "Hollow Knight",
@@ -252,11 +252,13 @@ function archipelagoLocations(){
                             items: lockedList,
                             scrollbars: 'none',
                             onClick: (item: number) => {
-                                if (lockedList[0] === "{WHITE}Either this game just started and you're impatient, or Colby is bad at programming"){
+                                if (lockedList[0] === "{WHITE}Either this game just started and you're impatient, or Colby is bad at programming" || lockedList[0] === "Conglaturations! You've unlocked everything! Now go outside and touch some grass."){
                                     return;
                                 }
                                 else{
+                                    console.log("Dank" + lockedList);
                                     Archipelago.PurchaseItem((item - item %2) / 2);
+                                    lockedList = Archipelago.CreateLockedList()
                                 }
                             }
                         },
