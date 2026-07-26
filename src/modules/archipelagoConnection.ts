@@ -596,6 +596,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
                             case "Ice Trap": TrapLink.ActivateTrap("Pause Trap", true); break;
                             case "Literature Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
                             case "Market Crash Trap": TrapLink.ActivateTrap("Loan Shark Trap", true); break;
+                            case "Mirror Trap": TrapLink.ActivateTrap("Rotate Trap", true); break;
                             case "Paralyze Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break;
                             case "Paralysis Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break;
                             case "Person Trap": TrapLink.ActivateTrap("Spawn Trap", true, source); break;
