@@ -576,7 +576,11 @@ function archipelagoLocations(){
                             isStriped: true,
                             items: (createHintList()),
                             scrollbars: 'vertical',
-                            columns:[{width: 140},{width: 140},{width: 140},{width: 140},{width: 140}]
+                            columns:[{width: 140},{width: 140},{width: 140},{width: 140},{width: 140}],
+                            onClick: (item: number) => {
+                                console.log("Colbys doing this right");
+                                ui.showError("", String(createHintList()[item][3]));
+                            }
                         },
                         {
                             type: 'checkbox',
