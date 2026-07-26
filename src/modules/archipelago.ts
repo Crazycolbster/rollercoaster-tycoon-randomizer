@@ -2034,23 +2034,42 @@ class RCTRArchipelago extends ModuleBase {
             }
             if (archipelago_objectives.UniqueRides[0].length){
                 objective.push("Required Rides:");
-                var ride_list = (archipelago_objectives.UniqueRides[1]) ? "✓        " : "        ";
-                for(let i = 0; i < archipelago_objectives.UniqueRides[0].length; i++){
-                    if(isInPark(archipelago_objectives.UniqueRides[0][i])){
-                        ride_list += ("{GREEN}" + archipelago_objectives.UniqueRides[0][i]) +
-                            ((i + 1 == archipelago_objectives.UniqueRides[0].length) ?  "": "{BLACK}, ");
-                    }
-                    else if(isUnlocked(archipelago_objectives.UniqueRides[0][i])){
-                        ride_list += ("{YELLOW}" + archipelago_objectives.UniqueRides[0][i]) +
-                            ((i + 1 == archipelago_objectives.UniqueRides[0].length) ?  "": "{BLACK}, ");
-                    }
-                    else{
-                        ride_list += ("{RED}" + archipelago_objectives.UniqueRides[0][i]) +
-                            ((i + 1 == archipelago_objectives.UniqueRides[0].length) ?  "": "{BLACK}, ");
-                    }
+                const prefix = (archipelago_objectives.UniqueRides[1]) ? "✓        " : "        ";
+                var ride_list = prefix;
+                const maxLineLength = 120;
+                // strips {TAG} markers so we measure only what's actually visible in-game
+                function visibleLength(str) {
+                    return str.replace(/\{[^}]*\}/g, "").length;
                 }
-                // console.log("This is the ride list: " + ride_list);
-                objective.push(ride_list);
+                for (let i = 0; i < archipelago_objectives.UniqueRides[0].length; i++) {
+                    let name = archipelago_objectives.UniqueRides[0][i];
+                    let color;
+            
+                    if (isInPark(name)) {
+                        color = "{GREEN}";
+                    } else if (isUnlocked(name)) {
+                        color = "{YELLOW}";
+                    } else {
+                        color = "{RED}";
+                    }
+            
+                    let isLast = (i + 1 == archipelago_objectives.UniqueRides[0].length);
+                    let segment = color + name + (isLast ? "" : "{BLACK}, ");
+                    // if adding this segment would push us over the limit, start a new line first
+                    // check visible length only, not the raw string with tags
+                    if (visibleLength(ride_list) + visibleLength(segment) > maxLineLength
+                        && ride_list !== prefix && ride_list.trim().length > 0) {
+                    objective.push(ride_list);
+                    ride_list = "        ";
+                }
+
+                    ride_list += segment;
+                }
+
+                // push whatever's left on the final line
+                if (ride_list.trim().length > 0) {
+                    objective.push(ride_list);
+                }
             }
             return objective;
         }

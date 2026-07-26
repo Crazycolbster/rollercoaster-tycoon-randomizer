@@ -410,9 +410,9 @@ function archipelagoLocations(){
                             x: 25,
                             y: 75,
                             width: 650,
-                            height: 200,
+                            height: 240,
                             isStriped: true,
-                            scrollbars: 'both',
+                            scrollbars: 'none',
                             columns:[{width: 1400}],
                             items: Archipelago.CreateObjectiveList()
                         },
@@ -1491,6 +1491,7 @@ function archipelagoDebug(){
                         // (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_menu_location_image_ID.start).id, 0,0)}
                         BathroomTrap.RotateTrap()
                         console.log(((map.rides)));
+                        archipelago_objectives.UniqueRides[0] = ["Classic Wooden Twister Roller Coaster","Classic Wooden Roller Coaster","Classic Stand-up Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster",]
                     //     var get_rotated_idiot = ui.openWindow({
                     //         classification: 'get-rotated-idiot',
                     //         title: "Get Rotated",
