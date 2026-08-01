@@ -325,7 +325,7 @@ class RCTRArchipelago extends ModuleBase {
         archipelago_settings.seed = imported_settings.seed;
         archipelago_settings.team = imported_settings.team;
         archipelago_settings.fireworks = imported_settings.fireworks;
-        archipelago_settings.awards = imported_settings.awards;
+        archipelago_settings.awards = imported_settings.selected_awards;
         archipelago_settings.exclude_safest_park = imported_settings.exclude_safest_park;
         archipelago_location_prices = imported_settings.location_prices;
         archipelago_settings.preferred_intensity = imported_settings.preferred_intensity;
