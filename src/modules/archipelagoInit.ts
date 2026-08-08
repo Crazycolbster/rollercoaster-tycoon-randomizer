@@ -141,7 +141,8 @@ var archipelago_settings: any = {
     all_rides_and_scenery_base: false,
     all_rides_and_scenery_expansion: false,
     seed: undefined,
-    started: false
+    started: false,
+    opened_unlock_shop: false
 };
 
 function ArchipelagoSaveLocations(LockedLocations, UnlockedLocations) {

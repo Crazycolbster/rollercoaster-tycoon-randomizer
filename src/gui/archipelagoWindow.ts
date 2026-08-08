@@ -188,6 +188,8 @@ function archipelagoLocations(){
     "Sonic Adventure 2", "Super Mario World", "Super Mario 64", "Super Metroid", "VVVVVV"];
     var game = game_choice[Math.floor(Math.random() * game_choice.length)];//Gotta throw that shade
 
+    archipelago_settings.opened_unlock_shop = true;
+
     var existing: Window = ui.getWindow("archipelago-locations");
     if(existing) {
         return existing;
@@ -1769,7 +1771,9 @@ function archipelagoDebug(){
                     onClick: function() { 
                         // var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         // BathroomTrap.ExtremeChaosTrap();
-                        console.log(archipelago_settings.skips);
+                        console.log(archipelago_settings.traplink)
+                        archipelago_settings.traplink = !archipelago_settings.traplink;
+                        
                         // console.log(JSON.stringify(context.getParkStorage().get('RCTRando.ArchipelagoLockedLocations')));
                         // console.log(convert_shop_name_to_ID("Burger Bar"))
                                          

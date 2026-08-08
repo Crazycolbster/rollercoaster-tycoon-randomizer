@@ -140,7 +140,14 @@ class RCTRArchipelago extends ModuleBase {
             }
         }}
         )
-
+        //Send the tutorial if the player can't find the button
+        context.setTimeout(() => {
+            if(!archipelago_settings.opened_unlock_shop){
+                tutorial_0();
+                ui.showError("Hey, it looks like you haven't opened your unlock shop yet.", "Here's the tutorial, just in case!");
+                archipelago_settings.traplink && archipelago_send_message("Bounce",{trap: "Tutorial Trap", tag: "TrapLink"});
+            }
+        }, 120000);
         //Set up actions for multiplayer
         try{
             context.registerAction('ExplodeRide', (args) => {return {};}, (args) => explodeRide(args));
