@@ -162,14 +162,23 @@ function ac_req(data) {//This is what we do when we receive a data packet
                 trace(archipelago_settings.multiworld_games);
 
                 if(!archipelago_init_received){
+                    console.log("They say ")
                     try{
+                        console.log("He is: ")
                         context.registerAction('SetImportedSettings', (args) => {return {};}, (args) => Archipelago.SetImportedSettings(args));
                     }
                     catch(e){
                         console.log("Error in registering SetImportedSettings:" + e)
                     }
-                    context.executeAction("SetImportedSettings", data.slot_data);
-                    // Archipelago.SetImportedSettings(data.slot_data);
+                    //We have to break out the location prices because of the max length of a string the custom action engine can handle
+                    //In addition, location_prices can still exceed the 65,000 character limit, so we can't run it through the action engine at all.
+
+                    console.log("Captain")
+                    const { location_prices, ...options } = data.slot_data;
+                    context.executeAction("SetImportedSettings", options);
+                    console.log("HOLUP: "+JSON.stringify(location_prices));
+                    Archipelago.SetLocationPrices(location_prices);
+                    console.log("Fetcher);");
                 }
                 
             }
@@ -267,6 +276,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
             context.setTimeout(() => {archipelago_update_locations(data.checked_locations)}, 2000);
 
             archipelago_connected_to_server = true;
+            console.log("The greatest of")
 
             if(data.slot_data.version != archipelago_version){
                 var bad_version_warning = ui.openWindow({
@@ -636,6 +646,10 @@ function ac_req(data) {//This is what we do when we receive a data packet
             if (archipelago_settings.started){//We don't want to apply all the previously received items before we start the game.
                 Archipelago.ReceiveArchipelagoItem(data.items, data.index);
             }
+            break;
+
+        case "Retrieved":
+            console.log("We didn't ask for this packet. Who is sending a Get packet on our behalf!?")
             break;
 
         case "LocationInfo":

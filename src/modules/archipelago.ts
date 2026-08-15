@@ -194,8 +194,8 @@ class RCTRArchipelago extends ModuleBase {
 
     SetImportedSettings(imported_settings: any): any{
         var self = this;
-        trace("Setting values retrieved from Archipelago");
-        trace(imported_settings);
+        console.log("Setting values retrieved from Archipelago");
+        console.log(JSON.stringify(imported_settings));
         imported_settings = imported_settings.args;
         switch(imported_settings.difficulty){
             case 0://very_easy
@@ -334,7 +334,6 @@ class RCTRArchipelago extends ModuleBase {
         archipelago_settings.fireworks = imported_settings.fireworks;
         archipelago_settings.awards = imported_settings.selected_awards;
         archipelago_settings.exclude_safest_park = imported_settings.exclude_safest_park;
-        archipelago_location_prices = imported_settings.location_prices;
         archipelago_settings.preferred_intensity = imported_settings.preferred_intensity;
         if(!archipelago_objectives.Monopoly[0]){
             archipelago_settings.land_price = imported_settings.land_price * 10;
@@ -361,6 +360,11 @@ class RCTRArchipelago extends ModuleBase {
         ui.getWindow("archipelago-connect").findWidget<LabelWidget>("label-Connected-to-server").text = "The Archipelago Client is connected to the server!";
         ui.getWindow("archipelago-connect").findWidget<ButtonWidget>("start-button").isDisabled = !archipelago_connected_to_game || !archipelago_connected_to_server || !archipelago_correct_scenario;
         return {};
+    }
+
+    SetLocationPrices(location_prices): any{
+
+        archipelago_location_prices = location_prices;
     }
 
     SetArchipelagoResearch(): any {//Mutates the context
