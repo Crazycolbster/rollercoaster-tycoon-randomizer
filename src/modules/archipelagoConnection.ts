@@ -162,9 +162,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
                 trace(archipelago_settings.multiworld_games);
 
                 if(!archipelago_init_received){
-                    console.log("They say ")
                     try{
-                        console.log("He is: ")
                         context.registerAction('SetImportedSettings', (args) => {return {};}, (args) => Archipelago.SetImportedSettings(args));
                     }
                     catch(e){
@@ -173,12 +171,9 @@ function ac_req(data) {//This is what we do when we receive a data packet
                     //We have to break out the location prices because of the max length of a string the custom action engine can handle
                     //In addition, location_prices can still exceed the 65,000 character limit, so we can't run it through the action engine at all.
 
-                    console.log("Captain")
                     const { location_prices, ...options } = data.slot_data;
                     context.executeAction("SetImportedSettings", options);
-                    console.log("HOLUP: "+JSON.stringify(location_prices));
                     Archipelago.SetLocationPrices(location_prices);
-                    console.log("Fetcher);");
                 }
                 
             }

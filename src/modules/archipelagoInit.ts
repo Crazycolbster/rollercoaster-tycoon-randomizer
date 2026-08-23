@@ -1,5 +1,5 @@
 //Archipelago Version Number
-const archipelago_version = "v0.1.22-beta";
+const archipelago_version = "v0.1.22.1-beta";
 
 //Lists for Archipelago
 interface archipelago_item {

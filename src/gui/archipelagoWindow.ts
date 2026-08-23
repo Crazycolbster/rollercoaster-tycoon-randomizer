@@ -1773,26 +1773,8 @@ function archipelagoDebug(){
                         // BathroomTrap.ExtremeChaosTrap();
                         console.log(archipelago_settings.traplink)
                         archipelago_settings.traplink = !archipelago_settings.traplink;
-                        const images: ImageData[] = [
-                            { width: 16, height: 16, data: pngToBase64.archipelago_icon },
-                        ];
-                        // allocate memory slots for each image
-                        const range = ui.imageManager.allocate(images.length);
-                    
-                        // populate the memory slots with the images
-                        if (range) {
-                            images.forEach((image, index) => {
-                                ui.imageManager.setPixelData(range.start + index, {
-                                    type: "png",
-                                    palette: "keep",
-                                    data: image.data,
-                                });
-                                imageMap[index] = range.start + index;
-                            });
                         // console.log(JSON.stringify(context.getParkStorage().get('RCTRando.ArchipelagoLockedLocations')));
                         // console.log(convert_shop_name_to_ID("Burger Bar"))
-                        }      
-                                      
                     }
                 },
                 {
