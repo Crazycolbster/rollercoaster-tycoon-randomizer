@@ -110,12 +110,12 @@ class RCTRRideTypes extends ModuleBase {
         }*/
 
         if(changed && rideId) {
-            park.postMessage(
-                {type: 'attraction', text: rideTypeName + ' stats have been re-rolled', subject: rideId} as ParkMessageDesc
+            context.executeAction("postMessage",
+                {message:{type: 'attraction', text: rideTypeName + ' stats have been re-rolled', subject: rideId} as ParkMessageDesc}
             );
         } else if(changed) {
-            park.postMessage(
-                {type: 'attraction', text: rideTypeName + ' stats have been re-rolled'} as ParkMessageDesc
+            context.executeAction("postMessage",
+                {message:{type: 'attraction', text: rideTypeName + ' stats have been re-rolled'} as ParkMessageDesc}
             );
         }
 
@@ -134,7 +134,7 @@ class RCTRRideTypes extends ModuleBase {
     }
 
     GetRideTypeFieldMult(difficulty, wetdry=1) {
-        let factor = randomize(1, difficulty);
+        let factor = randomize(1, difficulty, this.settings.rando_range);
         const dry = 1 - wetdry;
         factor = (factor * wetdry) + (1 * dry);
         return factor;

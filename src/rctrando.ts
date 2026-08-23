@@ -7,11 +7,13 @@ function loadedGame(savedData) {
     }
     //startGameGui();// just for testing
     initMenuItems();
-    if(global_settings.enabled===false) {
-        return;
+    if(!context.getParkStorage().get('RCTRando.ArchipelagoSettings')){// If a game of Archipelago has been started, keep the randomizer enabled.
+        if(global_settings.enabled===false) {
+            return;
+        }
     }
     global_settings.enabled = true;
-    //createChangesWindow(); FUTURE COLBY: UNCOMMENT THIS LINE!
+    createChangesWindow(); //FUTURE COLBY: UNCOMMENT THIS LINE!
     AnyEntry();
 }
 
