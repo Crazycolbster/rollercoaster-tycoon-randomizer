@@ -1,5 +1,5 @@
 var challenges = [
-    {//Pick a pony
+    {//0: Pick a pony
         colors: [5,18], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:"I used to wonder what friendship could be...",
@@ -62,7 +62,7 @@ var challenges = [
             }
         ]
     },
-    {//Book of Mormon Quiz
+    {//1: Book of Mormon Quiz
         colors: [6,19], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:"If anybody asks, I 100% count this as missionary work.",
@@ -103,7 +103,7 @@ var challenges = [
             }
         ]
     },
-    {//Degree quiz
+    {//2: Degree quiz
         colors: [38,13], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:"To be honest, I've never even seen Yugioh. Or Beyblades. What show is the {PALELAVENDER}shadow realm from?.",
@@ -141,7 +141,7 @@ var challenges = [
             }
         ]
     },
-    {//SCUBA Quiz
+    {//3: SCUBA Quiz
         colors: [38,7], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:"SCUBA: Self Contained Underwater Breathing Apparatus",
@@ -198,7 +198,7 @@ var challenges = [
             }
         ]
     },
-    {//The Game
+    {//4: The Game
         colors: [1,4], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:"Some friends of mine started this thing called the competition. If you think about it, you win!",
@@ -286,7 +286,7 @@ var challenges = [
             }
         ]
     },
-    {//Spelling
+    {//5: Spelling
         colors: [50,4], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:"I swear, some people don't know how to spell names",
@@ -339,7 +339,7 @@ var challenges = [
             }
         ]
     },
-    {//Sea Shanty
+    {//6: Sea Shanty
         colors: [38,4], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:"Sea Shanties never should have gone out of style",
@@ -401,7 +401,7 @@ var challenges = [
             }
         ]
     },
-    {//Ohms Law
+    {//7: Ohms Law
         colors: [57,4], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:"You should have paid attention in ECEN 150!",
@@ -455,7 +455,7 @@ var challenges = [
             }
         ]
     },
-    {//Dice Roll
+    {//8: Dice Roll
         colors: [59,4], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:"Roll for initiative.",
@@ -568,7 +568,7 @@ var challenges = [
             }
         ]
     },
-    {//Cosmere
+    {//9: Cosmere
         colors: [65,7], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:'"Airsick Lowlander!"',
@@ -634,7 +634,7 @@ var challenges = [
             }
         ]
     },
-    {//Kingdom Hearts
+    {//10: Kingdom Hearts
         colors: [66,7], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:'"Roller Coaster Tycoon in Kingdom hearts when?"',
@@ -691,7 +691,7 @@ var challenges = [
             }
         ]
     },
-    {//Ibeish
+    {//11: Ibeish
         colors: [66,7], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:'"Thibeis ibeis iba gibeood libeangibeuage!"',
@@ -725,7 +725,7 @@ var challenges = [
             }
         ]
     },
-    {//Dance Party!
+    {//12: Dance Party!
         colors: [36,7], //Colors for the popup
         label1: "We can banish all your furries to the {PALELAVENDER} SHADOW REALM,",//First line
         label1_tooltip:'"I like to move it move it!"',

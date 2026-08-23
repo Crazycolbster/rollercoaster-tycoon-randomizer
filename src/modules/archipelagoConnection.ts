@@ -40,6 +40,7 @@ function archipelago_send_message(type: string, message?: any) {
 function archipelago_select_message(type: string, message?: any){
     switch(type){
     case "Connect":
+        // TODO: This and ConnectUpdate don't display the TrapLink tag, but that's fine for now.
         trace({cmd: "Connect", password: message.password, game: "OpenRCT2", name: message.name, uuid: message.name + ": OpenRCT2", version: {major: 0, minor: 4, build: 1}, item_handling: 0b111, tags: (archipelago_settings.deathlink) ? ["DeathLink"] : [], slot_data: true});
         break;
     case "ConnectUpdate":
@@ -60,7 +61,25 @@ function archipelago_select_message(type: string, message?: any){
         for(let i = 0; i < archipelago_location_prices.length; i++){
             wanted_locations.push(2000000 + i);
         }
+        switch(archipelago_settings.awards){
+            case 0://Adds all awards to the location scout list
+                var award_locations = [2008008, 2008009, 2008010, 2008011, 2008012, 2008014, 2008015, 2008016, 2008017, 2008018, 2008019, 2008020, 2008021, 2008022, 2008023]
+                if (!archipelago_settings.exclude_safest_park)
+                    award_locations.push(2008013);
+                wanted_locations = wanted_locations.concat(award_locations);
+                break;
+            case 1://Adds postive awards to the location scout list
+                var award_locations = [2008009, 2008010, 2008011, 2008014, 2008015, 2008017, 2008019, 2008020, 2008021, 2008023]
+                if (!archipelago_settings.exclude_safest_park)
+                    award_locations.push(2008013);
+                wanted_locations = wanted_locations.concat(award_locations);
+                break;
+            case 2://Adds nothing to the list. 
+                break;
+        }
         connection.send({cmd: "LocationScouts", locations: wanted_locations, create_as_hint: 0});
+        archipelago_location_request_sent = true;//Keeps archipelago_update_locations from spamming
+        context.setTimeout(() => {archipelago_location_request_sent = false;}, 20000);//In case the connection fails, reset after 20 seconds
         break;
     case "LocationHints":
         connection.send({cmd: "LocationScouts", locations: message, create_as_hint: 2});
@@ -80,6 +99,9 @@ function archipelago_select_message(type: string, message?: any){
     case "Bounce":
         if(message.tag == "DeathLink"){
             connection.send({cmd: "Bounce", tags: ["DeathLink"], data: {time: Math.round(+new Date()/1000), cause: message.ride + " has crashed!", source: archipelago_settings.player[0]}});
+        }
+        if(message.tag == "TrapLink"){
+            connection.send({cmd: "Bounce", tags: ["TrapLink"], data: {time: Math.round(+new Date()/1000), trap_name: message.trap, source: archipelago_settings.player[0]}});
         }
         break;
     case "Get":
@@ -109,12 +131,16 @@ function ac_req(data) {//This is what we do when we receive a data packet
                 if(!context.getParkStorage().get("RCTRando.ArchipelagoPlayers")){ //We only need to do this once
                     for(let i=0; i<data.players.length; i++) {
                         //Create guest list populated with Player names
-                        archipelagoPlayers.push([data.players[i][2], false]);
+                        let playerAlias = data.players[i][2];
+                        let playerGame = data.slot_info[data.players[i][1]][1];
+                        let playerSlot = data.players[i][1];
+                        let team = data.players[i][0];
+                        archipelagoPlayers.push([playerAlias, false, playerGame, playerSlot, team]);
                         multiworld_games.push(data.slot_info[i + 1][1]);
                     }
                     trace(data.slot_info);
-                    trace("Here's our players:");
-                    trace(archipelagoPlayers);
+                    console.log("Here's our players:");
+                    console.log(archipelagoPlayers);
                     context.getParkStorage().set("RCTRando.ArchipelagoPlayers",archipelagoPlayers);
                     try{
                         context.registerAction('SetNames', (args) => {return {};}, (args) => Archipelago.SetNames());
@@ -142,8 +168,12 @@ function ac_req(data) {//This is what we do when we receive a data packet
                     catch(e){
                         console.log("Error in registering SetImportedSettings:" + e)
                     }
-                    context.executeAction("SetImportedSettings", data.slot_data);
-                    // Archipelago.SetImportedSettings(data.slot_data);
+                    //We have to break out the location prices because of the max length of a string the custom action engine can handle
+                    //In addition, location_prices can still exceed the 65,000 character limit, so we can't run it through the action engine at all.
+
+                    const { location_prices, ...options } = data.slot_data;
+                    context.executeAction("SetImportedSettings", options);
+                    Archipelago.SetLocationPrices(location_prices);
                 }
                 
             }
@@ -241,6 +271,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
             context.setTimeout(() => {archipelago_update_locations(data.checked_locations)}, 2000);
 
             archipelago_connected_to_server = true;
+            console.log("The greatest of")
 
             if(data.slot_data.version != archipelago_version){
                 var bad_version_warning = ui.openWindow({
@@ -360,7 +391,8 @@ function ac_req(data) {//This is what we do when we receive a data packet
                                     color = "PALELAVENDER";//Colors them purple
                                     break;
                                 case "item_id":
-                                    segment = context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[Number(data.data[i].text)];
+                                    var game = archipelagoPlayers[data.data[i].player - 1][2];
+                                    segment = context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[game][Number(data.data[i].text)];
                                     switch(data.data[i].flags){
                                         case 0://Normal
                                         case 2://Useful
@@ -375,7 +407,8 @@ function ac_req(data) {//This is what we do when we receive a data packet
                                     }
                                     break;
                                 case "location_id":
-                                    segment = context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName")[Number(data.data[i].text)];
+                                    var game = archipelagoPlayers[data.data[i].player - 1][2];
+                                    segment = context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName")[game][Number(data.data[i].text)];
                                     color = "GREEN";
                                     break;
                             }
@@ -412,6 +445,10 @@ function ac_req(data) {//This is what we do when we receive a data packet
 
                     break;
 
+                case "Countdown":
+                    ui.showError("Let's get ready to rumble!", data.data[0].text);
+                    break;
+
                 default:
                     archipelago_print_message(data.data[0].text);
             }
@@ -424,18 +461,18 @@ function ac_req(data) {//This is what we do when we receive a data packet
             var location_id_to_name = {};
             let current_game = Object.keys(data.data.games)[0];
 
-            trace("Here's all the keys:");
-            trace(Object.keys(data.data.games));
+            console.log("Here's all the keys:");
+            console.log(Object.keys(data.data.games));
 
-            trace("Here's our current game:");
-            trace(current_game);
-            trace("Here's every game we've received so far (This shouldn't have the current game):");
-            trace(archipelago_settings.received_games);
+            console.log("Here's our current game:");
+            console.log(current_game);
+            console.log("Here's every game we've received so far (This shouldn't have the current game):");
+            console.log(archipelago_settings.received_games);
 
             if(archipelago_settings.received_games.indexOf(current_game) !== -1)//Throw away data we already have
                 break;
 
-            trace("Received DataPackage, updating translation tables");
+            console.log("Received DataPackage, updating translation tables");
 
             function mergeObjects(target: { [key: string]: any }, source: { [key: string]: any }): void {
                 for (const key in source) {
@@ -458,14 +495,15 @@ function ac_req(data) {//This is what we do when we receive a data packet
 
                 return flippedObject;
               }
-            for (const gameName in data.data.games){//For every game in this game of Archipelago
-                if (data.data.games.hasOwnProperty(gameName)) {
-                    mergeObjects(item_name_to_id, data.data.games[gameName].item_name_to_id);
-                    mergeObjects(location_name_to_id, data.data.games[gameName].location_name_to_id);
-                }
-            }
+            
+            mergeObjects(item_name_to_id, data.data.games[current_game].item_name_to_id);
+            mergeObjects(location_name_to_id, data.data.games[current_game].location_name_to_id);
+            
             item_id_to_name = flipObject(item_name_to_id);
             location_id_to_name = flipObject(location_name_to_id);
+
+            item_id_to_name = {[current_game]: item_id_to_name}
+            location_id_to_name = {[current_game]: location_id_to_name}
 
             mergeObjects(full_item_id_to_name, item_id_to_name);
             mergeObjects(full_location_id_to_name, location_id_to_name);
@@ -476,8 +514,8 @@ function ac_req(data) {//This is what we do when we receive a data packet
             // console.log(full_item_id_to_name);
             // console.log(full_location_id_to_name);
 
-            trace("Just added data for this game:");
-            trace(current_game);
+            console.log("Just added data for this game:");
+            console.log(current_game);
 
             archipelago_settings.received_games.push(current_game);
             saveArchipelagoProgress();
@@ -504,11 +542,91 @@ function ac_req(data) {//This is what we do when we receive a data packet
                                 player_color + "{RED} missed 100% of the shots they didn't take.", "{RED}It was " + player_color + "{RED}'s controller, I swear!",
                                 player_color + "{RED} was not the imposter.", player_color + "{RED} rolled a natural 1.",
                                 player_color + "{RED} should not have tried stealing the kings flocks from Ammon!", player_color + "{RED} started a land war in Asia!",
-                                player_color + "{RED} was burninated by Trogdor!"];
+                                player_color + "{RED} was burninated by Trogdor!",player_color + "{RED} couldn't live and didn't learn!",
+                                player_color + "{RED} was driven mad by High Demon Elgrim!"];
                             var death_message = message_choice[Math.floor(Math.random() * message_choice.length)];
                             archipelago_print_message(death_message);
                         }
                         break;
+                    }
+
+                    if (data.tags[i] == "TrapLink"){
+                        const trap = data.data.trap_name;
+                        const source = data.data.source;
+
+                        // Ignore this trap if it comes from ourselves or TrapLink is disabled.
+                        if (source == archipelago_settings.player[0] || !archipelago_settings.traplink){
+                            break;
+                        }
+
+                        var TrapLink = GetModule("RCTRArchipelago") as RCTRArchipelago;
+
+                        // Whether or not a message should be placed in the ticker regarding the TrapLink.
+                        var NotifyLink = true;
+
+                        switch (trap){
+                            // OpenRCT2's own traps.
+                            case "Bathroom Trap":
+                            case "Furry Convention Trap":
+                            case "Spam Trap":
+                            case "Loan Shark Trap":
+                            case "Food poisoning Trap":
+                            TrapLink.ActivateTrap(trap, true);
+                            break;
+
+                            // Other game's traps.
+                            case "Aaa Trap": TrapLink.ActivateTrap("Aaa Trap", true, source); break;
+                            case "Animal Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
+                            case "Animal Bonus Trap": TrapLink.ActivateTrap("Furry Convention Trap", true); break;
+                            case "Attraction Breakdown Trap": TrapLink.ActivateTrap("Breakdown Trap", true, source); break;
+                            case "Bald Trap": TrapLink.ActivateTrap("Bald Trap", true); break;
+                            case "Camera Rotate Trap": TrapLink.ActivateTrap("Rotate Trap"); break;
+                            case "Chaos Trap": TrapLink.ActivateTrap("Chaos Trap"); break;
+                            case "Chaos Control Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break;
+                            case "Controller Drift Trap": TrapLink.ActivateTrap("Scroll Trap", true, source); break;
+                            case "Damage Trap": TrapLink.ActivateTrap("Breakdown Trap", true, source); break;
+                            case "Eject Ability": TrapLink.ActivateTrap("Close Ride Trap", true, source); break;
+                            case "Exposition Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
+                            case "Extreme Chaos Mode": TrapLink.ActivateTrap("Extreme Chaos Trap", true); break;
+                            case "Fast Trap": TrapLink.ActivateTrap("Fast Trap", true, source); break;
+                            case "Freeze Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break; 
+                            case "Frozen Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break;
+                            case "Frost Trap": TrapLink.ActivateTrap("Frost Trap", true, source); break;
+                            case "Guest Bathroom Trap": TrapLink.ActivateTrap("Bathroom Trap", true, source); break;
+                            case "Guest Money Trap": TrapLink.ActivateTrap("Voucher Trap", true, source); break;
+                            case "Guest Vomiting Trap": TrapLink.ActivateTrap("Food Poisoning Trap", true, source); break;
+                            case "Help Trap": TrapLink.ActivateTrap("Tutorial Trap", true, source); break;
+                            case "Hey! Trap": TrapLink.ActivateTrap("Hey Trap", true); break;
+                            case "Ice Floor Trap": TrapLink.ActivateTrap("Frost Trap", true); break;
+                            case "Ice Trap": TrapLink.ActivateTrap("Pause Trap", true); break;
+                            case "Literature Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
+                            case "Market Crash Trap": TrapLink.ActivateTrap("Loan Shark Trap", true); break;
+                            case "Mirror Trap": TrapLink.ActivateTrap("Rotate Trap", true); break;
+                            case "Paralyze Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break;
+                            case "Paralysis Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break;
+                            case "Person Trap": TrapLink.ActivateTrap("Spawn Trap", true, source); break;
+                            case "Player Money Trap": TrapLink.ActivateTrap("Loan Shark Trap", true, source); break;
+                            case "Poison Mushroom": TrapLink.ActivateTrap("Food Poisoning Trap", true); break;
+                            case "Poison Trap": TrapLink.ActivateTrap("Food Poisoning Trap", true); break;
+                            case "Police Trap": TrapLink.ActivateTrap("Security Trap", true, source); break;
+                            case "Stun Trap": TrapLink.ActivateTrap("Pause Trap", true, source); break;
+                            case "Text Trap": TrapLink.ActivateTrap("Spam Trap", true); break;
+                            case "Toxin Trap": TrapLink.ActivateTrap("Food Poisoning Trap", true); break;
+                            case "Tutorial Trap": TrapLink.ActivateTrap("Tutorial Trap", true, source); break;
+                            case "Zoom In Trap": TrapLink.ActivateTrap("Zoom In Trap", true, source); break; 
+                            case "Zoom Out Trap": TrapLink.ActivateTrap("Zoom Out Trap", true, source); break;
+                            case "Zoom Trap": TrapLink.ActivateTrap("Zoom Trap", true, source); break; 
+
+                            // If this trap is unhandled, then trace log it and flip the NotifyLink flag so we don't send a pointless TrapLink notification.
+                            default:
+                                console.log("Unhandled trap type: '" + trap +"'.");
+                                NotifyLink = false;
+                                break;
+                        }
+                        
+                        if (NotifyLink){
+                            archipelago_print_message("{PALELAVENDER}" + source + "{GREEN} linked a {RED}" + trap + "{WHITE}!");
+                        }
                     }
                 }
             }
@@ -520,10 +638,13 @@ function ac_req(data) {//This is what we do when we receive a data packet
             break;
 
         case "ReceivedItems":
-            trace("This Far?");
             if (archipelago_settings.started){//We don't want to apply all the previously received items before we start the game.
                 Archipelago.ReceiveArchipelagoItem(data.items, data.index);
             }
+            break;
+
+        case "Retrieved":
+            console.log("We didn't ask for this packet. Who is sending a Get packet on our behalf!?")
             break;
 
         case "LocationInfo":
@@ -534,8 +655,42 @@ function ac_req(data) {//This is what we do when we receive a data packet
                     break;//If we have the locations already, we can assume this was an unintentional repeat request
 
                 if(ready){
+                    switch(archipelago_settings.awards){
+                        case 0://all
+                        var count = archipelago_settings.exclude_safest_park ? 15 : 16;
+                        // splice last N from locations
+                        var awardSource = data.locations.splice(data.locations.length - count, count);
+                            for(let i = 0; i < awardSource.length; i++){
+                                console.log("Here's all the award locations!",JSON.stringify(awardSource));
+                                let receivingPlayer = players[data.locations[i][2] - 1][0]
+                                let game = players[data.locations[i][2] - 1][2];
+                                let slot = data.locations[i][2];
+                                //Strip the 2000000 from the location for internal use.
+                                archipelago_award_locations.push({LocationID: Number(awardSource[i][1] - 2000000), Item: awardSource[i][0], Game: game, Slot: slot, ReceivingPlayer: receivingPlayer, Flags: awardSource[i][3]})
+                                context.getParkStorage().set("RCTRando.ArchipelagoAwardLocations",archipelago_award_locations);
+                            }
+                            break;//Okay, we're going from here next time. Add logic for pushing the positive awards onto the list and have the award function check teh list and send out the item. Good luck.
+                        case 1://positive
+                        var count = archipelago_settings.exclude_safest_park ? 10 : 11;
+                        // splice last N from locations
+                        var awardSource = data.locations.splice(data.locations.length - count, count);
+                            for(let i = 0; i < awardSource.length; i++){
+                                trace("Here's all the award locations!",JSON.stringify(awardSource));
+                                let receivingPlayer = players[data.locations[i][2] - 1][0]
+                                let game = players[data.locations[i][2] - 1][2];
+                                let slot = data.locations[i][2];
+                                //Strip the 2000000 from the location for internal use.
+                                archipelago_award_locations.push({LocationID: Number(awardSource[i][1] - 2000000), Item: awardSource[i][0], Game: game, Slot: slot, ReceivingPlayer: receivingPlayer, Flags: awardSource[i][3]})        
+                                context.getParkStorage().set("RCTRando.ArchipelagoAwardLocations",archipelago_award_locations);
+                            }
+                            break;
+                        case 2://none
+                    }
                     for(let i = 0; i < data.locations.length; i++){
-                        archipelago_locked_locations.push({LocationID: i, Item: data.locations[i][0], ReceivingPlayer: players[data.locations[i][2] - 1][0], Flags: data.locations[i][3]})
+                        let receivingPlayer = players[data.locations[i][2] - 1][0]
+                        let game = players[data.locations[i][2] - 1][2];
+                        let slot = data.locations[i][2];
+                        archipelago_locked_locations.push({LocationID: i, Item: data.locations[i][0], Game: game, Slot: slot, ReceivingPlayer: receivingPlayer, Flags: data.locations[i][3]})
                     }
                     ArchipelagoSaveLocations(archipelago_locked_locations,[]);
                 }
@@ -553,11 +708,15 @@ function ac_req(data) {//This is what we do when we receive a data packet
                 trace(context.getParkStorage().get("RCTRando.ArchipelagoPlayers") as playerTuple[]);
                 for(let i = 0; i < data.value.length; i++){
                     let archipelagoPlayers = (context.getParkStorage().get("RCTRando.ArchipelagoPlayers") as playerTuple[]);
+                    let receivingPlayer = archipelagoPlayers[Number(data.value[i].receiving_player) - 1][0];
+                    let findingPlayer = archipelagoPlayers[Number(data.value[i].finding_player) - 1][0];
+                    let itemGame = archipelagoPlayers[Number(data.value[i].receiving_player) - 1][2];
+                    let locationGame = archipelagoPlayers[Number(data.value[i].finding_player) - 1][2];
                     var hint: archipelago_hint = {
-                        ReceivingPlayer: archipelagoPlayers[Number(data.value[i].receiving_player) - 1][0],
-                        FindingPlayer: archipelagoPlayers[Number(data.value[i].finding_player) - 1][0],
-                        Location: context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName")[Number(data.value[i].location)],
-                        Item: context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[Number(data.value[i].item)],
+                        ReceivingPlayer: receivingPlayer,
+                        FindingPlayer: findingPlayer,
+                        Location: context.getParkStorage().get("RCTRando.ArchipelagoLocationIDToName")[locationGame][Number(data.value[i].location)],
+                        Item: context.getParkStorage().get("RCTRando.ArchipelagoItemIDToName")[itemGame][Number(data.value[i].item)],
                         Found: data.value[i].found
                     }
                     //Check if we've received the hint before

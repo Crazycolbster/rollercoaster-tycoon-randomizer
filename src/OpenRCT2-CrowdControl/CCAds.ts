@@ -164,6 +164,11 @@ const adPool: Ad[] = [
         onClick: () => 
             {try{
                 var DeathLink = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                if (!archipelago_settings.deathlink){
+                    console.log("no deathlink enabled");
+                    archipelago_settings.deathlink = true;
+                    context.setTimeout(() => {archipelago_settings.deathlink = false; archipelago_settings.deathlink_timeout = false;}, 5000);
+                }
                 DeathLink.SendDeathLink(null,"A popup window with the text \"SEND DEATHLINK\"");}
             catch{ui.showError("Archipelago not open", "You should try this while playing Archipelago!")}
             ui.closeAllWindows()}//We don't know the ID, so close everything. Besides, it "Crashed"
@@ -260,7 +265,25 @@ const adPool: Ad[] = [
         button: "This is why ride costs $300 instead of $50,000.",
         onClick: () => 
             {
-                ui.showError("We convert the guests essence directly into rides.", "Keep an eye out for Hoid!");
+                try{
+                    ui.showError("We convert the guests essence directly into rides.", "Keep an eye out for Hoid!");
+                    let hoidNames = ["Hoid", "Wit", "Cephandrius", "Midius"]
+                    let archipelagoPlayers = (context.getParkStorage().get("RCTRando.ArchipelagoPlayers") as playerTuple[]);
+                    var found = false;
+                    console.log(JSON.stringify(archipelagoPlayers));
+                    for(let i=0; i<archipelagoPlayers.length; i++){
+                        if (hoidNames.includes(archipelagoPlayers[i][0])){
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found){
+                        let randomName = hoidNames[rng(0, (hoidNames.length - 1))]
+                        archipelagoPlayers.push([randomName,true ,"The Cosmere", 17000000,17000000])
+                        context.getParkStorage().set("RCTRando.ArchipelagoPlayers",archipelagoPlayers);
+                    }
+                }
+                catch{ui.showError("Archipelago not open", "You should try this while playing Archipelago!")}
             }
     },
     {//37
@@ -338,6 +361,7 @@ const adPool: Ad[] = [
                 var iceIndex = (objectManager.load("rct2.terrain_surface.ice")).index;
                 console.log(iceIndex);
                 var surfaces = objectManager.getAllObjects("terrain_surface");
+                context.executeAction("cheatset", {type: 35, param1: 6, param2: 0}, () => trace("Summoned snowfall"));
                 for(let i = 1; i < (x - 1); i++){//check the x's. Map.size gives a couple coordinates off the map, so we exclude those.
                     for(let j = 1; j < (y - 1); j++){//check the y's
                         var tile = map.getTile(i,j).elements;//get the tile data
@@ -350,6 +374,53 @@ const adPool: Ad[] = [
                     }
                 }
                 ui.showError("I don't feel so good...", "I think... I'm going to go home...");
+            }
+    },
+    {//43
+        title: "Go play Ghost Trick",
+        header: "I'll be honest, Ghost Trick: Phantom Detective is an incredible game.",
+        message: "Go play it right now. I don't care that you're in the middle of Archipelago.",
+        button: "Go buy Ghost Trick and start playing!",
+    },
+    {//44
+        title: "LEGO",
+        header: "Ever want to go completely broke buying toys made for children?",
+        message: "Buy a LEGO set today!",
+        button: "It's only a couple hundred dollars for a single set!",
+    },
+    {//45
+        title: "A Winner is You!",
+        header: "Todays Lucky Number is:",
+        message: String(Math.ceil(Math.random() * 1000000)),
+        button: "Did you win?",
+    },
+    {//46
+        title: "\"Poetry\"",
+        header: "'The time has come,' the Walrus said, 'To talk of many things' Of shoes — and ships — and sealing-wax —",
+        message: "Of cabbages — and kings — And why the sea is boiling hot —",
+        button: "And whether pigs have wings.",
+    },
+    {//47
+        title: "Middle Earth!",
+        header: "Visit Beautiful New Zealand today!",
+        message: "It's only NZ $17 for a tourist e-visa!",
+        button: "Buy Now!",
+        onClick: () => 
+            {
+                park.cash -= 1170;
+                ui.showError("PSYC!", "It's actually NZD $117! (True story)")
+            }
+    },
+    {//48
+        title: "RCT U!",
+        header: "Learn to play OpenRCT2 Archipelago Today!",
+        message: "You may even earn $20!",
+        button: "Click Here!",
+        onClick: () => 
+            {
+                tutorial_0()
+                if(archipelago_settings.traplink)
+                    archipelago_send_message("Bounce",{trap: "Tutorial Trap", tag: "TrapLink"});
             }
     }
 ]
