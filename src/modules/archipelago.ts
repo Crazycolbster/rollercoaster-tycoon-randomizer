@@ -1796,16 +1796,18 @@ class RCTRArchipelago extends ModuleBase {
                     var prereqs = prices[location[i].LocationID].RidePrereq;
                     var cost = display_color + "          " + "[" + (location[i].LocationID < 8 ? location[i].LocationID : Math.floor(location[i].LocationID / 8) - 1) + "] "  + context.formatString("{CURRENCY2DP}",  (prices[location[i].LocationID].Price) * 10);//Cash price
                     if(prereqs.length != 0) {//Handle prerequisites
-                        cost += " + " + prereqs[0].toString() + " ";
+                        cost += " + " + prereqs[UnlockShop.numberOfRides].toString() + " ";
                         cost += prereqs[1] + "(s)";
-                        if(prereqs[2] != 0)//Check for excitement requirement
-                            cost += ', (> ' + prereqs[2] + ' excitement)';
-                        if(prereqs[3] != 0)//Check for intensity requirement
-                            cost += ', (> ' + prereqs[3] + ' intensity)';
-                        if(prereqs[4] != 0)//Check for nausea requirement
-                            cost += ', (> ' + prereqs[4] + ' nausea)';
-                        if(prereqs[5] != 0)//Check for length requirement
-                            cost += ', (> ' + context.formatString("{LENGTH}", prereqs[5]) + ')';
+                        if(prereqs[UnlockShop.excitement] != 0)//Check for excitement requirement
+                            cost += ', (> ' + prereqs[UnlockShop.excitement] + ' excitement)';
+                        if(prereqs[UnlockShop.intensity] != 0)//Check for intensity requirement
+                            cost += ', (> ' + prereqs[UnlockShop.intensity] + ' intensity)';
+                        if(prereqs[UnlockShop.nausea] != 0)//Check for nausea requirement
+                            cost += ', (> ' + prereqs[UnlockShop.nausea] + ' nausea)';
+                        if(prereqs[UnlockShop.length] != 0)//Check for length requirement
+                            cost += ', (> ' + context.formatString("{LENGTH}", prereqs[UnlockShop.length]) + ')';
+                        if(prereqs[UnlockShop.totalCustomers] != 0)//Check for nausea requirement
+                            cost += ', (> ' + prereqs[UnlockShop.totalCustomers] + ' customers served)';
                     }
                     unlocked.push(cost);
                 }
@@ -1832,25 +1834,23 @@ class RCTRArchipelago extends ModuleBase {
                     else{//Set up the string denoting the price
                         var prereqs = prices[location[i].LocationID].RidePrereq;
                         var cost = ""
-                        // if(archipelago_settings.colorblind_mode)
-                        //     cost += "[" + colorblind_color + "] ";
                         cost += (archipelago_settings.colorblind_mode ? "[" + colorblind_color + "] ": display_color) + "[" + (location[i].LocationID < 8 ? location[i].LocationID : Math.floor(location[i].LocationID / 8) - 1) + "] " + context.formatString("{CURRENCY2DP}",  (prices[location[i].LocationID].Price) * 10);//Cash price
                         // console.log(prereqs);
                         if(prereqs.length != 0) {//Handle prerequisites
                             var built = self.CheckElligibleRides(location[i].LocationID);
-                            cost += ((built[0] >= prereqs[0]) ? " + " + prereqs[0].toString() + display_color + " ":
-                            " + {RED}" + prereqs[0].toString() + display_color + " ");
+                            cost += ((built[0] >= prereqs[UnlockShop.numberOfRides]) ? " + " + prereqs[UnlockShop.numberOfRides].toString() + display_color + " ":
+                            " + {RED}" + prereqs[UnlockShop.numberOfRides].toString() + display_color + " ");
                             cost += prereqs[1] + "(s)";
-                            if(prereqs[2] != 0)//Check for excitement requirement
-                                cost += ((built[1] >= prereqs[0]) ? ', (> ' + prereqs[2] + ' excitement)': ',{RED} (> ' + prereqs[2] + ' excitement)' + display_color);
-                            if(prereqs[3] != 0)//Check for intensity requirement
-                                cost += ((built[2] >= prereqs[0]) ? ', (> ' + prereqs[3] + ' intensity)':',{RED} (> ' + prereqs[3] + ' intensity)' + display_color);
-                            if(prereqs[4] != 0)//Check for nausea requirement
-                                cost += ((built[3] >= prereqs[0]) ? ', (> ' + prereqs[4] + ' nausea)': '{RED}, (> ' + prereqs[4] + ' nausea)' + display_color);
-                            if(prereqs[5] != 0)//Check for length requirement
-                                cost += ((built[4] >= prereqs[0]) ? ', (> ' + context.formatString("{LENGTH}", prereqs[5]) + ')': ',{RED} (> ' + context.formatString("{LENGTH}", prereqs[5]) + ')' + display_color);
-                            if(prereqs[6] != 0)//Check for total customers requirement
-                                cost += ((built[5] >= prereqs[6]) ? ', (> ' + prereqs[6] + ' Total Customers)': '{RED}, (> ' + prereqs[6] + ' Total Customers)' + display_color);
+                            if(prereqs[UnlockShop.excitement] != 0)//Check for excitement requirement
+                                cost += ((built[1] >= prereqs[UnlockShop.numberOfRides]) ? ', (> ' + prereqs[UnlockShop.excitement] + ' excitement)': ',{RED} (> ' + prereqs[UnlockShop.excitement] + ' excitement)' + display_color);
+                            if(prereqs[UnlockShop.intensity] != 0)//Check for intensity requirement
+                                cost += ((built[2] >= prereqs[UnlockShop.numberOfRides]) ? ', (> ' + prereqs[UnlockShop.intensity] + ' intensity)':',{RED} (> ' + prereqs[UnlockShop.intensity] + ' intensity)' + display_color);
+                            if(prereqs[UnlockShop.nausea] != 0)//Check for nausea requirement
+                                cost += ((built[3] >= prereqs[UnlockShop.numberOfRides]) ? ', (> ' + prereqs[UnlockShop.nausea] + ' nausea)': '{RED}, (> ' + prereqs[UnlockShop.nausea] + ' nausea)' + display_color);
+                            if(prereqs[UnlockShop.length] != 0)//Check for length requirement
+                                cost += ((built[4] >= prereqs[UnlockShop.numberOfRides]) ? ', (> ' + context.formatString("{LENGTH}", prereqs[UnlockShop.length]) + ')': ',{RED} (> ' + context.formatString("{LENGTH}", prereqs[UnlockShop.length]) + ')' + display_color);
+                            if(prereqs[UnlockShop.totalCustomers] != 0)//Check for total customers requirement
+                                cost += ((built[5] >= prereqs[UnlockShop.totalCustomers]) ? ', (> ' + prereqs[UnlockShop.totalCustomers] + ' Total Customers)': '{RED}, (> ' + prereqs[UnlockShop.totalCustomers] + ' Total Customers)' + display_color);
                         // console.log(JSON.stringify((built)));
                         // console.log(JSON.stringify((prereqs)));
                         }
@@ -2490,7 +2490,7 @@ class RCTRArchipelago extends ModuleBase {
 
         // Step 4: Handle if using a skip
         if(archipelago_skip_enabled){
-            var archipelago_skip_elligible = self.CheckIfUnlocked(Prices[LocationID].RidePrereq[1]);//Make sure the rides unlocked, even if not built.
+            var archipelago_skip_elligible = self.CheckIfUnlocked(Prereqs[UnlockShop.category]);//Make sure the rides unlocked, even if not built.
             if(!archipelago_skip_elligible){
                 ui.showError("You must have this ride or category unlocked to use a skip.", "We'd break progression otherwise! You don't want that on your consience.");
                 (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isPressed = false;
@@ -2530,12 +2530,15 @@ class RCTRArchipelago extends ModuleBase {
             ui.showError("Not Enough Cash...", "You do not have enough money to buy this!")
             return;
         }
-        var QualifiedInfo = self.CheckElligibleRides(LocationID);
-        if(Prereqs.length && QualifiedInfo[0] < Prereqs[0]){
+        var QualifiedInfo = self.CheckElligibleRides(LocationID);//NumQualifiedRides,QualifiedExcitementCounter,QualifiedIntensityCounter,QualifiedNauseaCounter,QualifiedLengthCounter,TotalCustomerCounter
+        if(Prereqs.length && QualifiedInfo[0] < Prereqs[UnlockShop.numberOfRides]){
             ui.showError("Prerequisites not met", "You only have " + String(QualifiedInfo[0]) + " of these that are elligible in the park! (Ensure they have posted stats)");
             return;
         }
-        if(QualifiedInfo[5] && QualifiedInfo[5] < Prereqs[6]){//If our total guest count is higher than what we asked for
+        console.log("Logic?")
+        console.log(Prereqs[UnlockShop.totalCustomers]);
+        console.log(QualifiedInfo[5] && (QualifiedInfo[5] > Prereqs[UnlockShop.totalCustomers]));
+        if(QualifiedInfo[5] <= Prereqs[UnlockShop.totalCustomers]){//If we don't have enough guests.
             ui.showError("Guest prerequisite not met", "You only have " + String(QualifiedInfo[5]) + " total customers across all these!");
             return;
         }
@@ -2643,22 +2646,22 @@ class RCTRArchipelago extends ModuleBase {
 
             if (elligible){
                 //Check if excitement is met. To translate ingame excitement to incode excitement, multiply ingame excitement by 100
-                if ((ride_list[i].excitement >= (Prereqs[2] * 100)) || (stallSet.has(ride_list[i].object.identifier))){
+                if ((ride_list[i].excitement >= (Prereqs[UnlockShop.excitement] * 100)) || (stallSet.has(ride_list[i].object.identifier))){
                     QualifiedExcitement = true;
                     QualifiedExcitementCounter++;
                 }
-                if ((ride_list[i].intensity >= (Prereqs[3] * 100)) || (stallSet.has(ride_list[i].object.identifier))){
+                if ((ride_list[i].intensity >= (Prereqs[UnlockShop.intensity] * 100)) || (stallSet.has(ride_list[i].object.identifier))){
                     QualifiedIntensity = true;
                     QualifiedIntensityCounter++;
                 }
-                if ((ride_list[i].nausea >= (Prereqs[4] * 100)) || (stallSet.has(ride_list[i].object.identifier))){
+                if ((ride_list[i].nausea >= (Prereqs[UnlockShop.nausea] * 100)) || (stallSet.has(ride_list[i].object.identifier))){
                     QualifiedNausea = true;
                     QualifiedNauseaCounter++;
                 }
                 //Somethings going janky with this one. If you modify a coaster, it will retain its length value until tested again.
-                if (ride_list[i].rideLength >= (Prereqs[5]) || (stallSet.has(ride_list[i].object.identifier))){//I want my freedom units!
+                if (ride_list[i].rideLength >= (Prereqs[UnlockShop.length]) || (stallSet.has(ride_list[i].object.identifier))){//I want my freedom units!
                     trace("Ride length: " + String(ride_list[i].rideLength));
-                    trace("Wanted: " + Prereqs[5])
+                    trace("Wanted: " + Prereqs[UnlockShop.length])
                     QualifiedLength = true;
                     QualifiedLengthCounter++;
                 }
@@ -2670,7 +2673,9 @@ class RCTRArchipelago extends ModuleBase {
                 NumQualifiedRides += 1;
             }
         }
-        console.log(NumQualifiedRides,QualifiedExcitementCounter,QualifiedIntensityCounter,QualifiedNauseaCounter,QualifiedLengthCounter,TotalCustomerCounter)
+        console.log("Qualified Rides: " + NumQualifiedRides + "\nRides with Enough Excitement: " + QualifiedExcitementCounter + 
+        "\nRides with enough Intensity: " + QualifiedIntensityCounter + "\nRides with enough Nausea: "+ QualifiedNauseaCounter +
+        "\n Rides that are long enough: " + QualifiedLengthCounter + "\nTotal combined Customers: " + TotalCustomerCounter)
         return [NumQualifiedRides,QualifiedExcitementCounter,QualifiedIntensityCounter,QualifiedNauseaCounter,QualifiedLengthCounter,TotalCustomerCounter];
     }
 
