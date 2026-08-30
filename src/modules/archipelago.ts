@@ -808,6 +808,14 @@ class RCTRArchipelago extends ModuleBase {
             }
             context.executeAction("staffhire", {autoPosition: true, staffType: 3, costumeIndex: furry_type, staffOrders: 0} satisfies StaffHireArgs);
         }
+        try{
+            let Archipelago = GetModule("RCTRArchipelago") as RCTRArchipelago;
+            let lockedWindow = ui.getWindow("archipelago-locations");
+            lockedWindow.findWidget<ButtonWidget>("excorcize-furry-button").isDisabled = false;
+        }
+        catch{
+            trace("It appears the unlock shop is not open. They'll find the furry button enabled when they do so.");
+        }
     }
 
     LoanSharkTrap(): Window{

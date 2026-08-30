@@ -531,7 +531,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
                             Archipelago.ReceiveDeathLink({cause, source, attempt: 1});
                         }
                         if(cause){
-                            archipelago_print_message(cause);
+                            archipelago_print_message("{RED}" + cause);
                         }
                         else{
                             var player_color = "{PALELAVENDER}" + source;

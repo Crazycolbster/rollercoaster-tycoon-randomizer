@@ -1490,50 +1490,10 @@ function archipelagoDebug(){
                     text: 'Colbys Decision',
                     onClick: function() {
                         var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
-                        // (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_menu_location_image_ID.start).id, 0,0)}
-                        BathroomTrap.RotateTrap()
-                        console.log(((map.rides)));
-                        archipelago_objectives.UniqueRides[0] = ["Classic Wooden Twister Roller Coaster","Classic Wooden Roller Coaster","Classic Stand-up Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster",]
-                    //     var get_rotated_idiot = ui.openWindow({
-                    //         classification: 'get-rotated-idiot',
-                    //         title: "Get Rotated",
-                    //         width: 330,
-                    //         height: 330,
-                    //         colours: [0,0],
-                    //         widgets: [].concat(
-                    //             {
-                    //                 type: 'custom',
-                    //                 name: 'get-rotated-idiot',
-                    //                 x: 10,
-                    //                 y: 30,
-                    //                 width: 300,
-                    //                 height: 300,
-                    //                 tooltip: 'Just kidding, I love you, very platonically.',
-                    //                 onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_get_rotated_idiot_top_image_ID.start).id, 0,0)}
-                    //             },
-                    //             {
-                    //                 type: 'custom',
-                    //                 name: 'get-rotated-idiot',
-                    //                 x: 10,
-                    //                 y: 165,
-                    //                 width: 300,
-                    //                 height: 300,
-                    //                 tooltip: 'Just kidding, I love you, very platonically.',
-                    //                 onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_get_rotated_idiot_bottom_image_ID.start).id, 0,0)}
-                    //             },
-                    //             {
-                    //                 type: 'custom',
-                    //                 name: 'custom-archipealgo-logo-1',
-                    //                 x: 5,
-                    //                 y: 300,
-                    //                 width: 22,
-                    //                 height: 20,
-                    //                 tooltip: 'I\'ve wasted so much time committing to stupid bits like this.',
-                    //                 onDraw: (g: GraphicsContext) => {g.colour = 0;g.image(g.getImage(archipelago_icon_ID.start).id, 0,0)}
-                    //             }
-                    //         )
-                    //     })
-                    //     return get_rotated_idiot;
+                        // BathroomTrap.RotateTrap()
+                        console.log(archipelago_unlocked_locations);
+                        // archipelago_objectives.UniqueRides[0] = ["Classic Wooden Twister Roller Coaster","Classic Wooden Roller Coaster","Classic Stand-up Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster","Classic Wooden Roller Coaster",]
+                        
                     }
                 },
                 {
@@ -1771,8 +1731,16 @@ function archipelagoDebug(){
                     onClick: function() { 
                         // var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
                         // BathroomTrap.ExtremeChaosTrap();
-                        console.log(archipelago_settings.traplink)
-                        archipelago_settings.traplink = !archipelago_settings.traplink;
+                        ui.registerShortcut( //Movie Magic!
+                            {id:"Dank", text:"[AP] Don't press this when a spam window is open", bindings:['M'],
+                            callback() {
+                                archipelago_print_message("{PALELAVENDER}Sonic {WHITE}sent {LIGHTPINK}Furry Convention Trap {WHITE}to {PALELAVENDER}Colby.{WHITE}({GREEN}Speed Highway Chaos Emerald{WHITE})");
+                                var BathroomTrap = GetModule("RCTRArchipelago") as RCTRArchipelago;
+                                // BathroomTrap.AddRide(RideType["Looping Roller Coaster"]);
+                                // ac_req({"cmd":"Bounced","tags":["DeathLink"],"data":{"time":1690148379.2967014,"source":"Kirby","cause":"Kirby fell into a bottomless pit!"}})
+                                BathroomTrap.FurryConventionTrap()
+                            }
+                        });
                         // console.log(JSON.stringify(context.getParkStorage().get('RCTRando.ArchipelagoLockedLocations')));
                         // console.log(convert_shop_name_to_ID("Burger Bar"))
                     }
