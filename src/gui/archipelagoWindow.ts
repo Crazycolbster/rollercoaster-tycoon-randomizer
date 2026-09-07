@@ -878,7 +878,13 @@ function archipelagoLocations(){
                             image: 5477,
                             isDisabled: archipelago_settings.awards_received.indexOf("bestFood") === -1,
                             isVisible: true,
-                            tooltip: "At least 7 food shops, 4 unique, one food shop per 128 guests and no more than 12 guests are allowed to think \"I'm hungry\"."
+                            tooltip: "At least 7 food shops, 4 unique, one food shop per 128 guests and no more than 12 guests are allowed to think \"I'm hungry\".",
+                            onClick: function() {
+                                if(Math.random() > .5)
+                                ui.showError("Nom", "");                            
+                                else 
+                                ui.showError("Om", "");
+                            }
                         },
                         {
                             type: 'label',
@@ -924,7 +930,11 @@ function archipelagoLocations(){
                             image: 5481,
                             isDisabled: archipelago_settings.awards_received.indexOf("bestWaterRides") === -1,
                             isVisible: true,
-                            tooltip: "Park must have at least 6 water rides which are currently open and have not crashed recently. #DeathLink"
+                            tooltip: "Park must have at least 6 water rides which are currently open and have not crashed recently. #DeathLink",
+                            onClick: function() {
+                                Archipelago.RotateTrap();
+                                archipelago_settings.traplink && archipelago_send_message("Bounce",{trap: "Camera Rotate Trap", tag: "TrapLink"})
+                            }
                         },
                         {
                             type: 'label',
@@ -970,7 +980,20 @@ function archipelagoLocations(){
                             image: 5483,
                             isDisabled: archipelago_settings.awards_received.indexOf("mostDazzlingRideColours") === -1,
                             isVisible: true,
-                            tooltip: "At least 5 rides and more than half of the rides are colourful. A ride is considered colourful if the main track color is bright purple, bright green, light orange or bright pink. Hover over the colors in the palette in the game to see the color names. Rides without a track are not counted!"
+                            tooltip: "At least 5 rides and more than half of the rides are colourful. A ride is considered colourful if the main track color is bright purple, bright green, light orange or bright pink. Hover over the colors in the palette in the game to see the color names. Rides without a track are not counted!",
+                            onClick: function() {
+                                const message1 = "Good job!";
+                                const coloredMessage1 = message1
+                                .split("")
+                                .map(letter => Archipelago.GetColors(rng(0, 64))[0] + letter)
+                                .join("");    
+                                const message2 = "You did it!"
+                                const coloredMessage2 = message2
+                                .split("")
+                                .map(letter => Archipelago.GetColors(rng(0, 64))[0] + letter)
+                                .join("");    
+                                ui.showError(coloredMessage1,coloredMessage2);
+                            }
                         },
                         {
                             type: 'label',
@@ -1085,7 +1108,10 @@ function archipelagoLocations(){
                             image: 5478,
                             isDisabled: archipelago_settings.awards_received.indexOf("worstFood") === -1,
                             isVisible: true,
-                            tooltip: "No more than 2 unique food shops, less than one food shop per 256 guests and more than 15 hungry guests must be be thinking \"I'm hungry\"."
+                            tooltip: "No more than 2 unique food shops, less than one food shop per 256 guests and more than 15 hungry guests must be be thinking \"I'm hungry\".",
+                            onClick: function() {
+                                ui.showError("Blech", "");
+                            }
                         },
                         {
                             type: 'label',
@@ -1755,6 +1781,16 @@ function archipelagoDebug(){
                     text: 'Add Skip',
                     onClick: function() {
                         archipelago_settings.skips++;
+                        // saveArchipelagoProgress();
+                        try{
+                            (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).text = 'Skips: ' + String(archipelago_settings.skips);
+                            (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isPressed = false;
+                            (ui.getWindow("archipelago-locations").findWidget("skip-button") as ButtonWidget).isDisabled = !archipelago_settings.skips;
+                        }
+                        catch{
+                            trace("Unlock shop ain't open boss.");
+                        }
+                        console.log("Added skip. Total skips is now: " + archipelago_settings.skips)
                     }
                 },
                 {

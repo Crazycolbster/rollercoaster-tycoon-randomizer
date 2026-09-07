@@ -271,7 +271,6 @@ function ac_req(data) {//This is what we do when we receive a data packet
             context.setTimeout(() => {archipelago_update_locations(data.checked_locations)}, 2000);
 
             archipelago_connected_to_server = true;
-            console.log("The greatest of")
 
             if(data.slot_data.version != archipelago_version){
                 var bad_version_warning = ui.openWindow({
@@ -656,7 +655,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
 
                 if(ready){
                     switch(archipelago_settings.awards){
-                        case 0://all
+                        case Awards.all://all
                         var count = archipelago_settings.exclude_safest_park ? 15 : 16;
                         // splice last N from locations
                         var awardSource = data.locations.splice(data.locations.length - count, count);
@@ -670,7 +669,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
                                 context.getParkStorage().set("RCTRando.ArchipelagoAwardLocations",archipelago_award_locations);
                             }
                             break;//Okay, we're going from here next time. Add logic for pushing the positive awards onto the list and have the award function check teh list and send out the item. Good luck.
-                        case 1://positive
+                        case Awards.positive://positive
                         var count = archipelago_settings.exclude_safest_park ? 10 : 11;
                         // splice last N from locations
                         var awardSource = data.locations.splice(data.locations.length - count, count);
@@ -684,7 +683,7 @@ function ac_req(data) {//This is what we do when we receive a data packet
                                 context.getParkStorage().set("RCTRando.ArchipelagoAwardLocations",archipelago_award_locations);
                             }
                             break;
-                        case 2://none
+                        case Awards.none://none
                     }
                     for(let i = 0; i < data.locations.length; i++){
                         let receivingPlayer = players[data.locations[i][2] - 1][0]

@@ -2742,7 +2742,7 @@ class RCTRArchipelago extends ModuleBase {
         var awards = park.awards;
         trace("asonetuhaontu",awards);
         var award_setting = archipelago_settings.awards;
-        if(award_setting == 2)
+        if(award_setting == Awards.none)
             return;//No awards, no logic needed!
         function findAward(ID){
             trace("Here's the award locations: " + JSON.stringify(archipelago_award_locations));
@@ -2757,82 +2757,109 @@ class RCTRArchipelago extends ModuleBase {
             console.log("Error in checkAwards: Award not found");
             return archipelago_award_locations[69420];//I also hope this never returns
         }
+        function updateAwardList(ID){
+            try{
+                (ui.getWindow("archipelago-locations").findWidget(ID) as ButtonWidget).isDisabled = false;
+            }
+            catch{
+                trace("Looks like the Archipelago Shop isn't open");
+            }
+        }
         for(let i = 0; i < awards.length; i++){
             if (archipelago_settings.awards_received.indexOf(awards[i].type) === -1) {//If the item isn't in the list
                 archipelago_settings.awards_received.push(awards[i].type);//Add it to the list
-                //and send an updated location list
+                
+                //and send an updated location list. Since this checks daily and you can only recieve 1 award per month max
+                //only 1 thing in here will ever activate.
+                
                 trace("Here's the list!" + archipelago_settings.awards_received);
                 switch(awards[i].type){
                     case "mostUntidy":
-                        if (award_setting == 0){
+                        updateAwardList("Most Untidy Award")
+                        if (award_setting == Awards.all){
                             archipelago_unlocked_locations.push(findAward(8008))
                         }
                         else 
-                        return;
-                        break;
+                        return;//We don't want to send an unchanged locations list to the server, 
+                        break; //so we return early on negative awards when "Positive" is set.
                     case "mostTidy":
+                        updateAwardList("Tidiest Award")
                         archipelago_unlocked_locations.push(findAward(8009))
                         break;
                     case "bestRollerCoasters":
+                        updateAwardList("Best Rollercoasters Award")
                         archipelago_unlocked_locations.push(findAward(8010))
                         break;
-                    case "bestValue":
-                        return;
+                    case "bestValue": //Blank because we explicitly don't check this award.
+                        return;       //It's too restrictive on playstyle.
                     case "mostBeautiful":
+                        updateAwardList("Most Beautiful Award")
                         archipelago_unlocked_locations.push(findAward(8011))
                         break;
                     case "worstValue":
-                        if (award_setting == 0){
+                        updateAwardList("Worst Value Award")
+                        if (award_setting == Awards.all){
                             archipelago_unlocked_locations.push(findAward(8012))
                         }
                         else 
                         return;
                         break;
                     case "safest":
+                        updateAwardList("Safest Park Award")
                         if(archipelago_settings.exclude_safest_park)
                             return;
                         archipelago_unlocked_locations.push(findAward(8013))
                         break;
                     case "bestStaff":
+                        updateAwardList("Best Staff Award")
                         archipelago_unlocked_locations.push(findAward(8014))
                         break;
                     case "bestFood":
+                        updateAwardList("Best Food Award")
                         archipelago_unlocked_locations.push(findAward(8015))
                         break;
                     case "worstFood":
-                        if (award_setting == 0){
+                        updateAwardList("Worst Food Award")
+                        if (award_setting == Awards.all){
                             archipelago_unlocked_locations.push(findAward(8016))
                         }
                         else 
                         return;
                         break;
                     case "bestToilets":
+                        updateAwardList("Best Toilets Award")
                         archipelago_unlocked_locations.push(findAward(8017))
                         break;
                     case "mostDisappointing":
-                        if (award_setting == 0){
+                        updateAwardList("Total Disappointment")
+                        if (award_setting == Awards.all){
                             archipelago_unlocked_locations.push(findAward(8018))
                         }
                         else 
                         return;
                         break;
                     case "bestWaterRides":
+                        updateAwardList("Best Water Rides Award")
                         archipelago_unlocked_locations.push(findAward(8019))
                         break;
                     case "bestCustomDesignedRides":
+                        updateAwardList("Best Custom Designed Rides Award")
                         archipelago_unlocked_locations.push(findAward(8020))
                         break;
                     case "mostDazzlingRideColours":
+                        updateAwardList("Most Dazzling Colors Award")
                         archipelago_unlocked_locations.push(findAward(8021))
                         break;
                     case "mostConfusingLayout" :
-                        if (award_setting == 0){
+                        updateAwardList("Most Confusing Award")
+                        if (award_setting == Awards.all){
                             archipelago_unlocked_locations.push(findAward(8022))
                         }
                         else 
                         return;
                         break;
                     case "bestGentleRides":
+                        updateAwardList("Best Gentle Rides Award")
                         archipelago_unlocked_locations.push(findAward(8023))
                         break;
                 }

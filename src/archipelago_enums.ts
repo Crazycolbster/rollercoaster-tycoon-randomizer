@@ -285,6 +285,12 @@ enum UnlockShop{
     "totalCustomers"
 }
 
+enum Awards{
+    "all", 
+    "positive", 
+    "none"
+}
+
 function convert_scenario_name_to_archipelago(scenarioName: string, fileName: string): string{
     if(ScenarioName[scenarioName])//If we already match, great!
         return scenarioName;

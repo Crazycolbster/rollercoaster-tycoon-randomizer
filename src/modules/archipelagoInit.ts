@@ -124,7 +124,7 @@ var archipelago_settings: any = {
     monopoly_x: 1,
     monopoly_y: 1,
     fireworks: false,
-    awards: 2,//0:all, 1: positive, 2:none
+    awards: Awards.none,//0:all, 1: positive, 2:none
     exclude_safest_park: false,
     awards_received: [],
     multiworld_games: [],
